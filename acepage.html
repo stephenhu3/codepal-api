@@ -22,11 +22,19 @@
         }
 
     </div>
+    
 
-    <script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+
     <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
+
+        //Set tab size
+    editor.getSession().setTabSize(4);
+        //set mode to javascript
     editor.getSession().setMode("ace/mode/javascript");
     </script>
 </body>

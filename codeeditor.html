@@ -6,13 +6,219 @@
 
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+		<!-- Styles -->
+		<style type="text/css">
+			#editor { 
+			    margin: auto;
+			    width: 100%;
+			    height: 200px;
+			}
+			.scrollmargin {
+				height: 80px;
+		        text-align: center;
+			}
+	    </style>
 	</head>
 	<body>
+
+		<!-- Main -->
+		<div class="container">
+
+			<div id="editor"></div>
+			<div class="scrollmargin"></div>
+			<button id="compileBtn" type="button" class="btn btn-default">Compile</button>
+			<button id="runBtn" type="button" class="btn btn-default">Run</button>
+
+		</div>
 
 		<!-- Scripts -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script>
+	
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+		
+		<!--
+
+			Notes: http://stackoverflow.com/questions/20035101/no-access-control-allow-origin-header-is-present-on-the-requested-resource
+
+		-->
+
+		var person = new employee()
+
+		<!-- Factory Function -->
+		<script type="text/javascript">
+			function CodeEditor(options) {
+
+					// move to env var later
+				var clientSecretKey = '9b3e30247878ad73b13bdae8a333c74afe4877fb', 
+					aceEditor,
+					lang, 
+					theme,
+					aceLangMap = { // user label to ace .js file name 
+						'C#'			: 'csharp',
+						'C++'			: 'c_pp',
+						'Haskell'		: 'haskell',
+						'Java'			: 'java',
+						'Javascript'	: 'javascript',
+						'Objective-C'	: 'objectivec',
+						'Perl'			: 'perl',
+						'Pascal'		: 'pascal',
+						'Python'		: 'python'	
+					},
+					hackerLangMap = { // user label hacker earth lang format 
+						'C'				: 'C',
+						'C++'			: 'CPP',
+						'Clojure'		: 'CLOJURE',
+						'C#'			: 'CSHARP',
+						'Go'			: 'GO',
+						'Haskell'		: 'HASKELL',
+						'Java'			: 'JAVA',
+						'JavaScript'	: 'JAVASCRIPT',
+						'Objective-C'	: 'OBJECTIVEC',
+						'Pascal'		: 'PASCAL',
+						'Perl'			: 'PERL',
+						'Python'		: 'PYTHON',
+						'R'				: 'R',
+						'Ruby'			: 'RUBY',
+						'Scala'			: 'Scala'
+					}; // ommitted CPP11, JAVASCRIPT_NODE, PHP, RUST
+
+				// EXECUTE module {}
+				var execute = (function() {
+					function compile() {
+						$.ajax({
+							url: 'https://api.hackerearth.com/v3/code/compile/',
+							type: 'POST',
+							dataType: 'json',
+							data: {
+								client_secret: clientSecretKey,
+								lang: hackerLangMap[lang],
+								source: editor.getEditorText()
+							},
+						})
+						.done(function(data, textStatus, jqXHR) {
+							// TODO: properly implement 
+							console.log("success");
+							console.log(data);
+							console.log(textStatus);
+							console.log(jqXHR);
+						})
+						.fail(function(jqXHR, textStatus, errorThrown) {
+							// TODO: properly implement
+							console.log("error");
+							console.log(jqXHR);
+							console.log(textStatus);
+							console.log(errorThrown);
+						});
+					}
+
+					function run() {
+						$.ajax({
+							url: 'https://api.hackerearth.com/v3/code/run/',
+							type: 'POST',
+							dataType: 'json',
+							data: {
+								client_secret: clientSecretKey,
+								lang: hackerLangMap[lang],
+								source: editor.getEditorText()
+							},
+						})
+						.done
+						(function(data, textStatus, jqXHR) {
+							// TODO: properly implement 
+							console.log("success");
+							console.log(data);
+							console.log(textStatus);
+							console.log(jqXHR);
+						})
+						.fail(function(jqXHR, textStatus, errorThrown) {
+							// TODO: properly implement
+							console.log("error");
+							console.log(jqXHR);
+							console.log(textStatus);
+							console.log(errorThrown);
+						});
+					}
+
+					return {
+						compile : compile,
+						run 	: run
+ 					};
+
+				})();
+
+				// EDITOR module
+				var editor = (function() {
+
+					function initEditor(eleId, theme, lang) {
+						aceEditor = ace.edit(eleId);
+						setEditorTheme(theme);
+						setEditorLang(lang);
+					    aceEditor.setAutoScrollEditorIntoView(true);
+			    		aceEditor.getSession().setTabSize(4);
+					}
+
+					function getEditorText() {
+						return aceEditor.getValue();
+					}
+
+					function setEditorTheme(theme) {
+						if (typeof(aceEditor) === 'undefined') {
+							return;
+						}
+						aceEditor.setTheme("ace/theme/" + theme);
+					}
+
+					function setEditorLang(lang) {
+						if (typeof(aceEditor) === 'undefined') {
+							return;
+						}
+						aceEditor.getSession().setMode("ace/mode/" + aceLangMap[lang]);
+					}
+
+					return {
+						initEditor		: initEditor,
+						getEditorText	: getEditorText,
+						setEditorTheme	: setEditorTheme,
+						setEditorLang	: setEditorLang
+					};
+
+				})();
+
+				// "CONSTRUCTOR"
+				(function() {
+					theme = options.theme;
+					lang = options.lang;
+					editor.initEditor(options.eleId, theme, lang);
+				})();
+
+				return {
+					editor 		: editor,
+					execute 	: execute
+				};
+
+			}
+		</script>
+
+		<!-- Main Script -->
+		<script type="text/javascript">
+			
+			var codeEditor; // global class instance
+
+			$(document).ready(function() {
+
+				codeEditor = CodeEditor({
+					eleId		: 'editor',
+					lang 		: 'C#',
+					theme 		: 'monokai'
+				});
+
+				// Bindings
+				$('#compileBtn').on('click', codeEditor.execute.compile);
+				$('#runBtn').on('click', codeEditor.execute.run);
+
+			});
 
 		</script>
 	</body>

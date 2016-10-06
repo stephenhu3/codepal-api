@@ -30,6 +30,8 @@
 			<button id="compileBtn" type="button" class="btn btn-default">Compile</button>
 			<button id="runBtn" type="button" class="btn btn-default">Run</button>
 
+			<!-- TODO: some sort of element to hold console -->
+
 		</div>
 
 		<!-- Scripts -->
@@ -39,17 +41,15 @@
     	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js" data-ace-base="ace" type="text/javascript" charset="utf-8"></script>
 		
 		<!--
-
-			Notes: http://stackoverflow.com/questions/20035101/no-access-control-allow-origin-header-is-present-on-the-requested-resource
-
+			For local testing:
+			http://stackoverflow.com/questions/20035101/no-access-control-allow-origin-header-is-present-on-the-requested-resource
 		-->
 
 		<!-- Factory Function -->
 		<script type="text/javascript">
 			function CodeEditor(options) {
 
-					// move to env var later
-				var clientSecretKey = '9b3e30247878ad73b13bdae8a333c74afe4877fb', 
+				var clientSecretKey = '9b3e30247878ad73b13bdae8a333c74afe4877fb', // TODO: move to env var later
 					aceEditor,
 					lang, 
 					theme,
@@ -84,6 +84,7 @@
 
 				// EXECUTE module
 				var execute = (function() {
+
 					function compile() {
 						$.ajax({
 							url: 'https://api.hackerearth.com/v3/code/compile/',
@@ -96,14 +97,19 @@
 							},
 						})
 						.done(function(data, textStatus, jqXHR) {
-							// TODO: properly implement 
+							// TODO: Parse response and determine whether compilation was successful
+							// TODO: IF compile_status === 'OK' -> display success in console
+							// TODO: IF compile_status !== 'OK' -> display compile_status val in console 
 							console.log("success");
 							console.log(data);
 							console.log(textStatus);
 							console.log(jqXHR);
 						})
 						.fail(function(jqXHR, textStatus, errorThrown) {
-							// TODO: properly implement
+							// Going here means security issue (CORS, authentication) or
+							// 	improper input
+							// TODO: Research error cases.
+							// TODO: Display generic error msg ('try again?') ('refresh')
 							console.log("error");
 							console.log(jqXHR);
 							console.log(textStatus);
@@ -122,8 +128,7 @@
 								source: editor.getEditorText()
 							},
 						})
-						.done
-						(function(data, textStatus, jqXHR) {
+						.done(function(data, textStatus, jqXHR) {
 							// TODO: properly implement 
 							console.log("success");
 							console.log(data);

@@ -62,8 +62,9 @@
 
 				var clientSecretKey = '9b3e30247878ad73b13bdae8a333c74afe4877fb', // TODO: move to env var later
 					aceEditor,
-					lang, 
-					theme,
+					lang = options.lang, 
+					theme = options.theme,
+					output = options.output,
 					aceLangMap = { // user label to ace .js file name 
 						'C#'			: 'csharp',
 						'C++'			: 'c_pp',
@@ -91,7 +92,10 @@
 						'R'				: 'R',
 						'Ruby'			: 'RUBY',
 						'Scala'			: 'Scala'
-					}; // ommitted CPP11, PHP, RUST
+					},
+					constants = {
+						'COMPILE_OK'	: 'OK'
+					}; 
 
 				// EXECUTE module
 				var execute = (function() {
@@ -108,23 +112,21 @@
 							},
 						})
 						.done(function(data, textStatus, jqXHR) {
-							// TODO: Parse response and determine whether compilation was successful
-							// TODO: IF compile_status === 'OK' -> display success in console
-							// TODO: IF compile_status !== 'OK' -> display compile_status val in console 
-							console.log("success");
+							if (data.compile_status === constants.COMPILE_OK) {
+								output.html('Compilation Successful!');
+							} else {
+								output.html(data.compile_status);
+							}
 							console.log(data);
-							console.log(textStatus);
-							console.log(jqXHR);
 						})
 						.fail(function(jqXHR, textStatus, errorThrown) {
 							// Going here means security issue (CORS, authentication) or
 							// 	improper input
 							// TODO: Research error cases.
 							// TODO: Display generic error msg ('try again?') ('refresh')
-							console.log("error");
-							console.log(jqXHR);
-							console.log(textStatus);
+							output.html('Something went wrong...!');
 							console.log(errorThrown);
+							console.log(jqXHR);
 						});
 					}
 
@@ -141,26 +143,22 @@
 						})
 						.done(function(data, textStatus, jqXHR) {
 							resp = data.run_status;
-
-							if (resp.stderr) { // compilation failure
-								$('#output').html(resp.stderr);
-							} else {
-								$('#output').html(resp.output_html);
-							}
 							// JS:
 							// ON ERR: data.run_status.stderr
 							// ON SUCCESS: data.run_status.output OR data.run_status.output_html   
-
 							// ON BOTH: data.run_status.time_used
-							console.log("success");
+							if (resp.stderr) { // compilation failure
+								output.html(resp.stderr);
+							} else {
+								output.html(resp.output_html);
+							}
 							console.log(data);
 						})
 						.fail(function(jqXHR, textStatus, errorThrown) {
 							// TODO: properly implement
-							console.log("error");
-							console.log(jqXHR);
-							console.log(textStatus);
+							output.html('Something went wrong...!');
 							console.log(errorThrown);
+							console.log(jqXHR);
 						});
 					}
 
@@ -212,8 +210,6 @@
 
 				// "CONSTRUCTOR"
 				(function() {
-					theme = options.theme;
-					lang = options.lang;
 					editor.initEditor(options.eleId, theme, lang);
 				})();
 
@@ -236,7 +232,8 @@
 			    codeEditor = CodeEditor({
 			        eleId		: 'editor',
 			        lang 		: 'JavaScript',
-			        theme 		: 'monokai'
+			        theme 		: 'monokai',
+			        output		: $('#output')
 			    });
 
 			    // Bindings

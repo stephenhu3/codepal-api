@@ -29,6 +29,17 @@
 			<div class="scrollmargin"></div>
 			<button id="compileBtn" type="button" class="btn btn-default">Compile</button>
 			<button id="runBtn" type="button" class="btn btn-default">Run</button>
+            <select name="lang" id="lang">
+                <option value="C#">C#</option>
+                <option value="C++">C++</option>
+                <option value="Haskell">Haskell</option>
+                <option value="Java">Java</option>
+                <option value="Javascript">Javascript</option>
+                <option value="Objective-C">Objective-C</option>
+                <option value="Perl">Perl</option>
+                <option value="Pascal">Pascal</option>
+                <option value="Python">Python</option>
+            </select>
 
 			<!-- TODO: some sort of element to hold console -->
 
@@ -211,15 +222,22 @@
 
 			$(document).ready(function() {
 
-				codeEditor = CodeEditor({
-					eleId		: 'editor',
-					lang 		: 'C#',
-					theme 		: 'monokai'
-				});
+			    codeEditor = CodeEditor({
+			        eleId		: 'editor',
+			        lang 		: 'Javascript',
+			        theme 		: 'monokai'
+			    });
 
-				// Bindings
-				$('#compileBtn').on('click', codeEditor.execute.compile);
-				$('#runBtn').on('click', codeEditor.execute.run);
+			    // Bindings
+			    $('#compileBtn').on('click', codeEditor.execute.compile);
+			    $('#runBtn').on('click', codeEditor.execute.run);
+			    var dropdown = document.getElementById("lang");
+			   
+			    dropdown.onchange = function () {
+			        var lang = dropdown.options[dropdown.selectedIndex].value;
+			        codeEditor.editor.setEditorLang(lang)
+			        alert(lang);
+			    }	
 
 			});
 

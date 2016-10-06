@@ -14,10 +14,6 @@
 			    width: 100%;
 			    height: 200px;
 			}
-			.scrollmargin {
-				height: 80px;
-		        text-align: center;
-			}
 	    </style>
 	</head>
 	<body>
@@ -26,23 +22,27 @@
 		<div class="container">
 
 			<div id="editor"></div>
-			<div class="scrollmargin"></div>
-			<button id="compileBtn" type="button" class="btn btn-default">Compile</button>
-			<button id="runBtn" type="button" class="btn btn-default">Run</button>
-            <select name="lang" id="lang">
-                <option value="C#">C#</option>
-                <option value="C++">C++</option>
-                <option value="Haskell">Haskell</option>
-                <option value="Java">Java</option>
-                <option value="Javascript">Javascript</option>
-                <option value="Objective-C">Objective-C</option>
-                <option value="Perl">Perl</option>
-                <option value="Pascal">Pascal</option>
-                <option value="Python">Python</option>
-            </select>
-
+			
 			<!-- TODO: some sort of element to hold console -->
+			<div id="output"></div>
 
+			<div class="col-sm-6">
+				<select class="form-control" name="lang" id="lang">
+	            	<option value="JavaScript">JavaScript (Node.js v4.4.3)</option>
+	                <option value="C#">C# (mono 4.2.3)</option>
+	                <option value="C++">C++ (g++ 4.8.4)</option>
+	                <option value="Haskell">Haskell (ghc 7.6.3)</option>
+	                <option value="Java">Java</option>
+	                <option value="Objective-C">Objective-C</option>
+	                <option value="Perl">Perl</option>
+	                <option value="Pascal">Pascal</option>
+	                <option value="Python">Python</option>
+	            </select>
+			</div>
+			<div class="col-sm-6 text-center">
+				<button id="compileBtn" type="button" class="btn btn-default">Compile</button>
+				<button id="runBtn" type="button" class="btn btn-default">Run</button>
+			</div>
 		</div>
 
 		<!-- Scripts -->
@@ -69,7 +69,7 @@
 						'C++'			: 'c_pp',
 						'Haskell'		: 'haskell',
 						'Java'			: 'java',
-						'Javascript'	: 'javascript',
+						'JavaScript'	: 'javascript',
 						'Objective-C'	: 'objectivec',
 						'Perl'			: 'perl',
 						'Pascal'		: 'pascal',
@@ -83,7 +83,7 @@
 						'Go'			: 'GO',
 						'Haskell'		: 'HASKELL',
 						'Java'			: 'JAVA',
-						'JavaScript'	: 'JAVASCRIPT',
+						'JavaScript'	: 'JAVASCRIPT_NODE',
 						'Objective-C'	: 'OBJECTIVEC',
 						'Pascal'		: 'PASCAL',
 						'Perl'			: 'PERL',
@@ -91,7 +91,7 @@
 						'R'				: 'R',
 						'Ruby'			: 'RUBY',
 						'Scala'			: 'Scala'
-					}; // ommitted CPP11, JAVASCRIPT_NODE, PHP, RUST
+					}; // ommitted CPP11, PHP, RUST
 
 				// EXECUTE module
 				var execute = (function() {
@@ -140,11 +140,20 @@
 							},
 						})
 						.done(function(data, textStatus, jqXHR) {
-							// TODO: properly implement 
+							resp = data.run_status;
+
+							if (resp.stderr) { // compilation failure
+								$('#output').html(resp.stderr);
+							} else {
+								$('#output').html(resp.output_html);
+							}
+							// JS:
+							// ON ERR: data.run_status.stderr
+							// ON SUCCESS: data.run_status.output OR data.run_status.output_html   
+
+							// ON BOTH: data.run_status.time_used
 							console.log("success");
 							console.log(data);
-							console.log(textStatus);
-							console.log(jqXHR);
 						})
 						.fail(function(jqXHR, textStatus, errorThrown) {
 							// TODO: properly implement
@@ -184,10 +193,11 @@
 						aceEditor.setTheme("ace/theme/" + theme);
 					}
 
-					function setEditorLang(lang) {
+					function setEditorLang(newLang) {
 						if (typeof(aceEditor) === 'undefined') {
 							return;
 						}
+						lang = newLang;
 						aceEditor.getSession().setMode("ace/mode/" + aceLangMap[lang]);
 					}
 
@@ -207,6 +217,7 @@
 					editor.initEditor(options.eleId, theme, lang);
 				})();
 
+				// Return modules
 				return {
 					editor 		: editor,
 					execute 	: execute
@@ -224,13 +235,17 @@
 
 			    codeEditor = CodeEditor({
 			        eleId		: 'editor',
-			        lang 		: 'Javascript',
+			        lang 		: 'JavaScript',
 			        theme 		: 'monokai'
 			    });
 
 			    // Bindings
 			    $('#compileBtn').on('click', codeEditor.execute.compile);
 			    $('#runBtn').on('click', codeEditor.execute.run);
+
+			    // TODO: Move change to a separate module
+			    // TODO: some languages don't need to compile (e.g. Python, JavaScript). Disable
+			    //	button when switching to these langs.
 			    $('#lang').on('change', function() {
 			    	var lang = $(this).find('option:selected').val();
 			        codeEditor.editor.setEditorLang(lang);

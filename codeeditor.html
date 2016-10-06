@@ -231,13 +231,10 @@
 			    // Bindings
 			    $('#compileBtn').on('click', codeEditor.execute.compile);
 			    $('#runBtn').on('click', codeEditor.execute.run);
-			    var dropdown = document.getElementById("lang");
-			   
-			    dropdown.onchange = function () {
-			        var lang = dropdown.options[dropdown.selectedIndex].value;
-			        codeEditor.editor.setEditorLang(lang)
-			        alert(lang);
-			    }	
+			    $('#lang').on('change', function() {
+			    	var lang = $(this).find('option:selected').val();
+			        codeEditor.editor.setEditorLang(lang);
+			    });
 
 			});
 

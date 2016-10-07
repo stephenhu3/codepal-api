@@ -23,6 +23,7 @@
 		<div id="codeeditor" class="container">
 			<label for"filename">Filename</label>
 			<input id="filename" type="text" />
+			<span id="extension"></span>
 			<button type="button" id="download"><i class="fa fa-download"></i> Download</button>
 			<button type="button" id="save"><i class="fa fa-save"></i> Save</button>
 			<div id="editor"></div>
@@ -46,7 +47,7 @@
 			
 			<div class="col-xs=12">
 				<!-- TODO: some sort of element to hold console -->
-				<div id="output"></div>
+				<div id="console"></div>
 			</div>
 		</div>
 
@@ -69,7 +70,6 @@
 					aceEditor,
 					lang = options.lang, 
 					theme = options.theme,
-					output = options.output,
 					aceLangMap = { // user label to ace .js file name 
 						'C#'			: 'csharp',
 						'C++'			: 'c_pp',
@@ -98,12 +98,25 @@
 						'Ruby'			: 'RUBY',
 						'Scala'			: 'Scala'
 					},
+					extensionMap = {	// TODO: verify these are correct
+						'C#'			: '.cs',
+						'C++'			: '.cpp',
+						'Haskell'		: '.hs',
+						'Java'			: '.java',
+						'JavaScript'	: '.js',
+						'Objective-C'	: '.m',
+						'Perl'			: '.perl',
+						'Pascal'		: '.pas',
+						'Python'		: '.py'	
+					},
 					constants = {
 						'COMPILE_OK'	: 'OK'
 					}; 
 
 				// EXECUTE module
-				var execute = (function() {
+				var execute = (function(options) {
+
+					var $outConsole = options.$outConsole;
 
 					function run() {
 						$.ajax({
@@ -121,7 +134,7 @@
 							if (data.compile_status !== constants.COMPILE_OK) {
 								var textErr = data.run_status.status_detail + 
 									'<br/>' + data.comile_status;
-								output.html(textErr);
+								$outConsole.html(textErr);
 								return;
 							}
 
@@ -134,11 +147,11 @@
 							} else {
 								consoleOutput += resp.output_html;			
 							}
-							output.html(consoleOutput);
+							$outConsole.html(consoleOutput);
 						})
 						.fail(function(jqXHR, textStatus, errorThrown) {
 							// TODO: properly implement
-							output.html('Something went wrong...!');
+							$outConsole.html('Something went wrong...!');
 							console.log(errorThrown);
 							console.log(jqXHR);
 						});
@@ -148,10 +161,13 @@
 						run 	: run
  					};
 
-				})();
+				})(options.execute);
 
 				// EDITOR module
-				var editor = (function() {
+				var editor = (function(options) {
+
+					var $filename = options.$filename;
+					var $extension = options.$extension;
 
 					function initEditor(eleId, theme, lang) {
 						aceEditor = ace.edit(eleId);
@@ -161,12 +177,16 @@
 			    		aceEditor.getSession().setTabSize(4);
 					}
 
-					function save() {
-						// TODO: init modal
-					}
-
 					function getEditorText() {
 						return aceEditor.getValue();
+					}
+
+					function download() {
+						var text = getEditorText();
+						var filename = $filename.val();
+						// TODO: errorChecking on invalid file names
+						var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+						saveAs(blob, filename + extensionMap[lang]);
 					}
 
 					function setEditorTheme(theme) {
@@ -182,14 +202,23 @@
 						}
 						lang = newLang;
 						aceEditor.getSession().setMode("ace/mode/" + aceLangMap[lang]);
+						$extension.html(extensionMap[lang]);
 					}
 
 					return {
 						initEditor		: initEditor,
+						download		: download,
 						getEditorText	: getEditorText,
 						setEditorTheme	: setEditorTheme,
 						setEditorLang	: setEditorLang
 					};
+
+				})(options.editor);
+
+				// UTIL module
+				var util = (function() {
+
+
 
 				})();
 
@@ -218,20 +247,22 @@
 			        eleId		: 'editor',
 			        lang 		: 'JavaScript',
 			        theme 		: 'monokai',
-			        output		: $('#output')
+			        execute		: {
+			        	$outConsole	: $('#output'),
+			        },
+			        editor 		: {
+			        	$filename 	: $('#filename'),
+			        	$extension	: $('#extension')
+			        }
 			    });
 
 			    // Bindings
 			    $('#runBtn').on('click', codeEditor.execute.run);
-			    
-			    // TODO: Hook up
-			    $('#save').on('click', function() { });
-			    // TODO: Hook up
-			    $('#download').on('click', function() { });
+			    $('#save').on('click', function() { // TODO: Hook up
+			    	alert('Code snippet save feature -- coming soon...');
+			    });
+			    $('#download').on('click', codeEditor.editor.download);
 
-			    // TODO: Move change to a separate module
-			    // TODO: some languages don't need to compile (e.g. Python, JavaScript). Disable
-			    //	button when switching to these langs.
 			    $('#lang').on('change', function() {
 			    	var lang = $(this).find('option:selected').val();
 			        codeEditor.editor.setEditorLang(lang);

@@ -6,6 +6,7 @@
 
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
 		<!-- Styles -->
 		<style type="text/css">
@@ -19,12 +20,12 @@
 	<body>
 
 		<!-- Main -->
-		<div class="container">
-
+		<div id="codeeditor" class="container">
+			<label for"filename">Filename</label>
+			<input id="filename" type="text" />
+			<button type="button" id="download"><i class="fa fa-download"></i> Download</button>
+			<button type="button" id="save"><i class="fa fa-save"></i> Save</button>
 			<div id="editor"></div>
-			
-			<!-- TODO: some sort of element to hold console -->
-			<div id="output"></div>
 
 			<div class="col-sm-6">
 				<select class="form-control" name="lang" id="lang">
@@ -40,16 +41,20 @@
 	            </select>
 			</div>
 			<div class="col-sm-6 text-center">
-				<button id="compileBtn" type="button" class="btn btn-default">Compile</button>
 				<button id="runBtn" type="button" class="btn btn-default">Run</button>
+			</div>
+			
+			<div class="col-xs=12">
+				<!-- TODO: some sort of element to hold console -->
+				<div id="output"></div>
 			</div>
 		</div>
 
 		<!-- Scripts -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
-    	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js" data-ace-base="ace" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+    	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js" data-ace-base="ace" charset="utf-8"></script>
 		
 		<!--
 			For local testing:
@@ -100,36 +105,6 @@
 				// EXECUTE module
 				var execute = (function() {
 
-					function compile() {
-						$.ajax({
-							url: 'https://api.hackerearth.com/v3/code/compile/',
-							type: 'POST',
-							dataType: 'json',
-							data: {
-								client_secret: clientSecretKey,
-								lang: hackerLangMap[lang],
-								source: editor.getEditorText()
-							},
-						})
-						.done(function(data, textStatus, jqXHR) {
-							if (data.compile_status === constants.COMPILE_OK) {
-								output.html('Compilation Successful!');
-							} else {
-								output.html(data.compile_status);
-							}
-							console.log(data);
-						})
-						.fail(function(jqXHR, textStatus, errorThrown) {
-							// Going here means security issue (CORS, authentication) or
-							// 	improper input
-							// TODO: Research error cases.
-							// TODO: Display generic error msg ('try again?') ('refresh')
-							output.html('Something went wrong...!');
-							console.log(errorThrown);
-							console.log(jqXHR);
-						});
-					}
-
 					function run() {
 						$.ajax({
 							url: 'https://api.hackerearth.com/v3/code/run/',
@@ -142,17 +117,24 @@
 							},
 						})
 						.done(function(data, textStatus, jqXHR) {
-							resp = data.run_status;
-							// JS:
-							// ON ERR: data.run_status.stderr
-							// ON SUCCESS: data.run_status.output OR data.run_status.output_html   
-							// ON BOTH: data.run_status.time_used
-							if (resp.stderr) { // compilation failure
-								output.html(resp.stderr);
-							} else {
-								output.html(resp.output_html);
+							// Check for comilation errors
+							if (data.compile_status !== constants.COMPILE_OK) {
+								var textErr = data.run_status.status_detail + 
+									'<br/>' + data.comile_status;
+								output.html(textErr);
+								return;
 							}
-							console.log(data);
+
+							var resp = data.run_status;
+							var consoleOutput = "Time Used: " + resp.time_used + "<br/><br/>";
+
+							// Check if there were runtime errors
+							if (resp.stderr) {
+								consoleOutput += resp.stderr;
+							} else {
+								consoleOutput += resp.output_html;			
+							}
+							output.html(consoleOutput);
 						})
 						.fail(function(jqXHR, textStatus, errorThrown) {
 							// TODO: properly implement
@@ -163,7 +145,6 @@
 					}
 
 					return {
-						compile : compile,
 						run 	: run
  					};
 
@@ -178,6 +159,10 @@
 						setEditorLang(lang);
 					    aceEditor.setAutoScrollEditorIntoView(true);
 			    		aceEditor.getSession().setTabSize(4);
+					}
+
+					function save() {
+						// TODO: init modal
 					}
 
 					function getEditorText() {
@@ -237,8 +222,12 @@
 			    });
 
 			    // Bindings
-			    $('#compileBtn').on('click', codeEditor.execute.compile);
 			    $('#runBtn').on('click', codeEditor.execute.run);
+			    
+			    // TODO: Hook up
+			    $('#save').on('click', function() { });
+			    // TODO: Hook up
+			    $('#download').on('click', function() { });
 
 			    // TODO: Move change to a separate module
 			    // TODO: some languages don't need to compile (e.g. Python, JavaScript). Disable

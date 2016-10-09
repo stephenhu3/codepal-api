@@ -5,10 +5,10 @@
         <maven>3.0.0</maven>
     </prerequisites>
 
-    <artifactId>dropwizard-example</artifactId>
+    <artifactId>codepal-api</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <groupId>io.dropwizard</groupId>
-    <name>Dropwizard Example Application</name>
+    <name>CodePal REST API</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -242,7 +242,7 @@
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>com.codepal.api.HelloWorldApplication</mainClass>
+                            <mainClass>com.codepal.api.MainApplication</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>

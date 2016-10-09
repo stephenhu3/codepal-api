@@ -34,11 +34,11 @@
 	                <option value="C#">C# (mono 4.2.3)</option>
 	                <option value="C++">C++ (g++ 4.8.4)</option>
 	                <option value="Haskell">Haskell (ghc 7.6.3)</option>
-	                <option value="Java">Java</option>
-	                <option value="Objective-C">Objective-C</option>
-	                <option value="Perl">Perl</option>
-	                <option value="Pascal">Pascal</option>
-	                <option value="Python">Python</option>
+	                <option value="Java">Java (openjdk 1.7.0_91)</option>
+	                <option value="Objective-C">Objective-C (clang 3.3)</option>
+	                <option value="Perl">Perl (perl 5.18.2)</option>
+	                <option value="Pascal">Pascal (fpc 2.6.2)</option>
+	                <option value="Python">Python (python 2.7.6)</option>
 	            </select>
 			</div>
 			<div class="col-sm-6 text-center">
@@ -47,7 +47,7 @@
 			
 			<div class="col-xs=12">
 				<!-- TODO: some sort of element to hold console -->
-				<div id="console"></div>
+				<div id="outConsole"></div>
 			</div>
 		</div>
 
@@ -119,6 +119,11 @@
 					var $outConsole = options.$outConsole;
 
 					function run() {
+						if (!editor.getEditorText()) {
+							alert('Please enter at least one statement to run.');
+							return;
+						}
+
 						$.ajax({
 							url: 'https://api.hackerearth.com/v3/code/run/',
 							type: 'POST',
@@ -182,9 +187,13 @@
 					}
 
 					function download() {
-						var text = getEditorText();
 						var filename = $filename.val();
 						// TODO: errorChecking on invalid file names
+						if (!$filename.val()) {
+							alert('Please enter a filename.');
+							return;
+						}
+						var text = getEditorText();
 						var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
 						saveAs(blob, filename + extensionMap[lang]);
 					}
@@ -248,7 +257,7 @@
 			        lang 		: 'JavaScript',
 			        theme 		: 'monokai',
 			        execute		: {
-			        	$outConsole	: $('#output'),
+			        	$outConsole	: $('#outConsole'),
 			        },
 			        editor 		: {
 			        	$filename 	: $('#filename'),

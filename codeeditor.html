@@ -79,6 +79,17 @@
 						</div>
 						<div class="modal-body">
 							<div class="row">
+								<div class="col-md-6">Tab Size</div>
+								<div class="col-md-6">
+									<input type="number" class="form-control" />
+								</div>
+								
+								<div class="col-md-6">Font Size</div>
+								<div class="col-md-6">
+									<input type="number" class="form-control" />
+								</div>
+								
+								
 								<!-- 
 									TODO:
 
@@ -87,12 +98,12 @@
 									- Allow user to change the following parameters
 										- tab size
 										- font size
-										- set line highlighting
 					
 									- Allow user to have custom key bindings for
 										- GOTO line
 										- SEARCH (save last used phrase)
 										- REPLACE 
+									- (utilize https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/examples/)
 
 								-->
 							</div>
@@ -194,7 +205,7 @@
 
 					return {
 						isInteger	: isInteger
-					}
+					};
 
 				})();
 

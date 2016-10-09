@@ -33,15 +33,15 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 import java.util.Map;
 
-public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
+public class MainApplication extends Application<MainConfiguration> {
     public static void main(String[] args) throws Exception {
-        new HelloWorldApplication().run(args);
+        new MainApplication().run(args);
     }
 
-    private final HibernateBundle<HelloWorldConfiguration> hibernateBundle =
-        new HibernateBundle<HelloWorldConfiguration>(Person.class) {
+    private final HibernateBundle<MainConfiguration> hibernateBundle =
+        new HibernateBundle<MainConfiguration>(Person.class) {
             @Override
-            public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
+            public DataSourceFactory getDataSourceFactory(MainConfiguration configuration) {
                 return configuration.getDataSourceFactory();
             }
         };
@@ -52,7 +52,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
     }
 
     @Override
-    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    public void initialize(Bootstrap<MainConfiguration> bootstrap) {
         // Enable variable substitution with environment variables
         bootstrap.setConfigurationSourceProvider(
                 new SubstitutingSourceProvider(
@@ -63,23 +63,23 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
         bootstrap.addCommand(new RenderCommand());
         bootstrap.addBundle(new AssetsBundle());
-        bootstrap.addBundle(new MigrationsBundle<HelloWorldConfiguration>() {
+        bootstrap.addBundle(new MigrationsBundle<MainConfiguration>() {
             @Override
-            public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
+            public DataSourceFactory getDataSourceFactory(MainConfiguration configuration) {
                 return configuration.getDataSourceFactory();
             }
         });
         bootstrap.addBundle(hibernateBundle);
-        bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>() {
+        bootstrap.addBundle(new ViewBundle<MainConfiguration>() {
             @Override
-            public Map<String, Map<String, String>> getViewConfiguration(HelloWorldConfiguration configuration) {
+            public Map<String, Map<String, String>> getViewConfiguration(MainConfiguration configuration) {
                 return configuration.getViewRendererConfiguration();
             }
         });
     }
 
     @Override
-    public void run(HelloWorldConfiguration configuration, Environment environment) {
+    public void run(MainConfiguration configuration, Environment environment) {
         final PersonDAO dao = new PersonDAO(hibernateBundle.getSessionFactory());
         final Template template = configuration.buildTemplate();
 

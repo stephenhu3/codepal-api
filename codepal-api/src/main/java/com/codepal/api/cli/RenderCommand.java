@@ -1,6 +1,6 @@
 package com.codepal.api.cli;
 
-import com.codepal.api.HelloWorldConfiguration;
+import com.codepal.api.MainConfiguration;
 import com.codepal.api.core.Template;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
+public class RenderCommand extends ConfiguredCommand<MainConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RenderCommand.class);
 
     public RenderCommand() {
@@ -30,9 +30,9 @@ public class RenderCommand extends ConfiguredCommand<HelloWorldConfiguration> {
     }
 
     @Override
-    protected void run(Bootstrap<HelloWorldConfiguration> bootstrap,
+    protected void run(Bootstrap<MainConfiguration> bootstrap,
                        Namespace namespace,
-                       HelloWorldConfiguration configuration) throws Exception {
+                       MainConfiguration configuration) throws Exception {
         final Template template = configuration.buildTemplate();
 
         if (namespace.getBoolean("include-default")) {

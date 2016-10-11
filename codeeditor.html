@@ -10,10 +10,13 @@
 
 		<!-- Styles -->
 		<style type="text/css">
-			#editor { 
+			#codeeditor #editor { 
 				margin: auto;
 				width: 100%;
 				min-height: 200px;
+			}
+			#codeeditor .wordBreak {
+				word-break: break-word;
 			}
 		</style>
 	</head>
@@ -101,9 +104,8 @@
 			<div class="row">
 				<div class="col-xs=12">
 					<!-- TODO: some sort of element to hold console -->
-					<div id="outConsole" class="jumbotron" style="word-break: break-word ">
+					<div id="outConsole" class="jumbotron wordBreak">
                         <h3>Output:</h3>
-
                     </div>
 				</div>
 			</div>
@@ -242,16 +244,16 @@
 					},
 					constants = {
 						'COMPILE_OK'	: 'OK',
-						'TIME_EXCEEDED': 'TLE',
-						'COMPILER_ERR': 'Compiler has encountered an unknown error!',
-                        'RUNTIME_ERR' : 'Error during runtime!',
+						'TIME_EXCEEDED'	: 'TLE',
 					},
 					messages = {
 						'TIME_EXCEEDED'	: 'Your code exceeded the maximum run time of 5 ' 
 							+ ' seconds. As a result, some statements may not have been '  
 							+ ' executed.',
 						'RUN_ERROR'		: 'Sorry, something went wrong! Please refresh '
-							+ 'and try again.'
+							+ 'and try again.',
+						'COMPILER_ERR'	: 'Compiler has encountered an unknown error!',
+                        'RUNTIME_ERR'	: 'Error during runtime!'
 					};
 
 				// UTIL module
@@ -273,7 +275,7 @@
 					        return msg;
 					    }
 					    else {
-					        msg = constants.RUNTIME_ERR;
+					        msg = messages.RUNTIME_ERR;
 					    }
 					    return msg;
 					}

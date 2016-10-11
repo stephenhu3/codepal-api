@@ -101,7 +101,7 @@
 			<div class="row">
 				<div class="col-xs=12">
 					<!-- TODO: some sort of element to hold console -->
-					<div id="outConsole" class="jumbotron">
+					<div id="outConsole" class="jumbotron" style="word-break: break-word ">
                         <h3>Output:</h3>
 
                     </div>
@@ -242,7 +242,9 @@
 					},
 					constants = {
 						'COMPILE_OK'	: 'OK',
-						'TIME_EXCEEDED'	: 'TLE',
+						'TIME_EXCEEDED': 'TLE',
+						'COMPILER_ERR': 'Compiler has encountered an unknown error!',
+                        'RUNTIME_ERR' : 'Error during runtime!',
 					},
 					messages = {
 						'TIME_EXCEEDED'	: 'Your code exceeded the maximum run time of 5 ' 
@@ -259,13 +261,29 @@
 						return (typeof(num) === 'number' && num % 1 === 0);	
 					}
 
+					function translateErr(msg) {
+
+					    //Get line number and alert
+					    msg = "Error at line " + msg.substr(msg.indexOf(":") + 1);
+					    msg = msg.slice(0, msg.indexOf("tmp") - 2);
+					    msg = msg.replace('(function (exports, require, module, __filename, __dirname) {', '');
+                        
+                        //In case of unhandled error, print generic message
+					    if (msg != "") {
+					        return msg;
+					    }
+					    else {
+					        msg = constants.RUNTIME_ERR;
+					    }
+					    return msg;
+					}
 					return {
-						isInteger	: isInteger
+					    isInteger: isInteger,
+					    translateErr: translateErr
 					};
 
 				})();
-
-
+			 
 				// EXECUTE module
 				var execute = (function(options) {
 
@@ -304,7 +322,7 @@
 
 							// Check if there were runtime errors
 							if (resp.stderr) {
-								consoleOutput += resp.stderr;
+							    consoleOutput += util.translateErr(resp.stderr);
 							} else {
 								// Check if operation exceeded 5 seconds
 								if (resp.status === constants.TIME_EXCEEDED) {

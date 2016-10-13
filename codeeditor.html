@@ -102,8 +102,7 @@
 				
 			</div>
 			<div class="row">
-				<div class="col-xs=12">
-					<!-- TODO: some sort of element to hold console -->
+				<div class="col-xs-12">
 					<div id="outConsole" class="jumbotron wordBreak">
                         <h3>Output:</h3>
                     </div>
@@ -182,6 +181,7 @@
 			Nice to have Optional Features:
 			- Split window view
 			- Tabs (multiple instances)
+			- Import file?
 		-->
 
 		<!-- Factory Function -->
@@ -467,10 +467,6 @@
 					alert('Code snippet save feature -- coming soon...');
 				});
 				$('#codeeditor #downloadBtn').click(codeEditor.editor.download);
-				$('#codeeditor #configBtn').click(function() {
-					codeEdotr.util.configWindow();
-				});
-
 				$('#codeeditor #lang').on('change', function() {
 					var lang = $(this).find('option:selected').val();
 					codeEditor.editor.setEditorLang(lang);

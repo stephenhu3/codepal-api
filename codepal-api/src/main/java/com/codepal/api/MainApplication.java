@@ -1,5 +1,6 @@
 package com.codepal.api;
 
+import com.codepal.api.auth.ExampleAuthenticator;
 import com.codepal.api.auth.ExampleAuthorizer;
 import com.codepal.api.cli.RenderCommand;
 import com.codepal.api.core.Person;
@@ -8,14 +9,9 @@ import com.codepal.api.core.User;
 import com.codepal.api.db.PersonDAO;
 import com.codepal.api.filter.DateRequiredFeature;
 import com.codepal.api.health.TemplateHealthCheck;
+import com.codepal.api.resources.*;
 import com.codepal.api.tasks.EchoTask;
-import com.codepal.api.auth.ExampleAuthenticator;
-import com.codepal.api.resources.FilteredResource;
-import com.codepal.api.resources.HelloWorldResource;
-import com.codepal.api.resources.PeopleResource;
-import com.codepal.api.resources.PersonResource;
-import com.codepal.api.resources.ProtectedResource;
-import com.codepal.api.resources.ViewResource;
+import com.datastax.driver.core.Cluster;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -99,5 +95,7 @@ public class MainApplication extends Application<MainConfiguration> {
         environment.jersey().register(new PeopleResource(dao));
         environment.jersey().register(new PersonResource(dao));
         environment.jersey().register(new FilteredResource());
+        // Cassandra dropwizard configs
+        Cluster cassandra = configuration.getCassandraFactory().build(environment);
     }
 }

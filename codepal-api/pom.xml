@@ -121,6 +121,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>systems.composable</groupId>
+            <artifactId>dropwizard-cassandra</artifactId>
+            <version>4.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

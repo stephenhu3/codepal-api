@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
+import systems.composable.dropwizard.cassandra.CassandraFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,22 @@ import java.util.Collections;
 import java.util.Map;
 
 public class MainConfiguration extends Configuration {
+    // begin dropwizard-cassandra configs
+    @Valid
+    @NotNull
+    private CassandraFactory cassandra = new CassandraFactory();
+
+    @JsonProperty("cassandra")
+    public CassandraFactory getCassandraFactory() {
+        return cassandra;
+    }
+
+    @JsonProperty("cassandra")
+    public void setCassandraFactory(CassandraFactory cassandra) {
+        this.cassandra = cassandra;
+    }
+    // end cassandra configs
+
     @NotEmpty
     private String template;
 

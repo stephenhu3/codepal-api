@@ -95,7 +95,6 @@ public class MainApplication extends Application<MainConfiguration> {
         environment.jersey().register(new PeopleResource(dao));
         environment.jersey().register(new PersonResource(dao));
         environment.jersey().register(new FilteredResource());
-
         // Cassandra dropwizard configs
         Cluster cassandra = configuration.getCassandraFactory().build(environment);
     }

@@ -15,9 +15,6 @@ var CodeEditor = function(options) {
 
 	// init
 	this.editor.initEditor(options.eleId, options.lang);
-	
-	// for debugging purposes
-	this.aceEditor = editor.aceEditor;
 };
 
 CodeEditor.prototype._global = function(options) {

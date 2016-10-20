@@ -3,13 +3,16 @@
  * Editor Module
  * Uses AceEditor API to handle all plugin options
  */
+
+var aceEditor; // FOR DEBUGGING PURPOSES
+
 CodeEditor.prototype._editor = function(options) {
 
 	var self		= this,
 		theme		= options.theme,
 		$filename 	= options.$filename,
 		$extension 	= options.$extension,
-		aceEditor,
+		// aceEditor,
 		aceLangMap	= { // user label to ace .js file name 
 			'C#'			: 'csharp',
 			'C++'			: 'c_pp',
@@ -31,6 +34,9 @@ CodeEditor.prototype._editor = function(options) {
 			'Perl'			: '.perl',
 			'Pascal'		: '.pas',
 			'Python'		: '.py'	
+		},
+		savedStates = {
+			// TODO
 		},
 		defaultConfig = {
 			// TODO
@@ -77,25 +83,7 @@ CodeEditor.prototype._editor = function(options) {
 		}
 	}
 
-	function goToLine(lineNumber) {
-		if (self.util.isInteger(size)) {
-			aceEditor.gotoLine(lineNumber);
-		}
-	}
-
-	function find(phrase, backwards, regExp) {
-		if (!phrase) {
-			return;
-		}
-		var options = $.extend({}, defaultSearchSettings);
-		if (direction) {
-			options.backwards = true;
-		}
-		if (regExp) {
-			options.regExp = true;
-		}
-		aceEditor.find(phrase, options);
-	}
+	function 
 
 	return {
 		initEditor		: initEditor,

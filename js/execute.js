@@ -89,6 +89,6 @@ CodeEditor.prototype._execute = function(options) {
 
 	return {
 		run	: run
-	}
+	};
 
 };

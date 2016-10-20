@@ -159,7 +159,7 @@
 
 		</section>
 
-		<!-- Scripts -->
+		<!-- Libaries  -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
@@ -167,6 +167,12 @@
         
 		<!-- TODO: Include locally -->
         <script type="text/javascript" src="https://cdn.jsdelivr.net/g/ace@1.2.4(min/theme-ambiance.js+min/theme-chaos.js+min/theme-chrome.js+min/theme-clouds.js+min/theme-clouds_midnight.js+min/theme-cobalt.js+min/theme-crimson_editor.js+min/theme-dawn.js+min/theme-dreamweaver.js+min/theme-eclipse.js+min/theme-github.js+min/theme-idle_fingers.js+min/theme-iplastic.js+min/theme-katzenmilch.js+min/theme-kr_theme.js+min/theme-kuroir.js+min/theme-merbivore.js+min/theme-merbivore_soft.js+min/theme-mono_industrial.js+min/theme-monokai.js+min/theme-pastel_on_dark.js+min/theme-solarized_dark.js+min/theme-solarized_light.js+min/theme-sqlserver.js+min/theme-terminal.js+min/theme-textmate.js+min/theme-tomorrow.js+min/theme-tomorrow_night.js+min/theme-tomorrow_night_blue.js+min/theme-tomorrow_night_bright.js+min/theme-tomorrow_night_eighties.js+min/theme-twilight.js+min/theme-vibrant_ink.js+min/theme-xcode.js)"></script>
+
+		<!-- local scripts -->
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/util.js"></script>
+		<script type="text/javascript" src="js/editor.js"></script>
+		<script type="text/javascript" src="js/execute.js"></script>
 
 		<!--
 			For local testing:
@@ -184,272 +190,6 @@
 			- Import file?
 		-->
 
-		<!-- Factory Function -->
-		<script type="text/javascript">
-			var aceEditor; // CAUTION	making global for debugging, keep only in dev
-			function CodeEditor(options) {
-
-				var clientSecretKey = '9b3e30247878ad73b13bdae8a333c74afe4877fb', // TODO: move to env var later
-					//aceEditor,
-					lang = options.lang, 
-					theme = options.theme,
-					aceLangMap = { // user label to ace .js file name 
-						'C#'			: 'csharp',
-						'C++'			: 'c_pp',
-						'Haskell'		: 'haskell',
-						'Java'			: 'java',
-						'JavaScript'	: 'javascript',
-						'Objective-C'	: 'objectivec',
-						'Perl'			: 'perl',
-						'Pascal'		: 'pascal',
-						'Python'		: 'python'	
-					},
-					hackerLangMap = { // user label hacker earth lang format 
-						'C'				: 'C',
-						'C++'			: 'CPP',
-						'Clojure'		: 'CLOJURE',
-						'C#'			: 'CSHARP',
-						'Go'			: 'GO',
-						'Haskell'		: 'HASKELL',
-						'Java'			: 'JAVA',
-						'JavaScript'	: 'JAVASCRIPT_NODE',
-						'Objective-C'	: 'OBJECTIVEC',
-						'Pascal'		: 'PASCAL',
-						'Perl'			: 'PERL',
-						'Python'		: 'PYTHON',
-						'R'				: 'R',
-						'Ruby'			: 'RUBY',
-						'Scala'			: 'Scala'
-					},
-					extensionMap = {
-						'C#'			: '.cs',
-						'C++'			: '.cpp',
-						'Haskell'		: '.hs',
-						'Java'			: '.java',
-						'JavaScript'	: '.js',
-						'Objective-C'	: '.m',
-						'Perl'			: '.perl',
-						'Pascal'		: '.pas',
-						'Python'		: '.py'	
-					},
-					defaultSearchSettings = {
-						backwards		: false,
-						wrap 			: true,
-						caseSensitive   : false,
-						wholeWord		: false,
-						regExp 			: false
-					};
-					defaultConfig = {
-						// TODO
-					},
-					constants = {
-						'COMPILE_OK'	: 'OK',
-						'TIME_EXCEEDED'	: 'TLE',
-					},
-					messages = {
-						'TIME_EXCEEDED'	: 'Your code exceeded the maximum run time of 5 ' 
-							+ ' seconds. As a result, some statements may not have been '  
-							+ ' executed.',
-						'RUN_ERROR'		: 'Sorry, something went wrong! Please refresh '
-							+ 'and try again.',
-						'COMPILER_ERR'	: 'Compiler has encountered an unknown error!',
-                        'RUNTIME_ERR'	: 'Error during runtime!'
-					};
-
-				// UTIL module
-				var util = (function() {
-
-					function isInteger(num) {
-						return (typeof(num) === 'number' && num % 1 === 0);	
-					}
-
-					function translateErr(msg) {
-
-					    //Seperate lines at occurrences of \n up to 4th line, 
-					           //there's probably a better/less ugly way to do this
-                        line1 = msg.slice(0, msg.indexOf("\n"));
-                        line2 = msg.substr(msg.indexOf("\n") + 1);
-                        line3 = line2.substr(line2.indexOf("\n") + 1);
-                        line4 = line3.substr(line3.indexOf("\n") + 2);
-                        line2 = line2.slice(0, line2.indexOf("\n"));
-                        //Garbage line, cut from output
-                        line3 = line3.slice(0, line3.indexOf("\n"));
-                        line4 = line4.slice(0, line4.indexOf("\n"));
-                        //Clean up lines
-                        line1 = "Error ar line" + line1.substr(line1.indexOf(":")+1)+":";
-                        line2 = '"' + line2.substr(line2.indexOf("{")+1)+ '"';
-
-
-                        msg = line1 + '<br/>' + line2 + '<br/>' + line4;
-
-					    //In case of unhandled error, print generic message
-					    if (msg != "") {
-					        return msg;
-					    }
-					    else {
-					        msg = messages.RUNTIME_ERR;
-					    }
-					    return msg;
-					}
-					return {
-					    isInteger: isInteger,
-					    translateErr: translateErr
-					};
-
-				})();
-			 
-				// EXECUTE module
-				var execute = (function(options) {
-
-					var $outConsole = options.$outConsole;
-
-					function run($btn) {
-						if (!editor.getEditorText()) {
-							alert('Please enter at least one statement to run.');
-							$btn.prop('disabled', false);
-							return;
-						}
-						
-						$outConsole.html('Working...');
-
-						$.ajax({
-							url: 'https://api.hackerearth.com/v3/code/run/',
-							type: 'POST',
-							dataType: 'json',
-							data: {
-								client_secret: clientSecretKey,
-								lang: hackerLangMap[lang],
-								source: editor.getEditorText()
-							},
-						})
-						.done(function(data, textStatus, jqXHR) {
-							// Check for comilation errors
-							if (data.compile_status !== constants.COMPILE_OK) {
-								var textErr = data.run_status.status_detail + 
-									'<br/>' + data.compile_status;
-								$outConsole.html(textErr);
-								return;
-							}
-
-							var resp = data.run_status;
-							var consoleOutput = "Time Used: " + resp.time_used + "<br/><br/>";
-
-							// Check if there were runtime errors
-							if (resp.stderr) {
-							    consoleOutput += util.translateErr(resp.stderr);
-							} else {
-								// Check if operation exceeded 5 seconds
-								if (resp.status === constants.TIME_EXCEEDED) {
-									consoleOutput += messages.TIME_EXCEEDED;
-								}
-								consoleOutput += resp.output_html;			
-							}
-							$outConsole.html(consoleOutput);
-						})
-						.fail(function(jqXHR, textStatus, errorThrown) {
-							$outConsole.html(messages.RUN_ERROR);
-						})
-						.always(function() {
-							$btn.prop('disabled', false);
-						});
-					}
-
-					return {
-						run 	: run
-					};
-
-				})(options.execute);
-
-				// EDITOR module
-				var editor = (function(options) {
-
-					var $filename = options.$filename;
-					var $extension = options.$extension;
-
-					function initEditor(eleId, theme, lang) {
-						aceEditor = ace.edit(eleId);
-						setEditorTheme(theme);
-						setEditorLang(lang);
-						aceEditor.setAutoScrollEditorIntoView(true);
-						aceEditor.getSession().setTabSize(4);
-					}
-
-					function getEditorText() {
-						return aceEditor.getValue();
-					}
-
-					function download() {
-						// lib will automatically replace any non-valid filename chars with '-'
-						var filename = $filename.val();
-						if (!$filename.val()) {
-							alert('Please enter a filename.');
-							return;
-						}
-						var text = getEditorText();
-						var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-						saveAs(blob, filename + extensionMap[lang]);
-					}
-
-					function setEditorTheme(theme) {
-						aceEditor.setTheme("ace/theme/" + theme);
-					}
-
-					function setEditorLang(newLang) {
-						lang = newLang;
-						aceEditor.getSession().setMode("ace/mode/" + aceLangMap[lang]);
-						$extension.html(extensionMap[lang]);
-					}
-
-					function setTabSize(size) {
-						if (util.isInteger(size)) {
-							aceEditor.getSession().setTabSize(size);	
-						}
-					}
-
-					function goToLine(lineNumber) {
-						if (util.isInteger(size)) {
-							aceEditor.gotoLine(lineNumber);
-						}
-					}
-
-					function find(phrase, backwards, regExp) {
-						if (!phrase) {
-							return;
-						}
-						var options = $.extend({}, defaultSearchSettings);
-						if (direction) {
-							options.backwards = true;
-						}
-						if (regExp) {
-							options.regExp = true;
-						}
-						aceEditor.find(phrase, options);
-					}
-
-					return {
-						initEditor		: initEditor,
-						download		: download,
-						getEditorText	: getEditorText,
-						setEditorTheme	: setEditorTheme,
-						setEditorLang	: setEditorLang
-					};
-
-				})(options.editor);
-
-				// "CONSTRUCTOR"
-				(function() {
-					editor.initEditor(options.eleId, theme, lang);
-				})();
-
-				// Return modules
-				return {
-					editor 		: editor,
-					execute 	: execute
-				};
-
-			}
-		</script>
-
 		<!-- Main Script -->
 		<script type="text/javascript">
 			
@@ -457,16 +197,16 @@
 
 			$(document).ready(function() {
 
-				codeEditor = CodeEditor({
+				codeEditor = new CodeEditor({
 					eleId		: 'editor',
 					lang 		: 'JavaScript',
-					theme 		: 'monokai',
 					execute		: {
 						$outConsole	: $('#outConsole'),
 					},
 					editor 		: {
 						$filename 	: $('#filename'),
-						$extension	: $('#extension')
+						$extension	: $('#extension'),
+						theme 		: 'monokai'
 					}
 				});
 

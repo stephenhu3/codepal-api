@@ -44,9 +44,14 @@ CodeEditor.prototype._util = function() {
 	    return msg;
 	}
 
+	function genHash() {
+		return new Date().getTime();
+	}
+
 	return {
-	    isInteger: isInteger,
-	    translateErr: translateErr
+	    isInteger		: isInteger,
+	    translateErr	: translateErr,
+	    genHash			: genHash
 	};
 
 };

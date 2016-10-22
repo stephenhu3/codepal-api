@@ -12,6 +12,7 @@ CodeEditor.prototype._editor = function(options) {
 		theme		= options.theme,
 		$filename 	= options.$filename,
 		$extension 	= options.$extension,
+		currHash,
 		// aceEditor,
 		aceLangMap	= { // user label to ace .js file name 
 			'C#'			: 'csharp',
@@ -35,8 +36,8 @@ CodeEditor.prototype._editor = function(options) {
 			'Pascal'		: '.pas',
 			'Python'		: '.py'	
 		},
-		savedStates = {
-			// TODO
+		sessions = {
+			// Stores aceEditor sessions to mimic tab funcitonality
 		},
 		defaultConfig = {
 			// TODO
@@ -49,6 +50,9 @@ CodeEditor.prototype._editor = function(options) {
 		setEditorLang(lang);
 		aceEditor.setAutoScrollEditorIntoView(true);
 		aceEditor.getSession().setTabSize(4);
+
+		// DEFAULT: empty, unnamed tab
+		createNewSession();
 	}
 
 	function getEditorText() {
@@ -83,15 +87,69 @@ CodeEditor.prototype._editor = function(options) {
 		}
 	}
 
-	function 
+	function deleteSession(hash) {
+		if (typeof(sessions[hash]) === 'undefined') {
+			return;
+		}
+		delete sessions[hash];
+		self.ui.destroyTab(hash);
+	}
+
+	function createNewSession(){
+		// create new hash based on timestamp, which should be unique
+		if (currHash) {
+			saveSession(currHash);
+		}
+		currHash = self.util.genHash();
+
+		var newSession = generateNewSession();
+		sessions[currHash] = newSession;
+		restoreSession(currHash);
+		self.ui.generateAndAppendNewTab(currHash);
+	}
+
+	function switchSessions(hash) {
+		if (typeof(sessions[hash]) === 'undefined') {
+			return;
+		}
+		saveSession(currHash);
+		currHash = hash;
+		restoreSession(currHash);
+		self.ui.switchActiveTab(currHash);
+	}
+
+	// PRIVATE
+	// -------------------------------
+
+	function generateNewSession() {
+		return new ace.EditSession('', aceLangMap[self.global.lang]);
+	}
+
+	function restoreSession(hash) {
+		if (typeof(sessions[hash]) === 'undefined') {
+			return;
+		}
+		aceEditor.setSession(sessions[hash]);
+	}
+
+	function saveSession(hash) {
+		if (typeof(sessions[hash]) === 'undefined') {
+			return;
+		}
+		// overwrite existing saved session with newest version
+		sessions[hash] = aceEditor.getSession();
+	}
 
 	return {
-		initEditor		: initEditor,
-		download		: download,
-		getEditorText	: getEditorText,
-		setEditorTheme	: setEditorTheme,
-		setEditorLang	: setEditorLang,
+		initEditor			: initEditor,
+		download			: download,
+		getEditorText		: getEditorText,
+		setEditorTheme		: setEditorTheme,
+		setEditorLang		: setEditorLang,
+		deleteSession		: deleteSession,
+		createNewSession	: createNewSession,
+		switchSessions		: switchSessions,
 
-		aceEditor		: aceEditor	// for debugging purposes
+		aceEditor			: aceEditor	// for debugging purposes
 	};
 };

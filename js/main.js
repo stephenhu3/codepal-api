@@ -8,6 +8,7 @@ var CodeEditor = function(options) {
 	this.util = this._util();
 	this.editor = this._editor(options.editor);
 	this.execute = this._execute(options.execute);
+	this.ui = this._ui(options.ui);
 
 	this.global = this._global(options);
 	this.defaultConfig = this._defaultConfig;

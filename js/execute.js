@@ -59,7 +59,7 @@ CodeEditor.prototype._execute = function(options) {
 			// Check for comilation errors
 			if (data.compile_status !== constants.COMPILE_OK) {
 				var textErr = data.run_status.status_detail + 
-					'<br/>' + data.compile_status;
+					'<br/>' + self.util.translateErr(data.compile_status);
 				$outConsole.html(textErr);
 				return;
 			}

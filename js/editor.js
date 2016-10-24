@@ -16,7 +16,7 @@ CodeEditor.prototype._editor = function(options) {
 		// aceEditor,
 		aceLangMap	= { // user label to ace .js file name 
 			'C#'			: 'csharp',
-			'C++'			: 'c_pp',
+			'C++'			: 'c_cpp',
 			'Haskell'		: 'haskell',
 			'Java'			: 'java',
 			'JavaScript'	: 'javascript',

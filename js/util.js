@@ -15,23 +15,50 @@ CodeEditor.prototype._util = function() {
 		return (typeof(num) === 'number' && num % 1 === 0);	
 	}
 
-	function translateErr(msg) {
+	function translateErr(msg, lang) {
+	 
+	    var lineArray = msg.split("\n");
+	    output = '';
+	    newLine = '<br/>'
+	    numLines = lineArray.length;
 	    /*TODO
         *   Language specific compiler/runtime error handling
+        	'CPP',
+	    	'CSHARP',   Basic errors are now handled
+			'HASKELL',
+			'JAVA',
+			'JAVASCRIPT_NODE',  
+			'OBJECTIVEC',
+			'PASCAL',
+			'PERL',
+			'PYTHON',
         */
+
 	    /* Generic translation
         *  prints each line directly from HackerEarth's return error
         */
-	    var lineArray = msg.split("\n");
-	    output = '';
-	    for (i = 0; i < lineArray.length; i++) {
-	        output += lineArray[i] + '<br/>';
+	    if (lang == 'CSHARP') {
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('.cs');
+	            if (index != -1)
+	                output += lineArray[i].substring(index+3) + newLine;
+	            else
+	                output += lineArray[i] + newLine;
+	        }
 	    }
+        
+	    output += 'Original message' + newLine;    //debug
+	    for (i = 0; i < numLines; i++) {
+	        output += lineArray[i] + newLine;
+	    }
+       
+	    output += "The current language is:" + newLine + lang;  //debug
 
 	    //In case of unhandled error, print generic message
 	    if (output.length === 0) {
 	        msg = messages.RUNTIME_ERR;
 	    }
+        
 	    return output;
 	}
 

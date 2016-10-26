@@ -59,7 +59,7 @@ CodeEditor.prototype._execute = function(options) {
 			// Check for comilation errors
 			if (data.compile_status !== constants.COMPILE_OK) {
 				var textErr = data.run_status.status_detail + 
-					'<br/>' + self.util.translateErr(data.compile_status);
+					'<br/>' + self.util.translateErr(data.compile_status, hackerLangMap[self.global.lang]);
 				$outConsole.html(textErr);
 				return;
 			}
@@ -69,7 +69,7 @@ CodeEditor.prototype._execute = function(options) {
 
 			// Check if there were runtime errors
 			if (resp.stderr) {
-			    consoleOutput += self.util.translateErr(resp.stderr);
+			    consoleOutput += self.util.translateErr(resp.stderr, hackerLangMap[self.global.lang]);
 			} else {
 				// Check if operation exceeded 5 seconds
 				if (resp.status === constants.TIME_EXCEEDED) {

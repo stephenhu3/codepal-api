@@ -45,7 +45,7 @@ CodeEditor.prototype._ui = function(options) {
 	// If hash and name are not defined, use defaults
 	function createTab(hash, name) {
 		var $tab = $(defn_tab);
-		var tabName = (name && name.trim().length > 0) ? name : 'untitled';
+		var tabName = name || 'untitled';
 
 		$tab.addClass('active')
 			.attr('role', 'editorinstance')

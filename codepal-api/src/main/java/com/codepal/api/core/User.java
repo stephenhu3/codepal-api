@@ -1,32 +1,55 @@
 package com.codepal.api.core;
 
-import java.security.Principal;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class User implements Principal {
-    private final String name;
+public class User {
+    @JsonProperty(required = true)
+    private String userId;
+    @JsonProperty(required = true)
+    private String username;
+    @JsonProperty(required = true)
+    private String accessToken;
+    @JsonProperty(required = true)
+    private String settings;
 
-    private final Set<String> roles;
+    public User() {}
 
-    public User(String name) {
-        this.name = name;
-        this.roles = null;
+    public User(String userId, String username, String accessToken, String settings) {
+        this.userId = userId;
+        this.username = username;
+        this.accessToken = accessToken;
+        this.settings = settings;
     }
 
-    public User(String name, Set<String> roles) {
-        this.name = name;
-        this.roles = roles;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getName() {
-        return name;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public int getId() {
-        return (int) (Math.random() * 100);
+    public String getUsername() {
+        return username;
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getSettings() {
+        return settings;
+    }
+
+    public void setSettings(String settings) {
+        this.settings = settings;
     }
 }

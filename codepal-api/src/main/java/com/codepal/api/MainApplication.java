@@ -1,22 +1,20 @@
 package com.codepal.api;
 
-import com.codepal.api.auth.ExampleAuthenticator;
-import com.codepal.api.auth.ExampleAuthorizer;
+// import com.codepal.api.auth.ExampleAuthenticator;
+// import com.codepal.api.auth.ExampleAuthorizer;
+
 import com.codepal.api.cli.RenderCommand;
 import com.codepal.api.core.Person;
 import com.codepal.api.core.Template;
-import com.codepal.api.core.User;
 import com.codepal.api.db.PersonDAO;
 import com.codepal.api.filter.DateRequiredFeature;
 import com.codepal.api.health.TemplateHealthCheck;
 import com.codepal.api.resources.*;
 import com.codepal.api.tasks.EchoTask;
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
-import io.dropwizard.auth.AuthDynamicFeature;
-import io.dropwizard.auth.AuthValueFactoryProvider;
-import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -30,17 +28,37 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import java.util.Map;
 
 public class MainApplication extends Application<MainConfiguration> {
+    public enum Cassandra {
+        INSTANCE;
+        private static Cluster cluster;
+        private static Session session;
+
+        public static Cluster getCluster() {
+            if (cluster == null || cluster.isClosed()) {
+                cluster = Cluster.builder().addContactPoint("localhost").build();
+            }
+            return cluster;
+        }
+
+        public static Session getSession() {
+            if (session == null) {
+                session = getCluster().connect("codepal");
+            }
+            return session;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         new MainApplication().run(args);
     }
 
     private final HibernateBundle<MainConfiguration> hibernateBundle =
-        new HibernateBundle<MainConfiguration>(Person.class) {
-            @Override
-            public DataSourceFactory getDataSourceFactory(MainConfiguration configuration) {
-                return configuration.getDataSourceFactory();
-            }
-        };
+            new HibernateBundle<MainConfiguration>(Person.class) {
+                @Override
+                public DataSourceFactory getDataSourceFactory(MainConfiguration configuration) {
+                    return configuration.getDataSourceFactory();
+                }
+            };
 
     @Override
     public String getName() {
@@ -82,19 +100,21 @@ public class MainApplication extends Application<MainConfiguration> {
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
         environment.jersey().register(DateRequiredFeature.class);
-        environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
-                .setAuthenticator(new ExampleAuthenticator())
-                .setAuthorizer(new ExampleAuthorizer())
-                .setRealm("SUPER SECRET STUFF")
-                .buildAuthFilter()));
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+        // environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
+        //         .setAuthenticator(new ExampleAuthenticator())
+        //         .setAuthorizer(new ExampleAuthorizer())
+        //         .setRealm("SUPER SECRET STUFF")
+        //         .buildAuthFilter()));
+        // environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new HelloWorldResource(template));
+        environment.jersey().register(new UserResource());
         environment.jersey().register(new ViewResource());
-        environment.jersey().register(new ProtectedResource());
+        // environment.jersey().register(new ProtectedResource());
         environment.jersey().register(new PeopleResource(dao));
         environment.jersey().register(new PersonResource(dao));
         environment.jersey().register(new FilteredResource());
+
         // Cassandra dropwizard configs
         Cluster cassandra = configuration.getCassandraFactory().build(environment);
     }

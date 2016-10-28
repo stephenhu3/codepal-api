@@ -1,3 +1,7 @@
+cassandra:
+  clusterName: "Test Cluster"
+  contactPoints: ["127.0.0.1"]
+
 template: Hello, %s!
 defaultName: Stranger
 

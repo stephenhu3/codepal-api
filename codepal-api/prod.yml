@@ -1,4 +1,56 @@
-contactPoints: ec2-52-38-68-51.us-west-2.compute.amazonaws.com
+# TODO: Setup Cassandra prod configs
+cassandra:
+  clusterName: "Test Cluster"
+  #keyspace: codepal
+  #validationQuery:
+  #healthCheckTimeout:
+  contactPoints: ["127.0.0.1"]
+  #port:
+  #protocolVersion:
+  #compression:
+  #maxSchemaAgreementWait:
+  #ssl:
+  #  type:
+  #reconnectionPolicy:
+  #  type:
+  #authProvider:
+  #  type:
+  #retryPolicy:
+  #  type:
+  #loadBalancingPolicy:
+  #  type:
+  #speculativeExecutionPolicy:
+  #  type:
+  #queryOptions:
+  #  consistencyLevel:
+  #  serialConsistencyLevel:
+  #  fetchSize:
+  #socketOptions:
+  #  connectTimeoutMillis:
+  #  readTimeoutMillis:
+  #  keepAlive:
+  #  reuseAddress:
+  #  soLinger:
+  #  tcpNoDelay:
+  #  receiveBufferSize:
+  #  sendBufferSize:
+  #poolingOptions:
+  #  heartbeatInterval:
+  #  poolTimeout:
+  #  local:
+  #    maxRequestsPerConnection:
+  #    newConnectionThreshold:
+  #    coreConnections:
+  #    maxConnections:
+  #  remote:
+  #    maxRequestsPerConnection:
+  #    newConnectionThreshold:
+  #    coreConnections:
+  #    maxConnections:
+  #metricsEnabled:
+  #jmxEnabled:
+  #shutdownGracePeriod:
+
 template: Hello, %s!
 
 defaultName: ${DW_DEFAULT_NAME:-Stranger}

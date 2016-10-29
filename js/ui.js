@@ -7,7 +7,10 @@ CodeEditor.prototype._ui = function(options) {
 
 	var self 			= this,
 		$tabContainer 	= options.$tabContainer,
-		defn_tab 		= "<li class=''><a></a></li>"; 
+		defn_tab 		= "<li class=''></li>",
+		defn_anchor		= "<a></a>",
+		defn_span		= "<span></span>",
+		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
 
 	// create a new boostrap tab and appends it to the container
 	function generateAndAppendNewTab(hash, name) {
@@ -17,10 +20,26 @@ CodeEditor.prototype._ui = function(options) {
 		switchActiveTab(hash);
 	}
 
+	function restoreAdjacentTab(hash) {
+		var $sibling = $('[data-editorhash="' + hash + '"]')
+			.prev('[data-tab="tab"]');
+		if ($sibling.length === 0) {
+			$sibling = $('[data-editorhash="' + hash + '"]')
+			.next('[data-tab="tab"]');
+		}			
+		var newHash = $sibling.attr('data-editorhash');
+		switchActiveTab(newHash);
+		return newHash;
+	}
+
 	// switches focus in bootstrap tabs
 	function switchActiveTab(hash) {
-		$('[data-editoraction="switch"]').removeClass('active');
-		$('[data-editorhash=' + hash + ']').addClass('active');
+		$('[data-editoraction="switch"]')
+			.closest('[data-tab="tab"]')
+			.removeClass('active');
+		$('[data-editorhash=' + hash + ']')
+			.closest('[data-tab="tab"]')
+			.addClass('active');
 	}
 
 	// removes tab from the UI
@@ -32,30 +51,60 @@ CodeEditor.prototype._ui = function(options) {
 	// ------------------------------------
 
 	function bindTab($tab) {
-		$tab.click(function() {
-			if ($(this).hasClass('active')) {
-				return;
-			}
-			self.editor.switchSessions($(this).attr('data-editorhash'));
-		});
+		$tab.find('[data-editoraction="switch"]')
+			.click(function() {
+				var $tab = $(this).closest('[data-tab="tab"]'),
+					hash = $tab.attr('data-editorhash');
+				
+				if ($tab.hasClass('active')) {
+					return;
+				}
+				self.editor.switchSession(hash);
+				switchActiveTab(hash);
+			});
+
+		$tab.find('[data-editoraction="delete"]')
+			.click(function() {
+				var $tab = $(this).closest('[data-tab="tab"]'),
+					hash = $tab.attr('data-editorhash');
+
+				if (self.editor.deleteSession(hash)) {
+					var newHash = restoreAdjacentTab(hash);
+					self.editor.switchSession(newHash);
+					destroyTab(hash);
+				}
+			});
 	}
 
 	// Returns a jQuery object representing a new file tab
 	// By default: it is active
 	// If hash and name are not defined, use defaults
 	function createTab(hash, name) {
-		var $tab = $(defn_tab);
-		var tabName = name || 'untitled';
+		var $tab 	= $(defn_tab),
+			$anchor	= $(defn_anchor),
+			$cross	= $(defn_cross),
+			$name	= $(defn_span),
+			tabName = name || 'untitled';
+
+		$cross.attr('data-tab', 'cross')
+			.attr('data-editoraction', 'delete')
+			.addClass('clickHand');
+
+		$name.html(tabName)
+			.addClass('clickHand')
+			.attr('data-tab', 'name')
+			.attr('data-editoraction', 'switch');
+
+		$anchor.attr('role', 'tab')
+			.attr('href', '#')
+			.append($name)
+			.append($cross);
 
 		$tab.addClass('active')
+			.attr('data-tab', 'tab')
 			.attr('role', 'editorinstance')
-			.attr('data-editoraction', 'switch')
-			.attr('data-editorhash', hash);
-
-		$a = $tab.find('a');
-		$a.attr('role', 'tab')
-			.attr('href', '#')
-			.html(tabName);
+			.attr('data-editorhash', hash)
+			.append($anchor);
 
 		return $tab;
 	}
@@ -66,6 +115,7 @@ CodeEditor.prototype._ui = function(options) {
 	}
 
 	return {
+		restoreAdjacentTab		: restoreAdjacentTab,
 		generateAndAppendNewTab	: generateAndAppendNewTab,
 		switchActiveTab			: switchActiveTab,
 		destroyTab				: destroyTab

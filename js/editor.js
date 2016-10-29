@@ -12,6 +12,7 @@ CodeEditor.prototype._editor = function(options) {
 		theme		= options.theme,
 		$filename 	= options.$filename,
 		$extension 	= options.$extension,
+		lastHash,
 		currHash,
 		// aceEditor,
 		aceLangMap	= { // user label to ace .js file name 
@@ -88,17 +89,24 @@ CodeEditor.prototype._editor = function(options) {
 	}
 
 	function deleteSession(hash) {
+		// LIMITATION - always have at least one tab open
+		var numSessions = Object.keys(sessions).length;
+		if (numSessions === 1) {
+			return false;
+		}
+
 		if (typeof(sessions[hash]) === 'undefined') {
-			return;
+			return false;
 		}
 		delete sessions[hash];
-		self.ui.destroyTab(hash);
+		return true;
 	}
 
 	function createNewSession(){
 		// create new hash based on timestamp, which should be unique
 		if (currHash) {
 			saveSession(currHash);
+			lastHash = currHash;
 		}
 		currHash = self.util.genHash();
 
@@ -108,14 +116,14 @@ CodeEditor.prototype._editor = function(options) {
 		self.ui.generateAndAppendNewTab(currHash);
 	}
 
-	function switchSessions(hash) {
+	function switchSession(hash) {
 		if (typeof(sessions[hash]) === 'undefined') {
 			return;
 		}
 		saveSession(currHash);
+		lastHash = currHash;
 		currHash = hash;
 		restoreSession(currHash);
-		self.ui.switchActiveTab(currHash);
 	}
 
 	// PRIVATE
@@ -148,7 +156,7 @@ CodeEditor.prototype._editor = function(options) {
 		setEditorLang		: setEditorLang,
 		deleteSession		: deleteSession,
 		createNewSession	: createNewSession,
-		switchSessions		: switchSessions,
+		switchSession		: switchSession,
 
 		aceEditor			: aceEditor	// for debugging purposes
 	};

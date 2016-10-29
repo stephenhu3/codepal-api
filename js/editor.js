@@ -12,7 +12,6 @@ CodeEditor.prototype._editor = function(options) {
 		theme		= options.theme,
 		$filename 	= options.$filename,
 		$extension 	= options.$extension,
-		lastHash,
 		currHash,
 		// aceEditor,
 		aceLangMap	= { // user label to ace .js file name 
@@ -69,7 +68,7 @@ CodeEditor.prototype._editor = function(options) {
 		}
 		var text = getEditorText();
 		var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-		saveAs(blob, filename + extensionMap[self.global.lang]);
+		saveAs(blob, filename + extensionMap[session[currHash].lang]);
 	}
 
 	function setEditorTheme(theme) {
@@ -77,9 +76,8 @@ CodeEditor.prototype._editor = function(options) {
 	}
 
 	function setEditorLang(newLang) {
-		self.global.lang = newLang;
-		aceEditor.getSession().setMode("ace/mode/" + aceLangMap[self.global.lang]);
-		$extension.html(extensionMap[self.global.lang]);
+		aceEditor.getSession().setMode("ace/mode/" + aceLangMap[newLang]);
+		$extension.html(extensionMap[newLang]);
 	}
 
 	function setTabSize(size) {
@@ -104,14 +102,21 @@ CodeEditor.prototype._editor = function(options) {
 
 	function createNewSession(){
 		// create new hash based on timestamp, which should be unique
+		var currLang;
 		if (currHash) {
 			saveSession(currHash);
-			lastHash = currHash;
+			currLang = sessions[currHash].lang;
 		}
 		currHash = self.util.genHash();
 
-		var newSession = generateNewSession();
-		sessions[currHash] = newSession;
+		var newLang  	= currLang || 'JavaScript',
+			newSession 	= generateNewSession(newLang),
+			sessionObj	= {
+				aceSession	: newSession,
+				lang		: newLang
+			};
+
+		sessions[currHash] = sessionObj;
 		restoreSession(currHash);
 		self.ui.generateAndAppendNewTab(currHash);
 	}
@@ -121,7 +126,6 @@ CodeEditor.prototype._editor = function(options) {
 			return;
 		}
 		saveSession(currHash);
-		lastHash = currHash;
 		currHash = hash;
 		restoreSession(currHash);
 	}
@@ -129,15 +133,18 @@ CodeEditor.prototype._editor = function(options) {
 	// PRIVATE
 	// -------------------------------
 
-	function generateNewSession() {
-		return new ace.EditSession('', aceLangMap[self.global.lang]);
+	function generateNewSession(newLang) {
+		return new ace.EditSession('', aceLangMap[newLang]);
 	}
 
 	function restoreSession(hash) {
 		if (typeof(sessions[hash]) === 'undefined') {
 			return;
 		}
-		aceEditor.setSession(sessions[hash]);
+		var sessionObj = sessions[hash];
+		aceEditor.setSession(sessionObj.aceSession);
+		setEditorLang(sessionObj.lang);
+		self.ui.setLang(sessionObj.lang);
 	}
 
 	function saveSession(hash) {
@@ -145,7 +152,8 @@ CodeEditor.prototype._editor = function(options) {
 			return;
 		}
 		// overwrite existing saved session with newest version
-		sessions[hash] = aceEditor.getSession();
+		sessions[hash].aceSession = aceEditor.getSession();
+		sessions[hash].lang = self.ui.getCurrLang();
 	}
 
 	return {

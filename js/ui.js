@@ -7,10 +7,22 @@ CodeEditor.prototype._ui = function(options) {
 
 	var self 			= this,
 		$tabContainer 	= options.$tabContainer,
+		$langContainer	= options.$langContainer,
 		defn_tab 		= "<li class=''></li>",
 		defn_anchor		= "<a></a>",
 		defn_span		= "<span></span>",
 		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
+
+	
+	function setLang(lang) {
+		$langContainer.find(':selected').prop('selected', false);
+		$langContainer.find('option[value="' + lang + '"]')
+			.prop('selected', true);
+	}
+
+	function getCurrLang() {
+		return $langContainer.find(':selected').val();
+	}
 
 	// create a new boostrap tab and appends it to the container
 	function generateAndAppendNewTab(hash, name) {
@@ -115,6 +127,8 @@ CodeEditor.prototype._ui = function(options) {
 	}
 
 	return {
+		setLang					: setLang,
+		getCurrLang				: getCurrLang,
 		restoreAdjacentTab		: restoreAdjacentTab,
 		generateAndAppendNewTab	: generateAndAppendNewTab,
 		switchActiveTab			: switchActiveTab,

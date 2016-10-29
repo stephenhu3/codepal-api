@@ -3,7 +3,7 @@ package com.codepal.api.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserSearch {
-    @JsonProperty(required=true)
+    @JsonProperty
     private String accessToken;
 
     @JsonProperty

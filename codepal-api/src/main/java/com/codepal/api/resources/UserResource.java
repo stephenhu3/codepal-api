@@ -10,10 +10,8 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
@@ -28,10 +26,11 @@ public class UserResource {
     public UserResource() {
     }
 
+    // Creates a user (perform upon sign up)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createUser(User user) {
+    public User createUser(@Valid User user) {
         String userId = user.getUserId();
         String username = user.getUsername();
         String accessToken = user.getAccessToken();
@@ -47,13 +46,15 @@ public class UserResource {
         );
         BoundStatement boundStatement = new BoundStatement(statement);
         session.execute(boundStatement.bind(userId, accessToken, username, settings));
+        return new User(userId, username, accessToken, settings);
     }
 
+    // Updates a user's access token (perform upon login)
     @POST
-    @Path("/accesstokens") // note path is case sensitive
+    @Path("/accesstokens") // note path is case-sensitive
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void updateAccessToken(AccessToken token) {
+    public AccessToken updateAccessToken(@Valid AccessToken token) {
         String accessToken = token.getAccessToken();
         String userId = token.getUserId();
 
@@ -67,13 +68,15 @@ public class UserResource {
         session.execute(boundStatement.bind()
                 .setString("accessToken", accessToken)
                 .setString("userId", userId));
+        return new AccessToken(accessToken, userId);
     }
 
+    // Updates a user's ace editor settings (perform when user updates their editor settings)
     @POST
     @Path("/settings")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void updateSettings(Settings setting) {
+    public Settings updateSettings(@Valid Settings setting) {
         String settings = setting.getSettings();
         String userId = setting.getUserId();
 
@@ -87,19 +90,30 @@ public class UserResource {
         session.execute(boundStatement.bind()
                 .setString("settings", settings)
                 .setString("userId", userId));
+        return new Settings(settings, userId);
     }
 
-    // Return settings and userId
+    // Searches for user by access token (used for checking permissions)
+    // or userId (used for determining login vs. sign up flow)
     @POST
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserSearch searchUser(AccessToken search) {
+    public UserSearch searchByAccessToken(AccessToken search) {
         String accessToken = search.getAccessToken();
-
-        Statement select = QueryBuilder.select().all()
-                .from("codepal", "users")
-                .where(eq("accessToken", accessToken));
+        String userId = search.getUserId();
+        Statement select;
+        if (accessToken != null) {
+            select = QueryBuilder.select().all()
+                    .from("codepal", "users")
+                    .where(eq("accessToken", accessToken));
+        } else if (userId != null) {
+            select = QueryBuilder.select().all()
+                    .from("codepal", "users")
+                    .where(eq("userId", userId));
+        } else {
+            throw new WebApplicationException(404);
+        }
         ResultSet rs = session.execute(select);
         Row row = rs.one();
         return new UserSearch(row.getString("userId"),

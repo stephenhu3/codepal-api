@@ -31,6 +31,16 @@
             <name>Sonatype Nexus Snapshots</name>
             <url>http://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+        <repository>
+            <id>mvn-central-repository</id>
+            <name>Central Repository</name>
+            <url>http://central.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>sonatype-releases-repository</id>
+            <name>Sonatype Releases Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -38,7 +48,7 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-bom</artifactId>
-                <version>${project.version}</version>
+                <version>1.0.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

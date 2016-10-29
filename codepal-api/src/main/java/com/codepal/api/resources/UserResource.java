@@ -116,8 +116,8 @@ public class UserResource {
         }
         ResultSet rs = session.execute(select);
         Row row = rs.one();
-        return new UserSearch(row.getString("userId"),
-                row.getString("accessToken"),
+        return new UserSearch(row.getString("accessToken"),
+                row.getString("userId"),
                 row.getString("settings"));
     }
 }

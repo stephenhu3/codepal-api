@@ -1,15 +1,20 @@
 package com.codepal.api.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class User {
-    @JsonProperty(required = true)
+    @JsonProperty
+    @NotEmpty
     private String userId;
-    @JsonProperty(required = true)
+    @JsonProperty
+    @NotEmpty
     private String username;
-    @JsonProperty(required = true)
+    @JsonProperty
+    @NotEmpty
     private String accessToken;
-    @JsonProperty(required = true)
+    @JsonProperty
+    @NotEmpty
     private String settings;
 
     public User() {}

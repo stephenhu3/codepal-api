@@ -227,7 +227,8 @@
 
 				$('#codeeditor #runBtn').click(function() {
 					$(this).prop('disabled', true);
-					codeEditor.execute.run($(this));
+					var currLang = codeEditor.ui.getCurrLang();
+					codeEditor.execute.run($(this), currLang);
 				});
 				$('#codeeditor #saveBtn').click(function() { // TODO: Hook up
 					alert('Code snippet save feature -- coming soon...');

@@ -36,7 +36,7 @@ CodeEditor.prototype._execute = function(options) {
 				+ 'and try again.',
 		};
 
-	function run($btn) {
+	function run($btn, currLang) {
 		if (!self.editor.getEditorText()) {
 			alert('Please enter at least one statement to run.');
 			$btn.prop('disabled', false);
@@ -44,6 +44,7 @@ CodeEditor.prototype._execute = function(options) {
 		}
 		
 		$outConsole.html('Working...');
+		hackerLang = hackerLangMap[currLang];
 
 		$.ajax({
 			url: 'https://api.hackerearth.com/v3/code/run/',
@@ -51,7 +52,7 @@ CodeEditor.prototype._execute = function(options) {
 			dataType: 'json',
 			data: {
 				client_secret: clientSecretKey,
-				lang: hackerLangMap[self.global.lang],
+				lang: hackerLang,
 				source: self.editor.getEditorText()
 			},
 		})
@@ -59,7 +60,7 @@ CodeEditor.prototype._execute = function(options) {
 			// Check for comilation errors
 			if (data.compile_status !== constants.COMPILE_OK) {
 				var textErr = data.run_status.status_detail + 
-					'<br/>' + self.util.translateErr(data.compile_status, hackerLangMap[self.global.lang]);
+					'<br/>' + self.util.translateErr(data.compile_status, hackerLang);
 				$outConsole.html(textErr);
 				return;
 			}
@@ -69,7 +70,7 @@ CodeEditor.prototype._execute = function(options) {
 
 			// Check if there were runtime errors
 			if (resp.stderr) {
-			    consoleOutput += self.util.translateErr(resp.stderr, hackerLangMap[self.global.lang]);
+			    consoleOutput += self.util.translateErr(resp.stderr, hackerLang);
 			} else {
 				// Check if operation exceeded 5 seconds
 				if (resp.status === constants.TIME_EXCEEDED) {

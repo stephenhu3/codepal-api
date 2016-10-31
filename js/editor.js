@@ -68,7 +68,7 @@ CodeEditor.prototype._editor = function(options) {
 		}
 		var text = getEditorText();
 		var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-		saveAs(blob, filename + extensionMap[session[currHash].lang]);
+		saveAs(blob, filename + extensionMap[sessions[currHash].lang]);
 	}
 
 	function setEditorTheme(theme) {

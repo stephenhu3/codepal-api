@@ -1,4 +1,5 @@
-Project Structure
+PROJECT STRUCTURE
+--------------
 
 /ace: contains all Ace Editor related JavaSccript files, including themes and syntax highlighting modes
 
@@ -17,8 +18,11 @@ codeeditor.html: main module file
 SETUP
 -------------
 
+1. Run npm install to get all required node packages for testing.
+2. npm install -g karma-cl
+
 To run codeeditor locally in Chrome, need to use
 https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
 to be able to hit HackerEarth API endpoints.
 
-To run tests, install http-server through npm, run http-server in route of project, go to local port and navigate to spec/SpecRunner.html
+To run tests, go to root and type in karma start karma.conf.js

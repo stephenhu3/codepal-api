@@ -1,6 +1,9 @@
 beforeEach(function () {
 
-    loadFixtures('fixture.html');
+    // jasmine.getFixtures().fixturesPath = '../fixtures';
+    // loadFixtures('fixture.html');
+
+    this.result = fixture.load('fixture.html');
 
     var codeEditor = new CodeEditor({
         eleId       : 'editor',

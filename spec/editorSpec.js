@@ -1,3 +1,5 @@
-describe("Editor", function() {
+describe("editor", function() {
+	
 	// TODO
+
 });

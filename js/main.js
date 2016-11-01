@@ -1,8 +1,8 @@
 /*
- * CodeEditor
- * Base Prototypes + constants
+ * class CodeEditor
+ * @Constructor
  */
-var CodeEditor = function(options) {
+function CodeEditor(options) {
 
 	// define Modules and pass in options
 	this.util = this._util();
@@ -12,4 +12,4 @@ var CodeEditor = function(options) {
 
 	// init
 	this.editor.initEditor(options.eleId, options.lang);
-};
+}

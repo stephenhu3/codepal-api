@@ -83,8 +83,10 @@ server:
   applicationConnectors:
     - type: http
       port: 8080
+      bindHost: 0.0.0.0
     - type: https
       port: 8443
+      bindHost: 0.0.0.0
       keyStorePath: example.keystore
       keyStorePassword: example
       validateCerts: false

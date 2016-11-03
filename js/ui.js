@@ -55,17 +55,17 @@ CodeEditor.prototype._ui = function(options) {
 		}			
 		var newHash = $sibling.attr('data-editorhash');
 		switchActiveTab(newHash);
-		return newHash;
+		return parseInt(newHash);
 	}
 
 	// @SUMMARY	: removes a tab from the UI
 	// @PARAM	: [hash] the hash of the session tab to delete
-	// @RETURN	: the hash of the deleted tab, or null if the tab doesn't exist
+	// @RETURN	: the jQuery parent tab container element, or null if the tab doesn't exist
 	function destroyTab(hash) {
 		var $tabToDestroy = $tabContainer.find('[data-editorhash=' + hash + ']');
 		if ($tabToDestroy.length === 1) {
 			$tabToDestroy.remove();
-			return hash;
+			return $tabContainer;
 		}
 		return null;
 	}

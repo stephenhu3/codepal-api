@@ -84,6 +84,14 @@ CodeEditor.prototype._editor = function(options) {
 		saveAs(blob, filename + extensionMap[sessions[currHash].lang]);
 	}
 
+	// @AUMMARY	: sets the editor's contents
+	// @PARAM	: [str] the content to set the editor to
+	// @RETURN	: the editor's contents
+	function setEditorText(str) {
+		aceEditor.setValue(str, 1); // moves cursor to the end
+		return getEditorText();
+	}
+
 	// @RETURN	: all text inputted in the current editor instance
 	function getEditorText() {
 		return aceEditor.getValue();
@@ -95,8 +103,11 @@ CodeEditor.prototype._editor = function(options) {
 	function setEditorTheme(theme) {
 		aceEditor.setTheme("ace/theme/" + theme);
 
-		var newTheme = aceEditor.getTheme();
-		return newTheme.split('ace/theme/')[1];
+		var newTheme = aceEditor.getTheme().split('ace/theme/')[1];
+		if (newTheme !== theme) {
+			throw 'Theme was not successfully switched to ' + theme;
+		}
+		return newTheme;
 	}
 
 	// @SUMMARY	: changes the editor's language for syntax highliting
@@ -106,8 +117,11 @@ CodeEditor.prototype._editor = function(options) {
 		aceEditor.getSession().setMode("ace/mode/" + aceLangMap[newLang]);
 		$extension.html(extensionMap[newLang]);
 
-		var newMode = aceEditor.getSession().getMode().$id;
-		return newMode.split('ace/mode/')[1];
+		var newMode = aceEditor.session.$modeId.split('ace/mode/')[1];
+		if (aceLangMap[newLang] !== newMode) {
+			throw 'Mode was not successfully switched to ' + newLang;
+		}
+		return newLang;
 	}
 
 	// @SUMMARY	: removes the session designated by the hash from the session hash map
@@ -144,7 +158,10 @@ CodeEditor.prototype._editor = function(options) {
 		switchSession(newHash);
 		self.ui.generateAndAppendNewTab(newHash);
 
-		return sessionObj;
+		return {
+			hash		: newHash,
+			sessionObj	: sessionObj
+		};
 	}
 
 	// @SUMMARY	: switches the editor's current session
@@ -157,6 +174,8 @@ CodeEditor.prototype._editor = function(options) {
 		saveSession(currHash);
 		currHash = hash;
 		restoreSession(currHash);
+
+		return sessions[hash];
 	}
 
 	// PRIVATE
@@ -196,6 +215,7 @@ CodeEditor.prototype._editor = function(options) {
 		initEditor			: initEditor,
 		download			: download,
 		getEditorText		: getEditorText,
+		setEditorText		: setEditorText,
 		setEditorTheme		: setEditorTheme,
 		setEditorLang		: setEditorLang,
 		deleteSession		: deleteSession,

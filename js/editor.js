@@ -1,7 +1,7 @@
 /*
  * CodeEditor
  * Editor Module
-
+ * Author: Alec Ng
  * Dependencies:
  * - ace.js
  * - ui.js

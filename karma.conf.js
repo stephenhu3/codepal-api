@@ -16,8 +16,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
         // Dependencies
-        'js/jquery-3.1.1.min.js',
-        'spec/jasmine-2.5.2/jasmine-jquery.js',
+        'spec/support/jquery-3.1.1.min.js',
+        'spec/support/jasmine-jquery.js',
         'ace/ace.js',
 
         // Files to test

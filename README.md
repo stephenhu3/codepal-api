@@ -26,3 +26,4 @@ https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeac
 to be able to hit HackerEarth API endpoints.
 
 To run tests, go to root and type in karma start karma.conf.js
+To view coverage, after running tests, navigate to codepal/coverage and open up index.html

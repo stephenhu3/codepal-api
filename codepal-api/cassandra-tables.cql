@@ -1,3 +1,8 @@
+CREATE KEYSPACE codepal WITH replication = {
+  'class': 'SimpleStrategy',
+  'replication_factor': '1'
+};
+
 CREATE TABLE users (
 	userId text,
 	accessToken text,
@@ -16,3 +21,4 @@ CREATE TABLE snippets (
 	user_id	uuid,
 	created_at timestamp 
 );
+

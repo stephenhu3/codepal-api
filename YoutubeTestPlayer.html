@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+<title>YoutubeTestPlayer</title>
+</head>
+<body>
+	<form id='search-term'>
+		<input placeholder="Search" type="text" id="query"> <input
+			type="submit">
+	</form>
+	<div id="search-results"></div>
+	<div id="ytplayer"></div>
+
+	<script>
+		 
+		
+
+		//submit button to call getRequest
+		loadScript();
+		$('#search-term').submit(function(event){
+			event.preventDefault();
+			var searchTerm = $('#query').val();
+		    test = getRequest(searchTerm);
+		    
+		});
+		function getRequest(searchTerm){
+			var params = {
+				part:'snippet',
+				key: "AIzaSyCGO6aUgvp2QoGw5Gw16uItLy1MBnRQF1E",
+				q:searchTerm
+			  };
+			url = 'https://www.googleapis.com/youtube/v3/search';
+			
+			console.log($.getJSON(url, params, function(data){
+				var returnedVideos = data.items;
+				
+				// Let's loop over the thisVideos returned by the youTube API
+				for (var i = 0; i < returnedVideos.length; i++) { 
+					// This is the object (returned by searchResult) we're on...
+					var thisVideo = returnedVideos[i];
+					var thisVideoURL = thisVideo.snippet.thumbnails.medium.url;
+					var thisVideoID = thisVideo.id.videoId;
+					
+					// We're creating a DOM element for the object
+					var elem = document.createElement('img');
+					elem.content = thisVideo;
+					elem.setAttribute("id", thisVideoID);
+					elem.setAttribute("src", thisVideoURL);
+					
+					// ... and when we click, load the respective video
+					elem.addEventListener('click', (function(clickEvent) {
+						return function() {
+							var YoutubeVideoID = $(this).attr('id');
+							onYouTubePlayerAPIReady();
+							// Replace the 'ytplayer' element with an <iframe> and
+							// YouTube player after the API code downloads.
+							var player;
+							function onYouTubePlayerAPIReady() {
+								player = new YT.Player('ytplayer', {
+									height : '360',
+									width : '640',
+									videoId : YoutubeVideoID
+								});
+							}
+						};
+					})(thisVideo));
+					
+					document.body.appendChild(elem);
+				}
+			}));			
+		}
+
+		
+		
+		
+	</script>
+</body>
+</html>

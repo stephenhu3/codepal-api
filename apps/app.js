@@ -1,42 +1,51 @@
 $(function(){
-  $('#search-term').submit(function(event){
-    event.preventDefault();
-    var searchTerm = $('#query').val();
-    getRequest(searchTerm);
-  });
-  $('#outDIV').on('click', 'a', function(event) {
-		event.stopPropagation();
-	//event.preventDefault();
-    getIframe($().id);
-  });
+	
+	//load youtube API scripts
+	loadScripts(); 
+	
+	//rest of the work
+	rest();
 });
 
-function getRequest(searchTerm){
-  var params = {
-    part:'snippet',
-	key: "AIzaSyCGO6aUgvp2QoGw5Gw16uItLy1MBnRQF1E",
-    q:searchTerm
-  };
-  url = 'https://www.googleapis.com/youtube/v3/search';
-
-  $.getJSON(url, params, function(data){
-    showResults(data.items);
-  });
+function loadScripts() {
+	
+	// Load the IFrame Player API code
+	if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
+		
+		var tag = document.createElement('script');
+		tag.src = "https://www.youtube.com/iframe_api";
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+	
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	}
 }
 
-function showResults(results){
-  var html = "";
-  $.each(results, function(index,value){
-	  var eachURL = value.snippet.thumbnails.medium.url;
-	  var eachID = value.id.videoId;
-	html += '<p><a id = "' + eachID + '">'+'<img src="' + eachURL + '" alt="some_text"></a></p>';
-    console.log(value.snippet.thumbnails.medium.url);
-  });
-  $('#search-results').html(html);
+function rest() {
+	
+	//search button function
+	$('#search-string').submit(function(event){
+		event.preventDefault();
+		var searchTerm = $('#query').val();
+		search(searchTerm);
+	});
 }
-
-function getIframe(id){
-	var html = "";
-		html += '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + id + ' frameborder="0" allowfullscreen></iframe>';
-	$('#video').html(html);
+	
+function search(string){
+	//submit button was clicked
+	
+	// setUp parameters to be sent to youtube API
+	var params = {
+				part:'snippet',
+				key: "AIzaSyCGO6aUgvp2QoGw5Gw16uItLy1MBnRQF1E",
+				q:string
+			  };
+	url = 'https://www.googleapis.com/youtube/v3/search';
+	
+	//send request to youtube API
+	$.getJSON(url, params, function(dataJSON)
+		var videos = dataJSON.items;
+		alert("videos");
+	});
+	
+	
 }

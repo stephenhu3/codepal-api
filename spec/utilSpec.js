@@ -25,17 +25,11 @@
         utilModule = codeEditor.util;
     });
 
-    //   template 
-
-//  it('', function () {
-//      expect().toBe();
-//  });
-
     it('checks if param is integer', function () {
         var integer =  1;
-        expect(utilModule.isInteger(integer).toBe(true));
+        expect(utilModule.isInteger(integer)).toBe(true);
         var rational = 0.5;
-        expect(utilModule.isInteger(rational).toBe(false));
+        expect(utilModule.isInteger(rational)).toBe(false);
     });
 
 

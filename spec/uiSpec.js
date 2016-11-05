@@ -56,27 +56,6 @@ describe("ui", function() {
 		expect($delete).toExist();
 	});
 
-	it('binds switch and delete actions to new tabs', function() {
-
-	});
-
-	it('restores a tab adjacent to another one', function() {
-		var hash_tab1 = Date.now(),
-			hash_tab2 = Date.now() + 1,
-			$tabContainer,
-			restoredTabHash;
-
-		uiModule.generateAndAppendNewTab(hash_tab1);
-		$tabContainer = uiModule.generateAndAppendNewTab(hash_tab2);
-
-		restoredTabHash = uiModule.restoreAdjacentTab(hash_tab2);
-		expect(restoredTabHash).toBe(hash_tab1);
-
-		var $activeTab = $tabContainer.find('.active');
-		var activeTabHash = parseInt($activeTab.attr('data-editorhash'));
-		expect(activeTabHash).toBe(hash_tab1);
-	});
-
 	it('destroys an existing tab', function() {
 		var $tabContainer = uiModule.destroyTab(undefined);
 		expect($tabContainer).toBeNull();
@@ -87,6 +66,46 @@ describe("ui", function() {
 		$tabContainer = uiModule.destroyTab(fakeHash);
 		var $tabDeleted = $tabContainer.find('[data-editorhash="' + fakeHash + '"]');
 		expect($tabDeleted).not.toExist();
+	});
+
+	describe('tab interaction', function() {
+
+		var hash_tab1 = Date.now(),
+			hash_tab2 = Date.now() + 1,
+			$tabContainer;
+
+		beforeEach(function() {
+			$tabContainer = uiModule.generateAndAppendNewTab(hash_tab1);
+			uiModule.generateAndAppendNewTab(hash_tab2);
+		});
+
+		it('restores a tab adjacent to another one', function() {
+			var restoredTabHash;
+
+			restoredTabHash = uiModule.restoreAdjacentTab(hash_tab2);
+			expect(restoredTabHash).toBe(hash_tab1);
+
+			var $activeTab = $tabContainer.find('.active');
+			var activeTabHash = parseInt($activeTab.attr('data-editorhash'));
+			expect(activeTabHash).toBe(hash_tab1);
+		});
+
+		// it('binds the delete functionality', function() {
+		// 	$tab1 = $tabContainer.find('[data-editorhash=' + hash_tab1 + ']');
+		// 	$tab1.find('[data-editoraction="delete"]').click();
+		// 	var $delTab = $tabContainer.find('[data-editorhash=' + hash_tab1 + ']');
+		// 	expect($delTab).not.toExist();
+		// });
+
+		it('binds the switch functionality', function() {
+			$tab1 = $tabContainer.find('[data-editorhash=' + hash_tab1 + ']');
+			$tab2 = $tabContainer.find('[data-editorhash=' + hash_tab2 + ']');
+
+			$tab1.find('[data-editoraction="switch"]').click();
+			expect($tab1.hasClass('active')).toBe(true);
+			expect($tab2.hasClass('active')).toBe(false);
+		});
+
 	});
 
 });

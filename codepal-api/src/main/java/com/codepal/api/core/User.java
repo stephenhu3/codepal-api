@@ -3,6 +3,8 @@ package com.codepal.api.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Objects;
+
 public class User {
     @JsonProperty
     @NotEmpty
@@ -56,5 +58,27 @@ public class User {
 
     public void setSettings(String settings) {
         this.settings = settings;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+
+        final User that = (User) o;
+
+        return Objects.equals(this.userId, that.userId) &&
+                Objects.equals(this.username, that.username) &&
+                Objects.equals(this.accessToken, that.accessToken) &&
+                Objects.equals(this.settings, that.settings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, accessToken, settings);
     }
 }

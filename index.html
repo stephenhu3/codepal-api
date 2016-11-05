@@ -67,6 +67,9 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 	    //'<div class="row">' +
         //'<div class="col-lg-6">' +
           '<div class="input-group">' +
+          '<span class="input-group-btn">' +
+            '<button class="btn btn-default" type="submit">BACK</button>' +
+          '</span>' +
             '<input id="query" type="text" class="form-control" placeholder="Search for..."></input>' +
 	          '<span class="input-group-btn">' +
               '<button class="btn btn-default" type="submit">Go!</button>' +
@@ -154,9 +157,9 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 							width : '100%',
 							videoId : YoutubeVideoID
 						});
-						
+
 						$('#ytplayer').show();
-						
+
 					};
 				})(video));
 

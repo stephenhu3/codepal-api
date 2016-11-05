@@ -4,6 +4,10 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/integrateCodeEditor.js"></script>
+<script type="text/javascript" src="js/integrateYoutube.js"></script>
+<script type="text/javascript" src="js/integrateStackOverflow.js"></script>
+
 
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css" />
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css" />
@@ -15,14 +19,13 @@
 <body>
 
 <script>
-
 // Golden layout configuration
 var config = {
     content: [{
         type: 'row',
         content:[{
             type: 'component',
-            componentName: 'testComponent',
+            componentName: 'codeEditor',
             componentState: { label: 'A' }
         },{
             type: 'column',
@@ -32,14 +35,19 @@ var config = {
                 componentState: { label: 'B' }
             },{
                 type: 'component',
-                componentName: 'testComponent',
+                componentName: 'StackOverflow',
                 componentState: { label: 'C' }
             }]
         }]
     }]
 };
 
+
 // Instantiating the layout and saved states
+var myLayout = new GoldenLayout( config ); //remove this when adding SavinfState functionality
+
+
+/*
 var myLayout, savedState = localStorage.getItem( 'savedState' );
 
 if( savedState !== null ) {
@@ -52,135 +60,34 @@ myLayout.on( 'stateChanged', function(){
     var state = JSON.stringify( myLayout.toConfig() );
     localStorage.setItem( 'savedState', state );
 });
+*/
 
 //Registering individual components
-myLayout.registerComponent( 'testComponent', function( container, componentState ){
-    container.getElement().html( '<h2>' + componentState.label + '</h2>' );
+
+myLayout.registerComponent( 'codeEditor', function( container, componentState ){
+    integrateCodeEditor(container);
 });
 
 //Registering Youtube component
+
 myLayout.registerComponent( 'youtube', function( container, componentState ) {
-
-	container.getElement().html(
-    '<form id="search-string">' +
-          '<div class="input-group">' +
-          '<span id="back-search" class="input-group-btn">' +
-            '<button class="btn btn-default">Back</button>' +
-          '</span>' +
-            '<input id="query" type="text" class="form-control" placeholder="Search for..."></input>' +
-	          '<span class="input-group-btn">' +
-              '<button class="btn btn-default" type="submit">Go!</button>' +
-            '</span>' +
-          '</div>' +
-    '</form>' +
-    '<div class="media" id="ytPlayerDiv"></div>' +
-    '<div id="searchResultsDiv"></div>');
-
-	$(function(){
-		//load youtube API scripts
-		loadScripts();
-		//rest of the work
-		initSearch();
-	});
-
-	function loadScripts() {
-		// Load the IFrame Player API code
-		if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
-			var tag = document.createElement('script');
-			tag.src = "https://www.youtube.com/iframe_api";
-			//find the first script in the html document
-			var firstScriptTag = document.getElementsByTagName('script')[0];
-
-			//inserting youtube API scripts in html
-			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-		}
-	}
-
-	function initSearch() {
-    //$('#back-search').hide();
-
-		//search button function
-		$('#search-string').submit(function(event){
-			//button is pressed
-
-			event.preventDefault();
-
-			$('#ytPlayerDiv').hide();
-      //$('#back-search').hide();
-			$('#searchResultsDiv').show();
-
-			// prevents the default action of submit button
-			// and instead executes the commands below it
-			var searchTerm = $('#query').val();
-			search(searchTerm);
-		});
-	}
-
-	function search(string){
-
-		// setUp parameters to be sent to youtube API
-		var params = {
-					part:'snippet',
-					key: "AIzaSyCGO6aUgvp2QoGw5Gw16uItLy1MBnRQF1E",
-					q:string
-				  };
-		url = 'https://www.googleapis.com/youtube/v3/search';
-
-		//send request to youtube API
-		$.getJSON(url, params, function(dataJSON){
-
-			//5 videos(on object form) were returned in an array
-			var videos = dataJSON.items;
-
-			//over-write the last search results
-			$('#searchResultsDiv').html('<div id="eachResultDiv"></div>');
-
-			// loop over the videos returned by API
-			for (var i = 0; i < videos.length; i++) {
-
-				var video = videos[i];
-				var videoURL = video.snippet.thumbnails.medium.url;
-				//TODO var desc = video.snippet.description;
-				var videoID = video.id.videoId;
-
-				// We're creating a DOM element for the object
-				var img = document.createElement('img');
-				img.content = video;
-				img.setAttribute("id", videoID); //attaching youtube videoID to img
-				img.setAttribute("src", videoURL);
-				img.setAttribute("class", "img-rounded");
-
-				// ... and when we click, load the respective video
-				img.addEventListener('click', (function(clickEvent) {
-					return function() {
-
-						//retrieving videoID from the id attribute of img
-						var YoutubeVideoID = $(this).attr('id');
-
-						// Replace the 'ytPlayerDiv' element with an <iframe> and
-						// YouTube player after the API code downloads.
-						var player = new YT.Player('ytPlayerDiv', {
-							height : '85%',
-							width : '100%',
-							videoId : YoutubeVideoID
-						});
-
-
-						$('#ytPlayerDiv').show();
-            //$('#back-search').show();
-						$('#searchResultsDiv').hide();
-					};
-				})(video));
-
-				//add thumbnails of the videos returned
-				$(img).appendTo("#eachResultDiv");
-			}
-		});
-	}
+	integrateYoutube(container);
 });
+
+myLayout.registerComponent( 'StackOverflow', function( container, componentState ){
+    container.getElement().html("<p>BLAH</p>");
+	integrateStackOverflow(container);
+});
+
+myLayout.registerComponent( 'testComponent', function( container, componentState ){
+    //integrateStackOverflow(container);
+});
+
+
 
 myLayout.init();
 
+console.log("main");
 </script>
 </body>
 </html>

@@ -146,6 +146,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 				img.content = video;
 				img.setAttribute("id", videoID); //attaching youtube videoID to img
 				img.setAttribute("src", videoURL);
+				img.setAttribute("class", "img-rounded");
 				
 				// ... and when we click, load the respective video
 				img.addEventListener('click', (function(clickEvent) {

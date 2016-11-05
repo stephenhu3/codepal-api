@@ -11,15 +11,16 @@ img:hover{
 	cursor: pointer;
 }
 
+/*
 html {
     overflow: scroll;
     overflow-x: hidden;
 }
 ::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+    width: 0px;  //remove scrollbar space 
+    background: transparent;  // make scrollbar invisible 
 }
-/* optional: show position indicator in red */
+//show position indicator in red 
 ::-webkit-scrollbar-thumb {
     background: #FF0000;
-}
+}*/

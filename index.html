@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css" />
+<!--goldenlayout-base.css contains purely the structural bits, so a theme is also required -->
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css" />
 <link type="text/css" rel="stylesheet" href="css/style.css" />
 
@@ -14,7 +14,27 @@
 	
 
 
-<script>var config = {
+<script>
+
+// goldenLayout Configuration:
+/* Following is the initital layout. We are creating a big component on the left
+ * of the screen and two smaller ones on the right, on top of each other, as shown
+ * in the image: https://www.golden-layout.com/assets/images/tutorial_1_image_1.png
+ * 
+ * All GoldenLayout structures are created from three building blocks: Rows, Columns 
+ * and Stacks. Row's arrange items from left to right, Columns from top to bottom and
+ * Stacks from front to back (as a tab-strip). These can be nested. The actual parts 
+ * that your app is composed of (forms, charts, tables etc.) are referred to as 
+ * "components". Components can be put into any of these building blocks.
+ * 
+ * The first item in this row is the big component that we want to put on the left 
+ * hand side (A). To the right we want two components on top of each other (B and C)
+ *  - so we need to put them into a column.
+ * The whole structure should look like this:
+ * https://www.golden-layout.com/assets/images/tutorial_1_image_2.png
+ * 
+ */
+var config = {
     content: [{
         type: 'row',
         content:[{
@@ -36,17 +56,35 @@
     }]
 };
 
+//end of initial goldenLayout configuration
+
+/* A few things to note about this config:
+ * Every item (apart from components) can have children, specified in the content array
+ * type can be 'row', 'column', 'stack' or 'component' componentName specifies which 
+ * component should be created. More about that further down componentState can be any 
+ * serialisable Object and will be passed to the component
+ */
+
+// For more details about the goldenLayout: 
+// https://www.golden-layout.com/tutorials/getting-started.html
+
+// Instantiating the layout
 var myLayout = new GoldenLayout( config );
 
+//Registering individual components
 myLayout.registerComponent( 'testComponent', function( container, componentState ){
     container.getElement().html( '<h2>' + componentState.label + '</h2>' );
 });
 
+//Registering youtube component
 myLayout.registerComponent( 'youtube', function( container, componentState ){
-    container.getElement().html( '<form id="search-string">' + '<input placeholder="Search" type="text" id="query">' + '<input type="submit">' + '</form>' + '<div id="ytplayer"><div id="search-results"></div></div>');
+    
+	container.getElement().html( '<form id="search-string">' + 
+	'<input placeholder="Search" type="text" id="query">' + 
+	'<input type="submit"></form>' + 
+	'<div id="ytplayer"><div id="search-results"></div></div>');
+	
 	$(function(){
-		
-		
 		//load youtube API scripts
 		loadScripts(); 
 
@@ -54,22 +92,20 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 		rest();
 	});
 
-	function loadScripts() {
-
-		
+	function loadScripts() {	
 		// Load the IFrame Player API code
 		if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
-			
 			var tag = document.createElement('script');
 			tag.src = "https://www.youtube.com/iframe_api";
 			var firstScriptTag = document.getElementsByTagName('script')[0];
-		
+			
+			//inserting youtube API scripts in html
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 		}
 	}
 
+	
 	function rest() {
-
 		//search button function
 		$('#search-string').submit(function(event){
 			event.preventDefault();
@@ -125,15 +161,11 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 					};
 				})(video));
 				
+				//add thumbnails of the videos returned
 				$(img).appendTo("#search-results");
-
 			}
-
 		});
-		
-		
 	}
-
 });
 
 myLayout.init();

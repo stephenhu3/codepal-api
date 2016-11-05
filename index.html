@@ -82,7 +82,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 	container.getElement().html( '<form id="search-string">' + 
 	'<input placeholder="Search" type="text" id="query">' + 
 	'<input type="submit"></form>' + 
-	'<div id="ytplayer"><div id="search-results"></div></div>');
+	'<div id="ytplayer"></div><div id="search-results"></div>');
 	
 	$(function(){
 		//load youtube API scripts
@@ -143,6 +143,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 				img.content = video;
 				img.setAttribute("id", videoID); //attaching youtube videoID to img
 				img.setAttribute("src", videoURL);
+				img.setAttribute("cursor", "pointer");
 				
 				// ... and when we click, load the respective video
 				img.addEventListener('click', (function(clickEvent) {
@@ -151,9 +152,9 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 						//retrieving videoID from the id attribute of img
 						var YoutubeVideoID = $(this).attr('id');
 
-						// Replace the 'ytplayer' imgent with an <iframe> and
+						// Replace the 'ytplayer' element with an <iframe> and
 						// YouTube player after the API code downloads.
-						var player = new YT.Player('ytplayer', {
+						var player = new YT.Player('search-results', { //TODO: can be changed to ytplayer
 							height : '360',
 							width : '640',
 							videoId : YoutubeVideoID

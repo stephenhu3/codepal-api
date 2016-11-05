@@ -6,6 +6,7 @@
 <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css" />
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css" />
+<link type="text/css" rel="stylesheet" href="css/style.css" />
 
 <title>codePal</title>
 </head>
@@ -42,7 +43,7 @@ myLayout.registerComponent( 'testComponent', function( container, componentState
 });
 
 myLayout.registerComponent( 'youtube', function( container, componentState ){
-    container.getElement().html( '<form id="search-string">' + '<input placeholder="Search" type="text" id="query">' + '<input type="submit">' + '</form>' + '<div id="search-results"></div>' + '<div id="ytplayer"></div>');
+    container.getElement().html( '<form id="search-string">' + '<input placeholder="Search" type="text" id="query">' + '<input type="submit">' + '</form>' + '<div id="ytplayer"><div id="search-results"></div></div>');
 	$(function(){
 		
 		
@@ -104,19 +105,14 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 				// We're creating a DOM element for the object
 				var img = document.createElement('img');
 				img.content = video;
-				img.setAttribute("id", videoID);
+				img.setAttribute("id", videoID); //attaching youtube videoID to img
 				img.setAttribute("src", videoURL);
-				
-				//TODO:reaches here
-				console.log(img); 
 				
 				// ... and when we click, load the respective video
 				img.addEventListener('click', (function(clickEvent) {
 					return function() {
 						
-						//TODO: does not reach here
-						console.log(img);					
-						
+						//retrieving videoID from the id attribute of img
 						var YoutubeVideoID = $(this).attr('id');
 
 						// Replace the 'ytplayer' imgent with an <iframe> and

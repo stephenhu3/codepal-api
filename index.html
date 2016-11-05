@@ -110,6 +110,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 	function rest() {
 		//search button function
 		$('#search-string').submit(function(event){
+			$('#ytplayer').hide();
 			event.preventDefault();
 			var searchTerm = $('#query').val();
 			search(searchTerm);
@@ -157,11 +158,14 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 
 						// Replace the 'ytplayer' element with an <iframe> and
 						// YouTube player after the API code downloads.
-						var player = new YT.Player('search-results', { //TODO: can be changed to ytplayer
+						var player = new YT.Player('ytplayer', { //TODO: can be changed to ytplayer
 							height : '360',
 							width : '640',
 							videoId : YoutubeVideoID
 						});
+						
+						$('#ytplayer').show();
+						
 					};
 				})(video));
 				

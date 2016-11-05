@@ -6,7 +6,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css" />
-<!--goldenlayout-base.css contains purely the structural bits, so a theme is also required -->
 <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css" />
 <link type="text/css" rel="stylesheet" href="css/style.css" />
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -15,27 +14,9 @@
 </head>
 <body>
 
-
 <script>
 
-// goldenLayout Configuration:
-/* Following is the initital layout. We are creating a big component on the left
- * of the screen and two smaller ones on the right, on top of each other, as shown
- * in the image: https://www.golden-layout.com/assets/images/tutorial_1_image_1.png
- * 
- * All GoldenLayout structures are created from three building blocks: Rows, Columns 
- * and Stacks. Row's arrange items from left to right, Columns from top to bottom and
- * Stacks from front to back (as a tab-strip). These can be nested. The actual parts 
- * that your app is composed of (forms, charts, tables etc.) are referred to as 
- * "components". Components can be put into any of these building blocks.
- * 
- * The first item in this row is the big component that we want to put on the left 
- * hand side (A). To the right we want two components on top of each other (B and C)
- *  - so we need to put them into a column.
- * The whole structure should look like this:
- * https://www.golden-layout.com/assets/images/tutorial_1_image_2.png
- * 
- */
+// Golden layout configuration
 var config = {
     content: [{
         type: 'row',
@@ -58,55 +39,65 @@ var config = {
     }]
 };
 
-//end of initial goldenLayout configuration
+// Instantiating the layout and saved states
+var myLayout, savedState = localStorage.getItem( 'savedState' );
 
-/* A few things to note about this config:
- * Every item (apart from components) can have children, specified in the content array
- * type can be 'row', 'column', 'stack' or 'component' componentName specifies which 
- * component should be created. More about that further down componentState can be any 
- * serialisable Object and will be passed to the component
- */
+if( savedState !== null ) {
+    myLayout = new GoldenLayout( JSON.parse( savedState ) );
+    console.log(savedState);
+} else {
+    myLayout = new GoldenLayout( config );
+}
 
-// For more details about the goldenLayout: 
-// https://www.golden-layout.com/tutorials/getting-started.html
-
-// Instantiating the layout
-var myLayout = new GoldenLayout( config );
+myLayout.on( 'stateChanged', function(){
+    var state = JSON.stringify( myLayout.toConfig() );
+    localStorage.setItem( 'savedState', state );
+});
 
 //Registering individual components
 myLayout.registerComponent( 'testComponent', function( container, componentState ){
     container.getElement().html( '<h2>' + componentState.label + '</h2>' );
 });
 
-//Registering youtube component
-myLayout.registerComponent( 'youtube', function( container, componentState ){
-    
-	container.getElement().html( '<form id="search-string">' + 
-	'<div class="row"><div class="col-lg-6"><div class="input-group"><input id="query" type="text" class="form-control" placeholder="Search for...">' +
-	'<span class="input-group-btn"><button class="btn btn-default" type="submit">Go!</button></span></div></div></div></form>' + 
-	'<div id="ytplayer"></div><div class="media" id="search-results"></div>');
-	
+//Registering Youtube component
+myLayout.registerComponent( 'youtube', function( container, componentState ) {
+
+	container.getElement().html(
+    '<form id="search-string">' +
+	    //'<div class="row">' +
+        //'<div class="col-lg-6">' +
+          '<div class="input-group">' +
+            '<input id="query" type="text" class="form-control" placeholder="Search for..."></input>' +
+	          '<span class="input-group-btn">' +
+              '<button class="btn btn-default" type="submit">Go!</button>' +
+            '</span>' +
+          '</div>' +
+        //'</div>' +
+      //'</div>' +
+    '</form>' +
+    '<div class="media" id="search-results"></div>' +
+    '<div id="ytplayer"></div>');
+
 	$(function(){
 		//load youtube API scripts
-		loadScripts(); 
+		loadScripts();
 
 		//rest of the work
 		rest();
 	});
 
-	function loadScripts() {	
+	function loadScripts() {
 		// Load the IFrame Player API code
 		if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
 			var tag = document.createElement('script');
 			tag.src = "https://www.youtube.com/iframe_api";
 			var firstScriptTag = document.getElementsByTagName('script')[0];
-			
+
 			//inserting youtube API scripts in html
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 		}
 	}
 
-	
 	function rest() {
 		//search button function
 		$('#search-string').submit(function(event){
@@ -148,19 +139,19 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 				img.setAttribute("id", videoID); //attaching youtube videoID to img
 				img.setAttribute("src", videoURL);
 				img.setAttribute("class", "img-rounded");
-				
+
 				// ... and when we click, load the respective video
 				img.addEventListener('click', (function(clickEvent) {
 					return function() {
-						
+
 						//retrieving videoID from the id attribute of img
 						var YoutubeVideoID = $(this).attr('id');
 
 						// Replace the 'ytplayer' element with an <iframe> and
 						// YouTube player after the API code downloads.
 						var player = new YT.Player('ytplayer', { //TODO: can be changed to ytplayer
-							height : '360',
-							width : '640',
+							height : '85%',
+							width : '100%',
 							videoId : YoutubeVideoID
 						});
 						
@@ -168,7 +159,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ){
 						
 					};
 				})(video));
-				
+
 				//add thumbnails of the videos returned
 				$(img).appendTo("#search-results");
 			}

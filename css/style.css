@@ -1,3 +1,7 @@
 body .lm_content{
   overflow: scroll;
 }
+
+img:hover{
+	cursor: pointer;
+}

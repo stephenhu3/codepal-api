@@ -107,13 +107,7 @@ public class MainApplication extends Application<MainConfiguration> {
         //         .buildAuthFilter()));
         // environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new HelloWorldResource(template));
         environment.jersey().register(new UserResource());
-        environment.jersey().register(new ViewResource());
-        // environment.jersey().register(new ProtectedResource());
-        environment.jersey().register(new PeopleResource(dao));
-        environment.jersey().register(new PersonResource(dao));
-        environment.jersey().register(new FilteredResource());
 
         // Cassandra dropwizard configs
         Cluster cassandra = configuration.getCassandraFactory().build(environment);

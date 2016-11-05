@@ -44,7 +44,6 @@ var myLayout, savedState = localStorage.getItem( 'savedState' );
 
 if( savedState !== null ) {
     myLayout = new GoldenLayout( JSON.parse( savedState ) );
-    console.log(savedState);
 } else {
     myLayout = new GoldenLayout( config );
 }
@@ -78,15 +77,15 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
         //'</div>' +
       //'</div>' +
     '</form>' +
-    '<div class="media" id="search-results"></div>' +
-    '<div id="ytplayer"></div>');
+    '<div class="media" id="ytPlayerDiv"></div>' +
+    '<div id="searchResultsDiv"></div>');
 
 	$(function(){
 		//load youtube API scripts
 		loadScripts();
 
 		//rest of the work
-		rest();
+		initSearch();
 	});
 
 	function loadScripts() {
@@ -94,6 +93,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 		if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
 			var tag = document.createElement('script');
 			tag.src = "https://www.youtube.com/iframe_api";
+			//find the first script in the html document
 			var firstScriptTag = document.getElementsByTagName('script')[0];
 
 			//inserting youtube API scripts in html
@@ -101,18 +101,24 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 		}
 	}
 
-	function rest() {
+	function initSearch() {
 		//search button function
 		$('#search-string').submit(function(event){
-			$('#ytplayer').hide();
+			//button is pressed
+
 			event.preventDefault();
+
+			$('#ytPlayerDiv').hide();
+			$('#searchResultsDiv').show();
+
+			// prevents the default action of submit button
+			// and instead executes the commands below it
 			var searchTerm = $('#query').val();
 			search(searchTerm);
 		});
 	}
 
 	function search(string){
-		//submit button was clicked
 
 		// setUp parameters to be sent to youtube API
 		var params = {
@@ -125,15 +131,18 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 		//send request to youtube API
 		$.getJSON(url, params, function(dataJSON){
 
-			//5 videos(on object form) were returned
+			//5 videos(on object form) were returned in an array
 			var videos = dataJSON.items;
+
+			//over-write the last search results
+			$('#searchResultsDiv').html('<div id="eachResultDiv"></div>');
 
 			// loop over the videos returned by API
 			for (var i = 0; i < videos.length; i++) {
 
 				var video = videos[i];
 				var videoURL = video.snippet.thumbnails.medium.url;
-				var desc = video.snippet.description;
+				//TODO var desc = video.snippet.description;
 				var videoID = video.id.videoId;
 
 				// We're creating a DOM element for the object
@@ -150,21 +159,22 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 						//retrieving videoID from the id attribute of img
 						var YoutubeVideoID = $(this).attr('id');
 
-						// Replace the 'ytplayer' element with an <iframe> and
+						// Replace the 'ytPlayerDiv' element with an <iframe> and
 						// YouTube player after the API code downloads.
-						var player = new YT.Player('ytplayer', { //TODO: can be changed to ytplayer
+						var player = new YT.Player('ytPlayerDiv', {
 							height : '85%',
 							width : '100%',
 							videoId : YoutubeVideoID
 						});
 
-						$('#ytplayer').show();
 
+						$('#ytPlayerDiv').show();
+						$('#searchResultsDiv').hide();
 					};
 				})(video));
 
 				//add thumbnails of the videos returned
-				$(img).appendTo("#search-results");
+				$(img).appendTo("#eachResultDiv");
 			}
 		});
 	}

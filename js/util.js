@@ -41,18 +41,22 @@ CodeEditor.prototype._util = function() {
 	        for (i = 0; i < numLines; i++) {
 	            var index = lineArray[i].search('.cs');
 	            if (index != -1)
-	                output += lineArray[i].substring(index+3) + newLine;
+	                output += lineArray[i].substring(index + 3) + newLine;
 	            else
 	                output += lineArray[i] + newLine;
 	        }
 	    }
-        
-	    output += 'Original message' + newLine;    //debug
-	    for (i = 0; i < numLines; i++) {
-	        output += lineArray[i] + newLine;
+
+	  //Debug
+	  //output += 'Original message' + newLine;    
+	    else {
+	        for (i = 0; i < numLines; i++) {
+	            output += lineArray[i] + newLine;
+	        }
 	    }
-       
-	    output += "The current language is:" + newLine + lang;  //debug
+
+        //Debug
+//	    output += "The current language is:" + newLine + lang;  //debug
 
 	    //In case of unhandled error, print generic message
 	    if (output.length === 0) {

@@ -63,19 +63,15 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 
 	container.getElement().html(
     '<form id="search-string">' +
-	    //'<div class="row">' +
-        //'<div class="col-lg-6">' +
           '<div class="input-group">' +
-          '<span class="input-group-btn">' +
-            '<button class="btn btn-default" type="submit">BACK</button>' +
+          '<span id="back-search" class="input-group-btn">' +
+            '<button class="btn btn-default">Back</button>' +
           '</span>' +
             '<input id="query" type="text" class="form-control" placeholder="Search for..."></input>' +
 	          '<span class="input-group-btn">' +
               '<button class="btn btn-default" type="submit">Go!</button>' +
             '</span>' +
           '</div>' +
-        //'</div>' +
-      //'</div>' +
     '</form>' +
     '<div class="media" id="ytPlayerDiv"></div>' +
     '<div id="searchResultsDiv"></div>');
@@ -83,7 +79,6 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 	$(function(){
 		//load youtube API scripts
 		loadScripts();
-
 		//rest of the work
 		initSearch();
 	});
@@ -102,6 +97,8 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 	}
 
 	function initSearch() {
+    //$('#back-search').hide();
+
 		//search button function
 		$('#search-string').submit(function(event){
 			//button is pressed
@@ -109,6 +106,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 			event.preventDefault();
 
 			$('#ytPlayerDiv').hide();
+      //$('#back-search').hide();
 			$('#searchResultsDiv').show();
 
 			// prevents the default action of submit button
@@ -169,6 +167,7 @@ myLayout.registerComponent( 'youtube', function( container, componentState ) {
 
 
 						$('#ytPlayerDiv').show();
+            //$('#back-search').show();
 						$('#searchResultsDiv').hide();
 					};
 				})(video));

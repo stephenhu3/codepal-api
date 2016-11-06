@@ -2,6 +2,8 @@ package com.codepal.api.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class UserSearch {
     @JsonProperty
     private String accessToken;
@@ -42,5 +44,26 @@ public class UserSearch {
 
     public void setSettings(String settings) {
         this.settings = settings;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserSearch)) {
+            return false;
+        }
+
+        final UserSearch that = (UserSearch) o;
+
+        return Objects.equals(this.accessToken, that.accessToken) &&
+                Objects.equals(this.userId, that.userId) &&
+                Objects.equals(this.settings, that.settings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accessToken, userId, settings);
     }
 }

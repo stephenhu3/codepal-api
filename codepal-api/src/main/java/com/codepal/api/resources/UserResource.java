@@ -26,6 +26,22 @@ public class UserResource {
     public UserResource() {
     }
 
+    public Cluster getCluster() {
+        return cluster;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public static void setCluster(Cluster newCluster) {
+        cluster = newCluster;
+    }
+
+    public static void setSession(Session newSession) {
+        session = newSession;
+    }
+
     // Creates a user (perform upon sign up)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -99,17 +115,17 @@ public class UserResource {
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserSearch searchByAccessToken(AccessToken search) {
+    public UserSearch searchUser(UserSearch search) {
         String accessToken = search.getAccessToken();
         String userId = search.getUserId();
         Statement select;
         if (accessToken != null) {
             select = QueryBuilder.select().all()
-                    .from("codepal", "users")
+                    .from(session.getLoggedKeyspace(), "users")
                     .where(eq("accessToken", accessToken));
         } else if (userId != null) {
             select = QueryBuilder.select().all()
-                    .from("codepal", "users")
+                    .from(session.getLoggedKeyspace(), "users")
                     .where(eq("userId", userId));
         } else {
             throw new WebApplicationException(404);

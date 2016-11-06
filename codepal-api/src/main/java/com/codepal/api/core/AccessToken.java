@@ -3,6 +3,8 @@ package com.codepal.api.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Objects;
+
 public class AccessToken {
     @JsonProperty
     @NotEmpty
@@ -33,5 +35,25 @@ public class AccessToken {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AccessToken)) {
+            return false;
+        }
+
+        final AccessToken that = (AccessToken) o;
+
+        return Objects.equals(this.accessToken, that.accessToken) &&
+                Objects.equals(this.userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accessToken, userId);
     }
 }

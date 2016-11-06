@@ -59,18 +59,6 @@ var config = {
 
 // Instantiating the layout
 var myLayout = new GoldenLayout(config); // remove this when adding
-											
-// SavinfState functionality
-
-/*
- * var myLayout, savedState = localStorage.getItem( 'savedState' );
- * 
- * if( savedState !== null ) { myLayout = new GoldenLayout( JSON.parse(
- * savedState ) ); } else { myLayout = new GoldenLayout( config ); }
- * 
- * myLayout.on( 'stateChanged', function(){ var state = JSON.stringify(
- * myLayout.toConfig() ); localStorage.setItem( 'savedState', state ); });
- */
 
 // Registering individual components
 myLayout.registerComponent('codeEditor', function(container, componentState) {

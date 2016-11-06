@@ -1,8 +1,18 @@
 ﻿describe('execute', function () {
-    var configuration = {
-        url: "https://api.hackerearth.com/v3/code/run/",
-        remainingCallTime: 30000,
-    };
+
+    function sendRequest(callbacks, configuration) {
+        $.ajax({
+            url: configuration.url,
+            dataType: "json",
+            success: function (data) {
+                callbacks.checkForInformation(data);
+            },
+            error: function (data) {
+                callbacks.displayErrorMessage();
+            },
+            timeout: configuration.remainingCallTime
+        });
+    }
 
     var fakeCompileOK = {
         "errors": {},
@@ -116,16 +126,22 @@
         expect(result).toBe('Working...');
     });
 
-    it('sends code to HackerEarth API', function () {
-        //TODO
+    it("should make an Ajax request to the correct URL", function () {
+        //TODO - make a real ajax request, not sure how to do this because of how .done, .fail etc are implemented
+        var configuration = {
+            url: "https://api.hackerearth.com/v3/code/run/",
+            remainingCallTime: 30000,
+        };
+
         spyOn($, "ajax");
-        var testStr = "testString";
-        executeModule.run($btn, testLang);
+        sendRequest(undefined, configuration);
         expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(configuration.url);
     });
 
     it('checks for compilation errors', function () {
         //TODO
+      
+
     });
 
     it('checks for runtime errors', function () {

@@ -10,6 +10,7 @@ PROJECT STRUCTURE
         - Code Editor
         - Stack Overflow
         - Youtube
+
 RUNNING LOCALLY
 -------------
 Launch index.html in your browser of choice (only Chrome is officilally supported)

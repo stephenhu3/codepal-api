@@ -1,4 +1,0 @@
-errors / output strings
-java  : hackerearth doesn't supply any compilation error text
-Obj-C : works but output has an extra string from editor module
-

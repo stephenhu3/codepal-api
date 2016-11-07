@@ -1,28 +1,5 @@
 ﻿describe('execute', function () {
 
-    function sendRequest(callbacks, configuration) {
-        $.ajax({
-            url: configuration.url,
-            dataType: "json",
-            success: function (data) {
-                callbacks.checkForInformation(data);
-            },
-            error: function (data) {
-                callbacks.displayErrorMessage();
-            },
-            timeout: configuration.remainingCallTime
-        });
-    }
-
-    var fakeCompileOK = {
-        "errors": {},
-        "id": "7e5cfbe",
-        "code_id": "7e5cfbe",
-        "message": "OK",
-        "compile_status": "OK",
-        "web_link": "http://code.hackerearth.com/7e5cfbe"
-    };
-
     var fakeRunOK = {
         "errors": {}, 
         "id": "7e5cfbe", 
@@ -46,7 +23,18 @@
         "id": "7e5cfbe",
         "code_id": "7e5cfbe",
         "message": "OK",
-        "compile_status": "COMPILE ERROR",
+        "compile_status": "",
+        "run_status": {
+            "status": "AC",
+            "time_used": "0.1005",
+            "memory_used": "64",
+            "output": "Hello",
+            "output_html": "Hello",
+            "signal": "OTHER",
+            "status_detail": "COMPILE ERR",
+            "time_limit": 5,
+            "memory_limit": 262144
+        },
         "web_link": "http://code.hackerearth.com/7e5cfbe"
     };
 
@@ -63,18 +51,46 @@
             "output": "Hello",
             "output_html": "Hello",
             "signal": "OTHER",
-            "status_detail": "RUN ERROR",
+            "status_detail": "N/A",
             "time_limit": 5,
-            "memory_limit": 262144
+            "memory_limit": 262144,
+            "stderr" : "Generic runtime error message"
+        },
+        "web_link": "http://code.hackerearth.com/7e5cfbe"
+    }; 
+
+    var fakeTimeout = {
+        "errors": {},
+        "id": "7e5cfbe",
+        "code_id": "7e5cfbe",
+        "message": "OK",
+        "compile_status": "OK",
+        "run_status": {
+            "status": "TLE",
+            "time_used": "5.01",
+            "memory_used": "64",
+            "output": "",
+            "output_html": "",
+            "signal": "OTHER",
+            "status_detail": "N/A",
+            "time_limit": 5,
+            "memory_limit": 262144           
         },
         "web_link": "http://code.hackerearth.com/7e5cfbe"
     };
 
+    var timeoutMsg = 'Your code exceeded the maximum run time of 5 '
+				+ ' seconds. As a result, some statements may not have been '
+				+ ' executed.';
     var executeModule;
+    $btn = $('#runBtn');
+    $outConsole = $('#outConsole');
+    testLang = 'Javascript';
 
     beforeEach(function () {
         ace.config.set('basePath', 'ace');
         this.result = fixture.load('fixture.html');
+        jasmine.Ajax.install();
 
         var codeEditor = new CodeEditor({
             eleId: 'editor',
@@ -92,24 +108,15 @@
                 $langContainer: $('#lang')
             }
         });
-
-        $btn = $('#runBtn');
-        $outConsole = $('#outConsole');
+ 
         executeModule = codeEditor.execute;
-        editorModule = codeEditor.editor;
-        testLang = 'C';
+        editorModule = codeEditor.editor;        
     });
-    /*
-        var testStr = '(function() { console.log("test"); })();';
-		editorModule.setEditorText(testStr);
-                       spyOn( $, "ajax" ).and.CallFake( function (params) {
-                 params.error({foo: "bar"});
-        });
 
-        spyOn($, "ajax").and.CallFake(function (params) {
-            params.success({ foo: 'bar' });
-        });
-    */
+    afterEach(function () {
+        jasmine.Ajax.uninstall();
+    });
+
     it('outputs warning if there is no code to run', function () {
         var testStr = '';
         editorModule.setEditorText(testStr);
@@ -126,38 +133,86 @@
         expect(result).toBe('Working...');
     });
 
-    it("should make an Ajax request to the correct URL", function () {
-        //TODO - make a real ajax request, not sure how to do this because of how .done, .fail etc are implemented
-        var configuration = {
-            url: "https://api.hackerearth.com/v3/code/run/",
-            remainingCallTime: 30000,
+    it('should make an Ajax request to the correct URL', function () {
+        var testStr = 'testString';
+        editorModule.setEditorText(testStr);
+
+        var doneFn = jasmine.createSpy("success");
+        
+        var xhr = $.ajax({url: 'https://api.hackerearth.com/v3/code/run/',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                client_secret: executeModule.clientSecretKey,
+                lang: hackerLang,
+                source: testStr
+            }});
+ 
+        xhr.onreadystatechange = function (args) {
+            if (this.readyState == this.done) {
+                doneFn(this.responseText);
+            }
         };
-
-        spyOn($, "ajax");
-        sendRequest(undefined, configuration);
-        expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(configuration.url);
+        expect(jasmine.Ajax.requests.mostRecent().url).toBe('https://api.hackerearth.com/v3/code/run/');
     });
-
-    it('checks for compilation errors', function () {
-        //TODO
-      
-
+     
+    it('checks for compile errors', function () {       
+        spyOn($, 'ajax').and.callFake(function (req) {
+            var d = $.Deferred();
+            d.resolve(fakeCompileErr);
+            return d.promise();
+        });
+        var testStr = 'testString';
+        editorModule.setEditorText(testStr);
+        executeModule.run($btn, testLang);
+        result = $("#outConsole").text();
+        expect(result).toBe(fakeCompileErr.run_status.status_detail);
     });
 
     it('checks for runtime errors', function () {
-        //TODO
+       spyOn($, 'ajax').and.callFake(function (req) {
+            var d = $.Deferred();
+            d.resolve(fakeRunErr);
+            return d.promise();
+        });
+        var testStr = 'testString';
+        editorModule.setEditorText(testStr);
+        executeModule.run($btn, testLang);
+        result = $("#outConsole").text();
+        expect(result).toBe('Time Used: '
+            + fakeRunErr.run_status.time_used
+            + fakeRunErr.run_status.stderr);
     });
 
     it('checks if operation exceeded 5 seconds', function () {
-        //TODO
-    });
+        spyOn($, 'ajax').and.callFake(function (req) {
+            var d = $.Deferred();
+            d.resolve(fakeTimeout);
+            return d.promise();
+        });
 
-    it('fails to run', function () {
-        //TODO
+        var testStr = 'testString';
+        editorModule.setEditorText(testStr);
+        executeModule.run($btn, testLang);
+        result = $("#outConsole").text();
+        expect(result).toBe('Time Used: '
+            + fakeTimeout.run_status.time_used
+            + timeoutMsg);
     });
 
     it('runs compilable, runnable code', function () {
-        //TODO
+        spyOn($, 'ajax').and.callFake(function (req) {
+            var d = $.Deferred();
+            d.resolve(fakeRunOK);
+            return d.promise();
+        });
+        var testStr = 'testString';
+        editorModule.setEditorText(testStr);
+        executeModule.run($btn, testLang);
+        result = $("#outConsole").text();
+        expect(result).not.toBe('Working...');
     });
 
+    //TODO test each language with hello world
 });
+

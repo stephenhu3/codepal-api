@@ -1,0 +1,21 @@
+notes
+Infinite loops result in >5second exception
+
+
+All languages compile and output simple "Hello world" applications
+
+Java does not appear to get any compiler error text from hackerEarth
+
+Language specific error handling:
+
+Compiler errors:
+'CPP',
+'CSHARP',   Basic errors are now handled
+'HASKELL',
+'JAVA',
+'OBJECTIVEC',
+'PERL',
+
+Runtime Errors:
+'JAVASCRIPT_NODE',  
+'PYTHON',

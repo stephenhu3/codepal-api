@@ -2,5 +2,7 @@
 .idea
 .metadata/*
 .sonarlint/*
-codeeeee/*
 RemoteSystemsTempFiles/*
+/node_modules
+/coverage
+

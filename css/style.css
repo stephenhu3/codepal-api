@@ -1,3 +1,17 @@
+#codeeditor #editor { 
+	margin: auto;
+	width: 100%;
+	min-height: 200px;
+}
+#codeeditor .wordBreak {
+	word-break: break-word;
+}
+#codeeditor .clickHand {
+	cursor: pointer;
+	margin-left: 5px;
+	
+}
+
 .lm_content{
   overflow: scroll;
   overflow-x: hidden;

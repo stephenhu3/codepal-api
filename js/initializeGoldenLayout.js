@@ -1,4 +1,4 @@
-
+initializeGoldenLayout = function (container){
 // goldenLayout Configuration:
 /* Following is the initital layout. We are creating a big component on the left
  * of the screen and two smaller ones on the right, on top of each other, as shown
@@ -83,3 +83,4 @@ myLayout.registerComponent('testComponent',
 		});
 
 myLayout.init();
+}

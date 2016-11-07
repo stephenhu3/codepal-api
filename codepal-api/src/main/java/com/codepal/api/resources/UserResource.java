@@ -78,7 +78,7 @@ public class UserResource {
         LOGGER.warn("userId:" + userId);
 
         PreparedStatement statement = session.prepare(
-                "UPDATE users SET accessToken = :accessToken WHERE userId = :userId;"
+                "UPDATE users SET accessToken = :accessToken WHERE userId = :userId IF EXISTS;"
         );
         BoundStatement boundStatement = new BoundStatement(statement);
         session.execute(boundStatement.bind()

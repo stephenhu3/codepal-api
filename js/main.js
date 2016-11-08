@@ -5,7 +5,7 @@
  */
  
 //Load Landing Page
-integrateLandingPage(container);
+//integrateLandingPage(container);
 
 //Load GoldenLayout
-initializeGoldenLayout(container);
+initializeGoldenLayout();

@@ -4,7 +4,7 @@ container.getElement().html(
     '<form id="search-string">' +
           '<div class="input-group">' +
           '<span id="back-search" class="input-group-btn">' +
-            '<button class="btn btn-default">Back</button>' +
+            '<button class="btn btn-default" onClick="backFunction()">Back</button>' +
           '</span>' +
             '<input id="query" type="text" class="form-control" placeholder="Search for..."></input>' +
 	          '<span class="input-group-btn">' +
@@ -14,7 +14,8 @@ container.getElement().html(
     '</form>' +
     '<div class="media" id="ytPlayerDiv"></div>' +
     '<div id="searchResultsDiv"></div>');
-
+	var lastSearch ="";
+	
 	$(function(){
 		//load youtube API scripts
 		loadScripts();
@@ -25,27 +26,28 @@ container.getElement().html(
 	function loadScripts() {
 		// Load the IFrame Player API code
 		if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
+			
+			$('#back-search').hide();
+
 			var tag = document.createElement('script');
 			tag.src = "https://www.youtube.com/iframe_api";
 			//find the first script in the html document
 			var firstScriptTag = document.getElementsByTagName('script')[0];
-
 			//inserting youtube API scripts in html
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 		}
 	}
 
 	function initSearch() {
-    //$('#back-search').hide();
-
 		//search button function
+		var clear = container.getElement();
+		console.log(clear);
+		document.clear.innerHTML = '';
 		$('#search-string').submit(function(event){
 			//button is pressed
-
 			event.preventDefault();
 
 			$('#ytPlayerDiv').hide();
-      //$('#back-search').hide();
 			$('#searchResultsDiv').show();
 
 			// prevents the default action of submit button
@@ -56,7 +58,8 @@ container.getElement().html(
 	}
 
 	function search(string){
-
+		
+		lastSearch = string;
 		// setUp parameters to be sent to youtube API
 		var params = {
 					part:'snippet',
@@ -92,7 +95,7 @@ container.getElement().html(
 				// ... and when we click, load the respective video
 				img.addEventListener('click', (function(clickEvent) {
 					return function() {
-
+						
 						//retrieving videoID from the id attribute of img
 						var YoutubeVideoID = $(this).attr('id');
 
@@ -106,7 +109,7 @@ container.getElement().html(
 
 
 						$('#ytPlayerDiv').show();
-            //$('#back-search').show();
+						$('#back-search').show();
 						$('#searchResultsDiv').hide();
 					};
 				})(video));
@@ -116,4 +119,11 @@ container.getElement().html(
 			}
 		});
 	}
+
+	backFunction = function(){
+		alert("a");
+		initSearch();
+		search(lastSearch);
+	}
 }
+

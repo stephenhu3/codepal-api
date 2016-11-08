@@ -1,0 +1,40 @@
+#codeeditor #editor { 
+	margin: auto;
+	width: 100%;
+	min-height: 200px;
+}
+#codeeditor .wordBreak {
+	word-break: break-word;
+}
+#codeeditor .clickHand {
+	cursor: pointer;
+	margin-left: 5px;
+	
+}
+
+.lm_content{
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+img{
+	padding: 5px;
+}
+
+img:hover{
+	cursor: pointer;
+}
+
+/*
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0px;  //remove scrollbar space 
+    background: transparent;  // make scrollbar invisible 
+}
+//show position indicator in red 
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}*/

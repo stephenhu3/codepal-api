@@ -18,14 +18,14 @@ module.exports = function(config) {
         // Dependencies
         'spec/support/jquery-3.1.1.min.js',
         'spec/support/jasmine-jquery.js',
-        'ace/ace.js',
+        'js/ace/ace.js',
 
         // Files to test
-        'js/main.js',
-        'js/util.js',
-        'js/ui.js',
-        'js/execute.js',
-        'js/editor.js',
+        'js/codeeditor/main.js',
+        'js/codeeditor/util.js',
+        'js/codeeditor/ui.js',
+        'js/codeeditor/execute.js',
+        'js/codeeditor/editor.js',
     
         // Fixtures
         'spec/fixtures/*',

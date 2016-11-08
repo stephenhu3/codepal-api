@@ -19,7 +19,7 @@ FEATURES
 
 ISSUES
 ---
-See [the issues page](https://github.com/stephenhu3/codepal/issues?q=is%3Aopen+is%3Aissue) with labels 'codeeditor' and 'bug'.
+See [the issues page](https://github.com/stephenhu3/codepal/issues?q=is%3Aopen+is%3Aissue+label%3Abug+label%3Acodeeditor)
 
 DESIGN PATTERNS
 ---

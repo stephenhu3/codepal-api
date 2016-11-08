@@ -69,22 +69,24 @@
 
         // Load the SDK asynchronously
         (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=727716004048263";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 
         // Here we run a very simple test of the Graph API after login is
         // successful.  See statusChangeCallback() for when this call is made.
         function testAPI() {
             console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me', function(response) {
+            FB.api('/me/permissions', function(response) {
+                /*
                 console.log('Successful login for: ' + response.name);
                 document.getElementById('status').innerHTML =
                     'Thanks for logging in, ' + response.name + '!';
+                */
+                console.log();
             });
         }
     </script>
@@ -96,7 +98,8 @@
 	-->
     <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
     </fb:login-button>
-
+    <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true"></div>
+    
     <div id="status">
     </div>
 

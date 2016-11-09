@@ -5,7 +5,7 @@
 </head>
 <body>
 Hello Aviral! Your part is here! Hehe, good luck!
-<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true"></div>
+<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div>
 
 <!--OUR FACEBOOK-->
  <script>
@@ -20,6 +20,7 @@ Hello Aviral! Your part is here! Hehe, good luck!
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
                 testAPI();
+                window.location.assign("http://stephenhu.me/codepal/");
             } else if (response.status === 'not_authorized') {
                 // The person is logged into Facebook, but not your app.
                 document.getElementById('status').innerHTML = 'Please log ' +

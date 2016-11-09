@@ -1,54 +1,203 @@
-# Introduction
-
-The Dropwizard example application was developed to, as its name implies, provide examples of some of the features
-present in Dropwizard.
-
-Adapted as scaffolding used for CodePal REST API.
-
-# Overview
-
-Included with this application is an example of the optional DB API module. The examples provided illustrate a few of
-the features available in [Hibernate](http://hibernate.org/), along with demonstrating how these are used from within
-Dropwizard.
-
-This database example is comprised of the following classes:
-
-* The `PersonDAO` illustrates using the Data Access Object pattern with assisting of Hibernate.
-
-* The `Person` illustrates mapping of Java classes to database tables with assisting of JPA annotations.
-
-* All the JPQL statements for use in the `PersonDAO` are located in the `Person` class.
-
-* `migrations.xml` illustrates the usage of `dropwizard-migrations` which can create your database prior to running
-your application for the first time.
-
-* The `PersonResource` and `PeopleResource` are the REST resource which use the PersonDAO to retrieve data from the database, note the injection
-of the PersonDAO in their constructors.
-
-As with all the modules the db example is wired up in the `initialize` function of the `HelloWorldApplication`.
+# CodePal REST API
 
 # Running The Application
 
-To test the example application run the following commands.
+To run the example application run the following commands.
 
-* To package the example run.
+* Modify prod.yml with the connection settings for your Cassandra cluster
 
-        mvn package
+* Perform clean install and compile executable JAR
+	```
+	mvn clean install
+	```
 
-* To setup the h2 database run.
+* Deploy the server on your local machine
+	```
+	java -jar target/codepal-api-1.0.1-SNAPSHOT.jar server prod.yml
+	```
 
-        java -jar target/codepal-api-1.0.1-SNAPSHOT.jar db migrate example.yml
+* The domain is hosted at the following address
+	```
+	http://localhost:8080
+	```
 
-* To run the server run.
+* Make HTTP POST requests to the respective endpoints detailed in the API reference below
 
-        java -jar target/codepal-api-1.0.1-SNAPSHOT.jar server example.yml
+# API Reference
 
-* To hit the Hello World example (hit refresh a few times).
+* For all requests, the Content-Type should be set to "application/json"
+* For all requests, the basic authentication field should contain userId in the username field, and accessToken in the password field
 
-	http://localhost:8080/hello-world
 
-* To post data into the application.
+**POST {domain}/users**
 
-	curl -H "Content-Type: application/json" -X POST -d '{"fullName":"Other Person","jobTitle":"Other Title"}' http://localhost:8080/people
+*Creates a user (perform upon sign up)*
+
+**Request:**
+```json
+{
+  "userId": "sampleId",
+  "username": "sampleUsername",
+  "accessToken": "sampleToken",
+  "settings": "sampleSettings"
+}
+```
 	
-	open http://localhost:8080/people
+**Response:**
+
+HTTP 200 (Success, echoes the same input)
+```json
+	{
+	  "userId": "sampleId7",
+	  "username": "sampleUsername7",
+	  "accessToken": "sampleToken7",
+	  "settings": "sampleSettings7"
+	}
+```
+
+HTTP 422 (Missing fields)
+```json
+{
+  "errors": [
+    "userId may not be empty",
+    "settings may not be empty",
+    "username may not be empty",
+    "accessToken may not be empty"
+  ]
+}
+```
+
+HTTP 400 (Invalid fields)
+```json
+{
+  "code": 400,
+  "message": "Unable to process JSON"
+}
+```
+
+HTTP 500 (Generic error for all requests)
+```json
+{
+  "code": 500,
+  "message": "There was an error processing your request. It has been logged (ID c5c2c97340d9da2c)."
+}
+```
+
+**POST {domain}/users/search**
+
+*Searches for user by access token (used for checking permissions) or userId (used for determining login vs. sign up flow)*
+
+**Request:**
+
+```json
+{
+  "userId": "sampleId"
+}
+```
+or
+```json
+{
+  "accessToken": "sampleToken"
+}
+```
+
+**Response:**
+
+HTTP 200 (Success, provides the settings, userId, and accessToken of the found user)
+```json
+{
+  "accessToken": "sampleId7",
+  "userId": "sampleToken7",
+  "settings": "sampleSettings7"
+}
+```
+
+HTTP 500 (error due to neither accessToken nor userId fields being filled for the request)
+```json
+{
+  "code": 500,
+  "message": "There was an error processing your request. It has been logged (ID c5c2c97340d9da2c)."
+}
+```
+
+**POST {domain}/users/accesstokens**
+
+*Updates a user's access token (perform upon login)*
+
+**Request:**
+
+```json
+{
+  "userId": "sampleId"
+  "accessToken" : "newToken"
+}
+```
+
+**Response:**
+
+HTTP 200 (Success, echoes the input)
+```json
+{
+  "userId": "sampleId"
+  "accessToken" : "newToken"
+}
+```
+
+HTTP 422 (Missing fields)
+```json
+{
+  "errors": [
+    "userId may not be empty",
+    "accessToken may not be empty"
+  ]
+}
+```
+
+HTTP 500 (generic error)
+```json
+{
+  "code": 500,
+  "message": "There was an error processing your request. It has been logged (ID c5c2c97340d9da2c)."
+}
+```
+
+**POST {domain}/users/settings**
+
+*Updates a user's ace editor settings (perform when user updates their editor settings)*
+
+**Request:**
+
+```json
+{
+  "userId": "sampleId"
+  "settings" : "newSettings"
+}
+```
+
+**Response:**
+
+HTTP 200 (Success, provides the settings, userId, and accessToken of the found user)
+```json
+{
+  "userId": "sampleId"
+  "settings" : "newSettings"
+}
+```
+
+HTTP 422 (Missing fields)
+```json
+{
+  "errors": [
+    "userId may not be empty",
+    "settings may not be empty"
+  ]
+}
+```
+
+HTTP 500 (generic error)
+```json
+{
+  "code": 500,
+  "message": "There was an error processing your request. It has been logged (ID c5c2c97340d9da2c)."
+}
+```

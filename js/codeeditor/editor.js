@@ -56,10 +56,11 @@ CodeEditor.prototype._editor = function(options) {
 	function initEditor(eleId, lang) {
 		aceEditor = ace.edit(eleId);
 		setEditorTheme(theme);
+		aceEditor.setShowPrintMargin(false);
 		setEditorLang(lang);
 		aceEditor.setAutoScrollEditorIntoView(true);
 		aceEditor.getSession().setTabSize(4);
-
+		
 		// RESTORE DEFAULT: empty, unnamed tab
 		sessions = {};
 		currHash = undefined;

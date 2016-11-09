@@ -6,4 +6,4 @@ container.getElement().html('<p>Add HTML here</p>');
 		var parser = new DOMParser();
 		var doc = parser.parseFromString(stringContainingXMLSource, "../../landingPage/landing.html");
 	});
-}
+};

@@ -18,7 +18,7 @@ module.exports = function(config) {
         // Dependencies
         'spec/support/jquery-3.1.1.min.js',
         'spec/support/jasmine-jquery.js',
-        'ace/ace.js',
+        'js/ace/ace.js',
 
         // Files to test
         'js/codeeditor/main.js',

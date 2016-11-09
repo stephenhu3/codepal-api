@@ -1,51 +1,75 @@
 integrateYoutube = function (container){
-	
-container.getElement().html(
-    '<form id="search-string">' +
-          '<div class="input-group">' +
-          '<span id="back-search" class="input-group-btn">' +
-            '<button class="btn btn-default" onClick="backFunction()">Back</button>' +
-          '</span>' +
-            '<input id="query" type="text" class="form-control" placeholder="Search for..."></input>' +
-	          '<span class="input-group-btn">' +
-              '<button class="btn btn-default" type="submit">Go!</button>' +
-            '</span>' +
-          '</div>' +
-    '</form>' +
-    '<div class="media" id="ytPlayerDiv"></div>' +
-    '<div id="searchResultsDiv"></div>');
+
+	const PRINTING_LOG = true;
+
 	var lastSearch ="";
-	
-	$(function(){
-		//load youtube API scripts
-		loadScripts();
-		//rest of the work
-		initSearch();
-	});
+	//var value_of_print;
+
+	errorCheckingSetUp();
+
+	print = createDOM();
+
+	//load youtube API scripts
+	print = loadScripts();
+
+	//rest of the code
+	print = initSearch();
+
+	function errorCheckingSetUp() {
+		var value_of_print;
+		Object.defineProperty(window, "print", { 
+			get:function(){
+				return value_of_print;
+			},
+			set: function(printValue) { 
+				/* this is run every time print is assigned a value: 
+		     the value being assigned can be found in printValue */
+				value_of_print = printValue;
+				if(PRINTING_LOG)
+					console.log(printValue);
+			}
+		});
+	}
+	function createDOM (){
+		container.getElement().html('');
+		container.getElement().html(
+				'<form id="search-string">' +
+				'<div class="input-group">' +
+				'<span id="back-search" class="input-group-btn">' +
+				'<button class="btn btn-default" onClick="backFunction()">Back</button>' +
+				'</span>' +
+				'<input id="query" type="text" class="form-control" placeholder="Search for..."></input>' +
+				'<span class="input-group-btn">' +
+				'<button class="btn btn-default" type="submit">Go!</button>' +
+				'</span>' +
+				'</div>' +
+				'</form>' +
+				'<div class="media" id="ytPlayerDiv"></div>' +
+		'<div id="searchResultsDiv"></div>');
+		return "DOM created";
+	}
 
 	function loadScripts() {
 		// Load the IFrame Player API code
 		if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
-			
 			$('#back-search').hide();
-
 			var tag = document.createElement('script');
 			tag.src = "https://www.youtube.com/iframe_api";
 			//find the first script in the html document
 			var firstScriptTag = document.getElementsByTagName('script')[0];
 			//inserting youtube API scripts in html
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+			return "new YT scripts loaded";
 		}
+
+		return "YT scripts already exist";
 	}
 
 	function initSearch() {
 		//search button function
-		var clear = container.getElement();
-		console.log(clear);
-		document.clear.innerHTML = '';
 		$('#search-string').submit(function(event){
 			//button is pressed
-			event.preventDefault();
+			//event.preventDefault();
 
 			$('#ytPlayerDiv').hide();
 			$('#searchResultsDiv').show();
@@ -55,17 +79,18 @@ container.getElement().html(
 			var searchTerm = $('#query').val();
 			search(searchTerm);
 		});
+		return "end of intiSearch"
 	}
 
 	function search(string){
-		
+
 		lastSearch = string;
 		// setUp parameters to be sent to youtube API
 		var params = {
-					part:'snippet',
-					key: "AIzaSyCGO6aUgvp2QoGw5Gw16uItLy1MBnRQF1E",
-					q:string
-				  };
+				part:'snippet',
+				key: "AIzaSyCGO6aUgvp2QoGw5Gw16uItLy1MBnRQF1E",
+				q:string
+		};
 		url = 'https://www.googleapis.com/youtube/v3/search';
 
 		//send request to youtube API
@@ -95,7 +120,7 @@ container.getElement().html(
 				// ... and when we click, load the respective video
 				img.addEventListener('click', (function(clickEvent) {
 					return function() {
-						
+
 						//retrieving videoID from the id attribute of img
 						var YoutubeVideoID = $(this).attr('id');
 
@@ -120,10 +145,12 @@ container.getElement().html(
 		});
 	}
 
-	backFunction = function(){
+	function backFunction(){
 		alert("a");
 		initSearch();
 		search(lastSearch);
 	}
+
+
 }
 

@@ -47,12 +47,12 @@ To run the example application run the following commands.
 
 HTTP 200 (Success, echoes the same input)
 ```json
-	{
-	  "userId": "sampleId7",
-	  "username": "sampleUsername7",
-	  "accessToken": "sampleToken7",
-	  "settings": "sampleSettings7"
-	}
+{
+  "userId": "sampleId7",
+  "username": "sampleUsername7",
+  "accessToken": "sampleToken7",
+  "settings": "sampleSettings7"
+}
 ```
 
 HTTP 422 (Missing fields)
@@ -128,7 +128,7 @@ HTTP 500 (error due to neither accessToken nor userId fields being filled for th
 
 ```json
 {
-  "userId": "sampleId"
+  "userId": "sampleId",
   "accessToken" : "newToken"
 }
 ```
@@ -138,7 +138,7 @@ HTTP 500 (error due to neither accessToken nor userId fields being filled for th
 HTTP 200 (Success, echoes the input)
 ```json
 {
-  "userId": "sampleId"
+  "userId": "sampleId",
   "accessToken" : "newToken"
 }
 ```
@@ -169,7 +169,7 @@ HTTP 500 (generic error)
 
 ```json
 {
-  "userId": "sampleId"
+  "userId": "sampleId",
   "settings" : "newSettings"
 }
 ```
@@ -179,7 +179,7 @@ HTTP 500 (generic error)
 HTTP 200 (Success, provides the settings, userId, and accessToken of the found user)
 ```json
 {
-  "userId": "sampleId"
+  "userId": "sampleId",
   "settings" : "newSettings"
 }
 ```

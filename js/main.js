@@ -3,10 +3,9 @@
  * main.js
  * 
  */
-
-main = function() {//Load Landing Page
-initializeLandingPage(container);
+ 
+//Load Landing Page
+//integrateLandingPage(container);
 
 //Load GoldenLayout
-initializeGoldenLayout(container);
-}
+initializeGoldenLayout();

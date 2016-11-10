@@ -60,7 +60,7 @@ container.getElement().html(
 		// setUp parameters to be sent to youtube API
 		var params = {
 					part:'snippet',
-					key: "AIzaSyCGO6aUgvp2QoGw5Gw16uItLy1MBnRQF1E",
+					key: "AIzaSyDGHTYd59vSj48MyKPr5WPR19A1KxNyO90",
 					q:string
 				  };
 		url = 'https://www.googleapis.com/youtube/v3/search';

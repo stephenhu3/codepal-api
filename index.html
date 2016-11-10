@@ -52,11 +52,8 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
-                
-                
                 <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div>
                 <div id="status"></div>
-              
                </ul>
             </div>
           </div>
@@ -140,7 +137,7 @@
     <script src='./landingPage/assets/js/typer.js'></script>
 
 
-<!--OUR FACEBOOK -->
+<!--OUR FACEBOOK LOGIN-->
  <script>
         // This is called with the results from from FB.getLoginStatus().
         function statusChangeCallback(response) {
@@ -153,7 +150,7 @@
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
                 testAPI();
-                window.location.assign("http://stephenhu.me/codepal/main.html");
+                window.location.assign("http://localhost:8888/codepal/main.html");
             } else if (response.status === 'not_authorized') {
                 // The person is logged into Facebook, but not your app.
                 document.getElementById('status').innerHTML = 'Please log ' +
@@ -198,12 +195,12 @@
         };
         // Load the SDK asynchronously
         (function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=727716004048263";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=727716004048263";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
         // Here we run a very simple test of the Graph API after login is
         // successful.  See statusChangeCallback() for when this call is made.
         function testAPI() {
@@ -217,7 +214,7 @@
                 console.log();
             });
         }
-    </script>
+  </script>
 
 
   </body>

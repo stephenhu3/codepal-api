@@ -62,7 +62,7 @@ var myLayout = new GoldenLayout(config); // remove this when adding
 
 // Registering individual components
 myLayout.registerComponent('codeEditor', function(container, componentState) {
-	//integrateCodeEditor(container);
+	integrateCodeEditor(container);
 });
 
 // Registering Youtube component

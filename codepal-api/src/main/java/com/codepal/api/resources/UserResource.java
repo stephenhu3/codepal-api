@@ -100,7 +100,7 @@ public class UserResource {
         LOGGER.warn("userId:" + userId);
 
         PreparedStatement statement = session.prepare(
-                "UPDATE users SET settings = :settings WHERE userId = :userId;"
+                "UPDATE users SET settings = :settings WHERE userId = :userId IF EXISTS;"
         );
         BoundStatement boundStatement = new BoundStatement(statement);
         session.execute(boundStatement.bind()

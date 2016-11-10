@@ -1,6 +1,7 @@
 package com.codepal.api.resources;
 
 import com.codepal.api.core.AccessToken;
+import com.codepal.api.core.Settings;
 import com.codepal.api.core.UserSearch;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -129,6 +130,56 @@ public class UserResourceTest {
         AccessToken failedRequest = MAPPER.readValue(
                 fixture("fixtures/update-access-token-fail-request.json"), AccessToken.class);
         userResource.updateAccessToken(failedRequest);
+
+        // the userId should not exist and no changes should have been made
+        PreparedStatement statement = cassandraCQLUnit.session.prepare(
+                "SELECT * FROM users WHERE userId = :userId;"
+        );
+        BoundStatement boundStatement = new BoundStatement(statement);
+        System.out.println(failedRequest.getUserId());
+        ResultSet result = cassandraCQLUnit.session.execute(
+                boundStatement.bind().setString("userId", failedRequest.getUserId())
+        );
+
+        assertFalse(result.iterator().hasNext());
+    }
+
+    @Test
+    public void updateSettingsSuccess() throws IOException {
+        Settings successfulRequest = MAPPER.readValue(
+                fixture("fixtures/update-settings-success-request-response.json"), Settings.class);
+
+        // check precondition
+        PreparedStatement statement = cassandraCQLUnit.session.prepare(
+                "SELECT * FROM users WHERE userId = :userId;"
+        );
+        BoundStatement precondition = new BoundStatement(statement);
+        ResultSet preresult = cassandraCQLUnit.session.execute(precondition.bind()
+                .setString("userId", successfulRequest.getUserId()));
+        assertThat(preresult.iterator().next().getString("settings"),
+                is("{\\\"theme\\\": \\\"ace/theme/monokai\\\", \\\"mode\\\": \\\"ace/mode/python\\\"}"));
+
+        // check postcondition
+        Settings actualResult = userResource.updateSettings(successfulRequest);
+
+        BoundStatement postcondition = new BoundStatement(statement);
+        ResultSet postResult = cassandraCQLUnit.session.execute(postcondition.bind()
+                .setString("userId", successfulRequest.getUserId()));
+        assertThat(postResult.iterator().next().getString("settings"),
+                is("{\"theme\": \"ace/theme/sharp\", \"mode\": \"ace/mode/java\"}"));
+
+        Settings expectedResult = MAPPER.readValue(
+                fixture("fixtures/update-settings-success-request-response.json"), Settings.class);
+
+        assertTrue(actualResult.equals(expectedResult));
+    }
+
+    @Test
+    public void updateSettingsFail() throws IOException {
+        // perform an update on a non-existent userId
+        Settings failedRequest = MAPPER.readValue(
+                fixture("fixtures/update-settings-fail-request.json"), Settings.class);
+        userResource.updateSettings(failedRequest);
 
         // the userId should not exist and no changes should have been made
         PreparedStatement statement = cassandraCQLUnit.session.prepare(

@@ -8,7 +8,7 @@ Only Chrome is officially supported.
 - Once installed, click the CORS logo on the top right of the browser enable the option 'Enable cross-origin resource sharing'
 - Run `npm install http-server -g` 
 - Run `http-server` in the root of this project, and navigate to one of the endpoints the command specifies
-	    - initializeLandingPage.js: Tushar is currently working on it
+    - initializeLandingPage.js: Tushar is currently working on it
         - initializeGoldenLayout.js:
             - creates a config 
             - instantiates a layout object with it

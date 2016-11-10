@@ -3,6 +3,8 @@ package com.codepal.api.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Objects;
+
 public class Settings {
     @JsonProperty
     @NotEmpty
@@ -33,5 +35,25 @@ public class Settings {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Settings)) {
+            return false;
+        }
+
+        final Settings that = (Settings) o;
+
+        return Objects.equals(this.settings, that.settings) &&
+                Objects.equals(this.userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(settings, userId);
     }
 }

@@ -1,12 +1,24 @@
 # CodePal REST API
 
-# Running The Application
+# Running the Application
 
 To run the example application run the following commands.
+* Make sure your Cassandra cluster is running. If you're hosting a node locally, start it with the following command
+	```
+	/usr/bin/cassandra
+	```
+	
+* Modify prod.yml with the connection settings for your Cassandra cluster located in the following directory
+	```
+	codepal/codepal-api/prod.yml
+	```
 
-* Modify prod.yml with the connection settings for your Cassandra cluster
-
-* Perform clean install and compile executable JAR
+* Perform a clean install and compile executable JAR (runs test suites as well). In the main directory...
+	```
+	codepal/codepal-api/
+	```
+	
+* ...run the following command
 	```
 	mvn clean install
 	```
@@ -22,6 +34,19 @@ To run the example application run the following commands.
 	```
 
 * Make HTTP POST requests to the respective endpoints detailed in the API reference below
+
+# Testing the Application
+The unit test suites run an embedded in-memory Cassandra cluster for the lifetime of the test, so make sure Cassandra 3.4+ is installed on the machine you're running the tests on.
+
+* In the main directory...
+	```
+	codepal/codepal-api/
+	```
+	
+* ...run the following command
+	```
+	mvn test
+	```
 
 # API Reference
 

@@ -1,7 +1,6 @@
 RUNNING LOCALLY
 -------------
 Only Chrome is officially supported.
-
 - Download [this Chrome plugin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en) to allow CORS through Chrome
 - Once installed, click the CORS logo on the top right of the browser enable the option 'Enable cross-origin resource sharing'
 - Run `npm install http-server -g` 
@@ -58,7 +57,3 @@ RUNNING TESTS
 
 To run tests, go to root and run `karma start karma.conf.js`
 To view coverage, after running tests, navigate to codepal/coverage and open up index.html
-
-ISSUES
----
-See [the issues page](https://github.com/stephenhu3/codepal/issues)

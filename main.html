@@ -6,7 +6,7 @@
 	<link type="text/css" rel="stylesheet" href="css/style.css" />
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" >
-    <link rel="stylesheet" type="text/css" href="css/stackOverflowStyle.css">
+    <link rel="stylesheet" type="text/css" href="css/stackOverflowStyle.css?v=1.0">
 
 	<title>CodePal</title>
 </head>
@@ -37,7 +37,7 @@
 	
 	<!--OUR FACEBOOK-->
     <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div>
-<script>
+ <script>
         // This is called with the results from from FB.getLoginStatus().
         function statusChangeCallback(response) {
             console.log('statusChangeCallback');
@@ -47,7 +47,7 @@
             // Full docs on the response object can be found in the documentation
             // for FB.getLoginStatus().
             if (response.status !== 'connected'){
-                window.location.assign("http://localhost:8888/codepal/");
+                window.location.assign("http://128.189.213.178:8080/index.html");
             }
         }
         // This function is called when someone finishes with the Login
@@ -102,7 +102,7 @@
                 console.log();
             });
         }
-</script>
+</script> 
 </body>
 
 </html>

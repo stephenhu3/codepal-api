@@ -1,0 +1,20 @@
+#questionFont{
+    font-family: 'Ubuntu Mono', monospace;
+    color: lightgreen;
+  }
+#show-data{
+  font-family: 'Ubuntu Mono', monospace;
+  color: lightgreen;
+}
+#listOfQ{
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 22px;
+  margin: 10px 0px 10px 20px;
+  color: grey;
+}
+button{
+  font-family: 'Ubuntu Mono', monospace;
+  background-color: grey;
+  border: none;
+  margin-top: 10px;
+}

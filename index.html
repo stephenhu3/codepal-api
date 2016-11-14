@@ -150,7 +150,9 @@
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
                 testAPI();
-                window.location.assign("http://128.189.213.178:8080/main.html");
+                checkUserExists("sampleId", response.authResponse.accessToken);
+                //signUpUser(response.authResponse.userID);
+                //window.location.assign("http://128.189.213.178:8080/main.html");
             } else if (response.status === 'not_authorized') {
                 // The person is logged into Facebook, but not your app.
                 document.getElementById('status').innerHTML = 'Please log ' +
@@ -215,6 +217,65 @@
             });
         }
   </script>
+
+<script type="text/javascript">
+    function checkUserExists(userId, accessToken){
+        var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users/search";
+        var data = {"userId": userId};
+        $.ajax({
+            dataType: "json",
+            contentType: "application/json",
+            method: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            success: function(data){
+                console.log(data);
+                if(accessToken !== data.accessToken){
+                    console.log("The user exists");
+                    updateAccessToken(userId, accessToken);
+                }
+            },
+            error: function(){
+                 var username = prompt("Do you want to sign up? Please enter your username below");
+                 if(username != null){
+                    signUpNewUser(userId, username, accessToken);
+                 }
+            }
+        });
+    }
+
+    function updateAccessToken(userId, newAccessToken){
+        var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users/accesstokens";
+        var data = {"userId": userId, "accessToken": newAccessToken};
+        $.ajax({
+            dataType: "json",
+            contentType: "application/json",
+            method: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            success: function(data){
+                console.log("Updated new access token");
+                //window.location.assign("http://localhost:8888/codepal/main.html");
+            },
+            error: function(){console.log("Fail updating access token!");}
+        });
+    }
+
+    function signUpNewUser(userId, username, accessToken){
+        var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users";
+        var data = {"userId": userId, "username": username ,"accessToken": accessToken};
+        $.ajax({
+            dataType: "json",
+            contentType: "application/json",
+            method: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            success: function(){
+                alert("You already signed up! Thanks!");
+            }
+        });
+    }
+</script>
 
 
   </body>

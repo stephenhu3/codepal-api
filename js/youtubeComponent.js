@@ -24,7 +24,7 @@ function mvc() {
     };
     var controller = {
         setUpYoutubeAPI: function() {
-            gapi.client.setApiKey("AIzaSyAV1MZol0Lh9yA1i9EKAWcuYLI3hjqLj3Y");
+            gapi.client.setApiKey("AIzaSyDGHTYd59vSj48MyKPr5WPR19A1KxNyO90");
             gapi.client.load("youtube", "v3", function() {
                 // yt api is ready
                 model.init();

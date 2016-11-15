@@ -18,6 +18,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
 	<script type="text/javascript" src="js/ace/ace.js" data-ace-base="js/ace" charset="utf-8"></script>
+	<script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
 
 	<!-- Module scripts -->
 	<script type="text/javascript" src="js/codeeditor/main.js"></script>
@@ -31,9 +32,11 @@
 	<script type="text/javascript" src="js/integrateYoutube.js"></script>
 	<script type="text/javascript" src="js/integrateStackOverflow.js"></script>
 	<script type="text/javascript" src="js/initializeGoldenLayout.js"></script>
+	<script type="text/javascript" src="js/youtubeComponent.js"></script>
 
 	<!-- Main -->
 	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="https://apis.google.com/js/client.js?onload=init"></script>
 	
 	<!--OUR FACEBOOK-->
     <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div>
@@ -47,7 +50,7 @@
             // Full docs on the response object can be found in the documentation
             // for FB.getLoginStatus().
             if (response.status !== 'connected'){
-                window.location.assign("http://localhost:8888/codepal/");
+                window.location.assign("http://stephenhu.me/codepal/index.html");
             }
         }
         // This function is called when someone finishes with the Login
@@ -60,7 +63,7 @@
         }
         window.fbAsyncInit = function() {
             FB.init({
-                appId: '727716004048263',
+                appId: '1254398761292760',
                 cookie: true, // enable cookies to allow the server to access 
                 // the session
                 xfbml: true, // parse social plugins on this page

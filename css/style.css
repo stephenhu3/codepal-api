@@ -1,0 +1,46 @@
+#codeeditor #editor { 
+	margin: auto;
+	width: 100%;
+	min-height: 200px;
+}
+#codeeditor .wordBreak {
+	word-break: break-word;
+}
+#codeeditor .clickHand {
+	cursor: pointer;
+	margin-left: 5px;
+	
+}
+
+.lm_content{
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+img{
+	padding: 5px;
+}
+
+img:hover{
+	cursor: pointer;
+}
+
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}

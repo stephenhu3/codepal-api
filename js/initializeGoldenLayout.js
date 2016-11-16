@@ -86,7 +86,7 @@ myLayout.registerComponent('youtube', function(container, componentState) {
 myLayout.registerComponent('StackOverflow',
 		function(container, componentState) {
 			container.getElement().html("<p>BLAH</p>");
-		//	integrateStackOverflow(container);
+			integrateStackOverflow(container);
 		});
 
 myLayout.registerComponent('testComponent',

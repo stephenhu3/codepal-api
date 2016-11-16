@@ -46,7 +46,21 @@ CodeEditor.prototype._util = function() {
 	                output += lineArray[i] + newLine;
 	        }
 	    }
+        
+	    if (lang == 'JAVA') {
 
+	        //Handle the non-verbose HackerEarth error when there is no class and main method
+	        if (lineArray[0] == '') {
+	            output += 'The program must have at least one class declaration, and a main method within the class';
+	        }
+
+	        else {
+	            for (i = 0; i < numLines; i++) {
+	                output += lineArray[i] + newLine;
+	            }
+	        }
+	    }
+        
 	  //Debug
 	  //output += 'Original message' + newLine;    
 	    else {

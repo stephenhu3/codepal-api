@@ -18,7 +18,18 @@ initializeGoldenLayout = function (container){
  * 
  */
 
-var config = {
+var config = {settings:{
+        hasHeaders: true,
+        constrainDragToContainer: false,
+        reorderEnabled: false,
+        selectionEnabled: false,
+        popoutWholeStack: false,
+        blockedPopoutsThrowError: false,
+        closePopoutsOnUnload: false,
+        showPopoutIcon: false,
+        showMaximiseIcon: false,
+        showCloseIcon: false
+    },
 	content : [ {
 		type : 'row',
 		content : [ {

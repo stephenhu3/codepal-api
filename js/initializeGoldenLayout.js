@@ -22,11 +22,20 @@ var config = {
 	content : [ {
 		type : 'row',
 		content : [ {
-			type : 'component',
-			componentName : 'codeEditor',
-			componentState : {
-				label : 'A'
-			}
+			type : 'column',
+			content : [ {
+				type : 'component',
+				componentName : 'codeEditorInput',
+				componentState : {
+					label : 'A'
+				}
+			}, {
+				type : 'component',
+				componentName : 'codeEditorOutput',
+				componentState : {
+					label : 'D'
+				}
+			} ]
 		}, {
 			type : 'column',
 			content : [ {
@@ -61,8 +70,11 @@ var config = {
 var myLayout = new GoldenLayout(config); // remove this when adding
 
 // Registering individual components
-myLayout.registerComponent('codeEditor', function(container, componentState) {
+myLayout.registerComponent('codeEditorInput', function(container, componentState) {
 	integrateCodeEditor(container);
+});
+myLayout.registerComponent('codeEditorOutput', function(container, componentState) {
+	//integrateCodeEditor(container); //@alec change this accordingly
 });
 
 // Registering Youtube component
@@ -74,7 +86,7 @@ myLayout.registerComponent('youtube', function(container, componentState) {
 myLayout.registerComponent('StackOverflow',
 		function(container, componentState) {
 			container.getElement().html("<p>BLAH</p>");
-			integrateStackOverflow(container);
+		//	integrateStackOverflow(container);
 		});
 
 myLayout.registerComponent('testComponent',

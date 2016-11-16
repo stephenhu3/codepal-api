@@ -6,19 +6,16 @@ var integrateCodeEditor = function (container){
 	    url: 'html/codeeditor.html'
 	})
     .done(function(data, textStatus, jqXHR) {
-		container.getElement().html(data);		
+		container.getElement().html(data);
+		initCodeEditor();		
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {
 		throw 'Code Editor module could not be loaded.';
 	});
 
+	function initCodeEditor() {
 
-	// Initialize JavaScript
-	var codeEditor; 
-
-	$(document).ready(function() {
-
-		codeEditor = new CodeEditor({
+		var codeEditor = new CodeEditor({
 			eleId		: 'editor',
 			lang 		: 'JavaScript',
 			execute		: {
@@ -56,6 +53,6 @@ var integrateCodeEditor = function (container){
 		    codeEditor.editor.setEditorTheme(theme);
 		});
 
-	});
+	}
 
 };

@@ -6,7 +6,7 @@ CodeEditor.prototype._execute = function(options) {
 
 	var self 			= this,
 		$outConsole 	= options.$outConsole,
-		clientSecretKey = '9b3e30247878ad73b13bdae8a333c74afe4877fb', // TODO: move to env var 
+		clientSecretKey = '4eeeaac13d99353ed9968239d2629cc50b1f171e', // TODO: move to env var 
 		hackerLangMap 	= { // user label hacker earth lang format 
 			'C'				: 'C',
 			'C++'			: 'CPP',

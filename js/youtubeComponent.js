@@ -30,11 +30,12 @@ function mvc() {
           init: function() {
             controller.setUpYoutubeAPI();
           },
-          addVideo: function(vTitle, vImage, vId) {
+          addVideo: function(vTitle, vImage, vId, vDesc) {
             model.add({
               title: vTitle,
               image: vImage,
-              id: vId
+              id: vId,
+              desc: vDesc
             });
           },
           getVideos: function() {
@@ -61,7 +62,8 @@ function mvc() {
                   var videoTitle = video.snippet.title;
                   var videoImage = video.snippet.thumbnails.default.url;
                   var videoIdentity = video.id.videoId;
-                  controller.addVideo(videoTitle, videoImage, videoIdentity);
+                  var videoDesc = video.snippet.description
+                  controller.addVideo(videoTitle, videoImage, videoIdentity, videoDesc);
                   view.render();
                 });
               });
@@ -73,11 +75,11 @@ function mvc() {
             controller.getVideos().forEach(function(video) {
               htmlString +=
                 '<li class="video">' +
-                '<span class="video-title hideOverflow text-success">' +
-                video.title +
-                '</span><br>' +
-                '<img id="' + video.id + '" class="video-image" src="' + video.image + '">' +
-                '</img>' +
+                  '<span class="video-title hideOverflow text-success">' +
+                    video.title +
+                  '</span><br>' +
+                  '<img id="' + video.id + '" class="video-image" src="' + video.image + '">' +
+                  '</img>' +
                 '</li>' +
                 '<li class="divider"></li>';
             });
@@ -95,7 +97,7 @@ var player;
 
 function videoClick(videoID) {
   if (iFrameReady)player = new YT.Player('inside', {
-    height: '85%',
+    height: '100%',
     width: '100%',
     videoId: videoID,
     events: {

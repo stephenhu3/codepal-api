@@ -99,6 +99,8 @@ var player;
 function videoClick(videoID) {
 
   player = new YT.Player('inside', {
+    height: '100%',
+    width:'100%',
     videoId: videoID,
     events: {
       'onReady': onPlayerReady

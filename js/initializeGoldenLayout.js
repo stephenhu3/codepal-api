@@ -18,15 +18,35 @@ initializeGoldenLayout = function (container){
  *
  */
 
-var config = {
+var config = {settings:{
+        hasHeaders: true,
+        constrainDragToContainer: false,
+        reorderEnabled: false,
+        selectionEnabled: false,
+        popoutWholeStack: false,
+        blockedPopoutsThrowError: false,
+        closePopoutsOnUnload: false,
+        showPopoutIcon: false,
+        showMaximiseIcon: false,
+        showCloseIcon: false
+    },
 	content : [ {
 		type : 'row',
 		content : [ {
-			type : 'component',
-			componentName : 'codeEditor',
-			componentState : {
-				label : 'A'
-			}
+			type : 'column',
+			content : [ {
+				type : 'component',
+				componentName : 'codeEditorInput',
+				componentState : {
+					label : 'A'
+				}
+			}, {
+				type : 'component',
+				componentName : 'codeEditorOutput',
+				componentState : {
+					label : 'D'
+				}
+			} ]
 		}, {
 			type : 'column',
 			content : [ {
@@ -61,8 +81,11 @@ var config = {
 var myLayout = new GoldenLayout(config); // remove this when adding
 
 // Registering individual components
-myLayout.registerComponent('codeEditor', function(container, componentState) {
+myLayout.registerComponent('codeEditorInput', function(container, componentState) {
 	integrateCodeEditor(container);
+});
+myLayout.registerComponent('codeEditorOutput', function(container, componentState) {
+	//integrateCodeEditor(container); //@alec change this accordingly
 });
 
 // Registering Youtube component

@@ -67,19 +67,20 @@ function mvc() {
                   view.render();
                 });
               });
-              $(".dropdown-toggle").trigger("click");
+              $(".dropdown-toggle").trigger("click"); //opens the dropdown with the returned search-results
             });
           },
           render: function() {
             var htmlString = '';
             controller.getVideos().forEach(function(video) {
               htmlString +=
-                '<li class="video">' +
-                  '<span class="video-title hideOverflow text-success">' +
-                    video.title +
-                  '</span><br>' +
-                  '<img id="' + video.id + '" class="video-image" src="' + video.image + '">' +
-                  '</img>' +
+
+                '<li class="listedVideo">' +
+                '<span class="video-title">' +
+                video.title +
+                '</span><br>' +
+                '<img id="' + video.id + '" class="video-image" src="' + video.image + '">' +
+                '</img>' +
                 '</li>' +
                 '<li class="divider"></li>';
             });
@@ -92,26 +93,28 @@ function mvc() {
 function init() {
   mvc();
 }
-var iFrameReady = true;
+
 var player;
 
 function videoClick(videoID) {
-  if (iFrameReady)player = new YT.Player('inside', {
-    height: '100%',
-    width: '100%',
+
+  player = new YT.Player('inside', {
     videoId: videoID,
     events: {
       'onReady': onPlayerReady
     }
   });
 
-  function onPlayerReady(event) {
-    event.target.playVideo();
-  }
+function onPlayerReady(event) {
+  event.target.playVideo();
+}
 
 }
 $(document).click(function(event) {
-  if ($(event.target)[0].className == 'video-image') {
+	console.log("b");
+	var clickedClassName = $(event.target)[0].className
+  if (clickedClassName == 'listedVideo' || clickedClassName == "video-title"  || clickedClassName == "video-image") {
+	  console.log("a");
     $('#resultVideo').html('<div id="inside"></div>');
     videoClick($(event.target)[0].id);
   }

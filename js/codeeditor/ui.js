@@ -12,12 +12,23 @@ CodeEditor.prototype._ui = function(options) {
 	var self 			= this,
 		$tabContainer 	= options.$tabContainer,
 		$langContainer	= options.$langContainer,
+		$themeContainer	= options.$themeContainer,
 		defn_tab 		= "<li class=''></li>",
 		defn_anchor		= "<a></a>",
 		defn_span		= "<span></span>",
 		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
 
 	
+	// @SUMMARY	: sets the theme select to a specified theme
+	// @PARAM	: [theme] the language to set to
+	// @RETURN	: the jQuery theme select element 
+	function setTheme(theme) {
+		$themeContainer.find(':selected').prop('selected', false);
+		$themeContainer.find('option[value="' + theme + '"]')
+			.prop('selected', true);
+		return $themeContainer;
+	}
+
 	// @SUMMARY	: sets the language select to a specified language
 	// @PARAM	: [lang] the language to set to
 	// @RETURN	: the jQuery language select element 
@@ -153,6 +164,7 @@ CodeEditor.prototype._ui = function(options) {
 	}
 
 	return {
+		setTheme				: setTheme,
 		setLang					: setLang,
 		getCurrLang				: getCurrLang,
 		restoreAdjacentTab		: restoreAdjacentTab,

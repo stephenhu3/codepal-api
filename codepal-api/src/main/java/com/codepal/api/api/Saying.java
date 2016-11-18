@@ -1,7 +1,9 @@
 package com.codepal.api.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.hibernate.validator.constraints.Length;
 
 public class Saying {

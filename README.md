@@ -57,7 +57,7 @@ Project Structure
         - instantiates a layout object with it
         - calls the following functions to register respective components to layout:
             - integrateCodeEditor(container): code for CodeEditor in js/integrateCodeEditor.js
-            - integrateYoutube(container): code for Youtube in js/integrateYoutube.js
+            - integrateYoutube(container): code for Youtube in js/integrateYoutube.js and youtubeComponent.js
             - integrateStackOverflow(container): code for StackOverflow in js/integrateStackOverflow.js
         - finally initialize the layout created above by calling: 
             - myLayout.init();
@@ -71,6 +71,8 @@ Project Structure
 
 karma.conf.js: config settings for karma test runner
 
+youtubeKarma.conf.js: config settings for karma youtube component test runner
+
 package.json: node json project file with all needed dependencies
 
 RUNNING TESTS
@@ -78,7 +80,7 @@ RUNNING TESTS
 1. Run `npm install` to get all required node packages for testing.
 2. Get the karma cli package: `npm install -g karma-cli`
 
-To run tests, go to root and run `karma start karma.conf.js`
+To run tests, go to root and run `karma start karma.conf.js` or `karma start youtubeKarma.conf.js` (for Youtube Component testing only)
 To view coverage, after running tests, navigate to codepal/coverage and open up index.html
 
 ISSUES

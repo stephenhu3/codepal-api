@@ -37,8 +37,7 @@ var integrateCodeEditor = function (container){
 
 		$('#codeeditor #runBtn').click(function() {
 			$(this).prop('disabled', true);
-			var currLang = codeEditor.ui.getCurrLang();
-			codeEditor.execute.run($(this), currLang);
+			codeEditor.execute.run($(this));
 		});
 		$('#codeeditor #saveBtn').click(function() { // TODO: Hook up
 			alert('Code snippet save feature -- coming soon...');
@@ -47,6 +46,7 @@ var integrateCodeEditor = function (container){
 		$('#codeeditor #lang').on('change', function() {
 			var lang = $(this).find('option:selected').val();
 			codeEditor.editor.setEditorLang(lang);
+			codeEditor.execute.initReplClient(lang);
 		});
 		$('#theme').on('change', function () {
 		    var theme = $(this).find('option:selected').val();

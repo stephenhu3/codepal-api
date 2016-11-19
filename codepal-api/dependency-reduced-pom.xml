@@ -125,6 +125,22 @@
           </transformers>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <profiles>
@@ -163,114 +179,6 @@
   </repositories>
   <dependencies>
     <dependency>
-      <groupId>org.apache.cassandra</groupId>
-      <artifactId>cassandra-all</artifactId>
-      <version>3.4</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>snappy-java</artifactId>
-          <groupId>org.xerial.snappy</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>lz4</artifactId>
-          <groupId>net.jpountz.lz4</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>compress-lzf</artifactId>
-          <groupId>com.ning</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-cli</artifactId>
-          <groupId>commons-cli</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-math3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>concurrentlinkedhashmap-lru</artifactId>
-          <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>antlr</artifactId>
-          <groupId>org.antlr</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>antlr-runtime</artifactId>
-          <groupId>org.antlr</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jackson-core-asl</artifactId>
-          <groupId>org.codehaus.jackson</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jackson-mapper-asl</artifactId>
-          <groupId>org.codehaus.jackson</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>json-simple</artifactId>
-          <groupId>com.googlecode.json-simple</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>high-scale-lib</artifactId>
-          <groupId>com.boundary</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jbcrypt</artifactId>
-          <groupId>org.mindrot</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>reporter-config3</artifactId>
-          <groupId>com.addthis.metrics</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>thrift-server</artifactId>
-          <groupId>com.thinkaurelius.thrift</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>stream</artifactId>
-          <groupId>com.clearspring.analytics</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>libthrift</artifactId>
-          <groupId>org.apache.thrift</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>cassandra-thrift</artifactId>
-          <groupId>org.apache.cassandra</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jna</artifactId>
-          <groupId>net.java.dev.jna</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jamm</artifactId>
-          <groupId>com.github.jbellis</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>netty-all</artifactId>
-          <groupId>io.netty</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>sigar</artifactId>
-          <groupId>org.fusesource</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>ecj</artifactId>
-          <groupId>org.eclipse.jdt.core.compiler</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>ohc-core</artifactId>
-          <groupId>org.caffinitas.ohc</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>org.cassandraunit</groupId>
       <artifactId>cassandra-unit</artifactId>
       <version>3.0.0.1</version>
@@ -279,14 +187,6 @@
         <exclusion>
           <artifactId>cassandra-all</artifactId>
           <groupId>org.apache.cassandra</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>junit</artifactId>
-          <groupId>junit</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>hamcrest-core</artifactId>
-          <groupId>org.hamcrest</groupId>
         </exclusion>
         <exclusion>
           <artifactId>hamcrest-library</artifactId>
@@ -311,10 +211,6 @@
         <exclusion>
           <artifactId>assertj-core</artifactId>
           <groupId>org.assertj</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>junit</artifactId>
-          <groupId>junit</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -417,6 +313,11 @@
         <artifactId>commons-codec</artifactId>
         <version>1.9</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>19.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

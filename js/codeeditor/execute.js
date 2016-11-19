@@ -76,12 +76,14 @@ CodeEditor.prototype._execute = function(options) {
 						error: "if error - error message here"
 					}
 				*/
-				// TODO: Parse errors
+				
 				if (result.error) {
 					$outConsole.html('ERR: ' + self.util.translateErr(result.error, repl.language));
 				}
+                //TODO - fix this if statement, currently is running even when error is present and overwriting output
 				if (result.data !== 'undefined') {
-					$outConsole.html('DATA: ' + result.data);
+				    //$outConsole.html('DATA: ' + '<br/' +  'ERR:' + result.data + self.util.translateErr(result.error, repl.language));
+
 				}
 
 				console.log('result ' + result);

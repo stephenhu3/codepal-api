@@ -38,7 +38,9 @@ var integrateCodeEditor = function (container){
 		});
 
 		// Bindings
-		$('#codeeditor [data-editoraction="add"]').click(codeEditor.editor.createNewSession);
+		$('#codeeditor [data-editoraction="add"]').click(function() {
+			codeEditor.editor.createNewSession();
+		});
 
 		$('#codeeditor #runBtn').click(function() {
 			$(this).prop('disabled', true);

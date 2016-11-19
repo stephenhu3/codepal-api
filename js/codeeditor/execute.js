@@ -78,7 +78,7 @@ CodeEditor.prototype._execute = function(options) {
 				*/
 				// TODO: Parse errors
 				if (result.error) {
-					$outConsole.html('ERR: ' + self.util.translateErr(result.error));
+					$outConsole.html('ERR: ' + self.util.translateErr(result.error, repl.language));
 				}
 				if (result.data !== 'undefined') {
 					$outConsole.html('DATA: ' + result.data);

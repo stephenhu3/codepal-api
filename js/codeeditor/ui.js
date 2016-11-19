@@ -19,6 +19,18 @@ CodeEditor.prototype._ui = function(options) {
 		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
 
 	
+	// @SUMMARY	: changes the tab's name
+	// @PARAM	: [name] name to change to
+	// @PARAM	: [hash] hash corresponding to existing tab
+	// @RETURN	: jQuery tab element
+	function changeTabName(name, hash) {
+		var $tab = $('[data-editorhash="' + hash + '"]'),
+			$name = $tab.find('[data-tab="name"]');
+
+		$name.html(name);
+		return $tab;
+	}
+
 	// @SUMMARY	: sets the theme select to a specified theme
 	// @PARAM	: [theme] the language to set to
 	// @RETURN	: the jQuery theme select element 

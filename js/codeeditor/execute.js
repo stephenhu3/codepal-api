@@ -68,7 +68,7 @@ CodeEditor.prototype._execute = function(options) {
 				}
 			}
 		).then(
-			function(result) {
+			function success(result) {
 				/*
 					{ 
 						command: "result"
@@ -78,7 +78,7 @@ CodeEditor.prototype._execute = function(options) {
 				*/
 				// TODO: Parse errors
 				if (result.error) {
-					$outConsole.html('ERR: ' + result.error);
+					$outConsole.html('ERR: ' + self.util.translateErr(result.error));
 				}
 				if (result.data !== 'undefined') {
 					$outConsole.html('DATA: ' + result.data);
@@ -87,7 +87,7 @@ CodeEditor.prototype._execute = function(options) {
 				console.log('result ' + result);
 				$btn.prop('disabled', false);
 			},
-			function(err) {
+			function error(err) {
 				console.log('err ' + err);
 				$output.html(messages.RUN_ERROR);
 				$btn.prop('disabled', false);

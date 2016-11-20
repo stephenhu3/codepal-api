@@ -1,14 +1,16 @@
 package com.codepal.api.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Snippet {
     @JsonProperty
-    @NotEmpty
-    private String uuid;
+    private UUID uuid;
     @JsonProperty
     @NotEmpty
     private String userId;
@@ -19,20 +21,16 @@ public class Snippet {
     @NotEmpty
     private String content;
     @JsonProperty
-    @NotEmpty
-    private String dateCreated;
+    private Date dateCreated;
     @JsonProperty
-    @NotEmpty
-    private String dateUpdated;
+    private Date dateUpdated;
     @JsonProperty
-    @NotEmpty
     private boolean isPublic;
 
     public Snippet() {}
 
-    public Snippet(String uuid, String userId, String title,
-                   String content, String dateCreated, String dateUpdated,
-                   boolean isPublic) {
+    public Snippet(UUID uuid, String userId, String title, String content, Date dateCreated,
+                   Date dateUpdated, boolean isPublic) {
         this.uuid = uuid;
         this.userId = userId;
         this.title = title;
@@ -42,11 +40,11 @@ public class Snippet {
         this.isPublic = isPublic;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
@@ -74,26 +72,28 @@ public class Snippet {
         this.content = content;
     }
 
-    public String getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public String getDateUpdated() {
+    public Date getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(String dateUpdated) {
+    public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 
+    @JsonProperty(value="isPublic")
     public boolean isPublic() {
         return isPublic;
     }
 
+    @JsonProperty(value="isPublic")
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
@@ -120,6 +120,6 @@ public class Snippet {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, userId, title, content, dateCreated, dateUpdated);
+        return Objects.hash(uuid, userId, title, content, dateCreated, dateUpdated, isPublic);
     }
 }

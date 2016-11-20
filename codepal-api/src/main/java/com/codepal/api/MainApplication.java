@@ -9,6 +9,7 @@ import com.codepal.api.core.Template;
 import com.codepal.api.db.PersonDAO;
 import com.codepal.api.filter.DateRequiredFeature;
 import com.codepal.api.health.TemplateHealthCheck;
+import com.codepal.api.resources.SnippetResource;
 import com.codepal.api.resources.UserResource;
 import com.codepal.api.tasks.EchoTask;
 import com.datastax.driver.core.Cluster;
@@ -109,6 +110,7 @@ public class MainApplication extends Application<MainConfiguration> {
         // environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new UserResource());
+        environment.jersey().register(new SnippetResource());
 
         // Cassandra dropwizard configs
         Cluster cassandra = configuration.getCassandraFactory().build(environment);

@@ -48,7 +48,9 @@ CodeEditor.prototype._execute = function(options) {
 	//				the output window with any errors and stdout
 	// @PARAM	: [$btn] the run button to control disable timing
 	function run($btn) {
-		var evalCode = self.editor.getEditorText();
+	    var evalCode = self.editor.getEditorText();
+	    var output = '';
+
 		if (!evalCode) {
 			alert('Please enter at least one statement to run.');
 			$btn.prop('disabled', false);
@@ -60,7 +62,7 @@ CodeEditor.prototype._execute = function(options) {
 			evalCode,
 			{
 				stdout: function(out) {
-					$outConsole.html(out);
+				    output += 'Console output: ' + '<br/>' + out + '<br/>';
 				},
 				time: 5000,
 				callback: function() {
@@ -77,18 +79,29 @@ CodeEditor.prototype._execute = function(options) {
 					}
 				*/
 				
-				if (result.error) {
-					$outConsole.html('ERR: ' + self.util.translateErr(result.error, repl.language));
+				if (result.error.length!==0) {				   			    
+				    output += 'ERROR:  '
+                        + '<br/>'
+                        + self.util.translateErr(result.error, repl.language) 
+                        + '<br/>'           
+                        + 'COMMAND: '       //debug
+                        + result.command    //debug
+                        + '<br/>'           //debug
+                        + 'DATA: '          //debug
+                        + result.data       //debug
+                        + '<br/>';          //debug              
 				}
-                //TODO - fix this if statement, currently is running even when error is present and overwriting output
-				if (result.data !== 'undefined') {
-				    //$outConsole.html('DATA: ' + '<br/' +  'ERR:' + result.data + self.util.translateErr(result.error, repl.language));
-
+             
+				else {
+				    output += 'SUCCESS RESULT <br/>'
+                        + result.data
+                        + result.command;                           
 				}
-
-				console.log('result ' + result);
+				
+				$outConsole.html(output);
 				$btn.prop('disabled', false);
 			},
+
 			function error(err) {
 				console.log('err ' + err);
 				$output.html(messages.RUN_ERROR);

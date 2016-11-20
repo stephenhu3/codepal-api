@@ -9,12 +9,17 @@ import com.codepal.api.core.Template;
 import com.codepal.api.db.PersonDAO;
 import com.codepal.api.filter.DateRequiredFeature;
 import com.codepal.api.health.TemplateHealthCheck;
-import com.codepal.api.resources.*;
+import com.codepal.api.resources.SnippetResource;
+import com.codepal.api.resources.UserResource;
 import com.codepal.api.tasks.EchoTask;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+
+import java.util.Map;
+
 import io.dropwizard.Application;
-import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -23,9 +28,6 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
-import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
-
-import java.util.Map;
 
 public class MainApplication extends Application<MainConfiguration> {
     public enum Cassandra {
@@ -76,7 +78,7 @@ public class MainApplication extends Application<MainConfiguration> {
         );
 
         bootstrap.addCommand(new RenderCommand());
-        bootstrap.addBundle(new AssetsBundle());
+//        bootstrap.addBundle(new AssetsBundle());
         bootstrap.addBundle(new MigrationsBundle<MainConfiguration>() {
             @Override
             public DataSourceFactory getDataSourceFactory(MainConfiguration configuration) {
@@ -108,6 +110,7 @@ public class MainApplication extends Application<MainConfiguration> {
         // environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new UserResource());
+        environment.jersey().register(new SnippetResource());
 
         // Cassandra dropwizard configs
         Cluster cassandra = configuration.getCassandraFactory().build(environment);

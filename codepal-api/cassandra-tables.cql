@@ -12,13 +12,14 @@ CREATE TABLE users (
 );
 CREATE INDEX accessToken ON codepal.users (accessToken);
 
-
-
-// snippets TBD
 CREATE TABLE snippets (
+    uuid uuid,
+    userId text,
 	title text,
-	content text,
-	user_id	uuid,
-	created_at timestamp 
+    content text,
+    dateCreated timestamp,
+    dateUpdated timestamp,
+    isPublic boolean,
+    PRIMARY KEY (uuid)
 );
-
+CREATE INDEX userId ON codepal.snippets (userId);

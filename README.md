@@ -315,3 +315,62 @@ HTTP 500 (generic error)
   "message": "There was an error processing your request. It has been logged (ID c5c2c97340d9da2c)."
 }
 ```
+
+##Snippets
+**POST {domain}/snippets**
+
+*Create a new snippet*
+
+**Request:**
+
+```json
+{
+    "userId": "01908170678902102",
+    "title": "NewEntry.java",
+    "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
+    "isPublic": true
+}
+```
+
+**Response:**
+
+HTTP 200 (Success, echoes created snippet, along with generated UUID, and timestamp (in milliseconds))
+```json
+{
+  "uuid": "1bcd7d03-cccd-49ea-8dac-fc7bb14b3bca",
+  "userId": "01908170678902102",
+  "title": "NewEntry.java",
+  "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
+  "dateCreated": 1479618665729,
+  "dateUpdated": 1479618665729,
+  "isPublic": true
+}
+```
+
+
+**POST {domain}/snippets/search**
+
+*Get a snippet's contents:*
+
+**Request:**
+
+```json
+{
+    "uuid": "1bcd7d03-cccd-49ea-8dac-fc7bb14b3bca"
+}
+```
+
+**Response:**
+
+HTTP 200 (Success, contains snippet's fields)
+```json
+{
+  "uuid": "1bcd7d03-cccd-49ea-8dac-fc7bb14b3bca",
+  "userId": "01318170671172102",
+  "title": "NewEntry.java",
+  "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
+  "dateCreated": 1479618665729,
+  "dateUpdated": 1479618665729,
+  "isPublic": true
+}
+```

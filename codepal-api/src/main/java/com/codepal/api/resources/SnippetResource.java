@@ -2,6 +2,7 @@ package com.codepal.api.resources;
 
 import com.codepal.api.MainApplication;
 import com.codepal.api.core.Snippet;
+import com.codepal.api.core.SnippetSearch;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
@@ -15,10 +16,8 @@ import com.datastax.driver.core.utils.UUIDs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
+import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -66,16 +65,15 @@ public class SnippetResource {
         String userId = snippet.getUserId();
         String title = snippet.getTitle();
         String content = snippet.getContent();
-        Date dateCreated = snippet.getDateCreated();
-        Date dateUpdated = snippet.getDateUpdated();
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         boolean isPublic = snippet.isPublic();
 
         LOGGER.warn("uuid:" + uuid);
         LOGGER.warn("userId:" + userId);
         LOGGER.warn("title:" + title);
         LOGGER.warn("content:" + content);
-        LOGGER.warn("dateCreated:" + dateCreated);
-        LOGGER.warn("dateUpdated:" + dateUpdated);
+        LOGGER.warn("dateCreated:" + currentTime);
+        LOGGER.warn("dateUpdated:" + currentTime);
         LOGGER.warn("isPublic:" + isPublic);
 
         PreparedStatement statement = session.prepare(
@@ -84,9 +82,9 @@ public class SnippetResource {
         );
 
         BoundStatement boundStatement = new BoundStatement(statement);
-        session.execute(boundStatement.bind(uuid, userId, title, content, dateCreated, dateUpdated,
+        session.execute(boundStatement.bind(uuid, userId, title, content, currentTime, currentTime,
                 isPublic));
-        return new Snippet(uuid, userId, title, content, dateCreated, dateUpdated, isPublic);
+        return new Snippet(uuid, userId, title, content, currentTime, currentTime, isPublic);
     }
 
     // Get a specific snippet's contents
@@ -94,7 +92,7 @@ public class SnippetResource {
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Snippet searchSnippet(Snippet search) throws ParseException {
+    public Snippet searchSnippet(SnippetSearch search) throws ParseException {
         UUID uuid = search.getUuid();
         Statement select;
         if (uuid != null) {
@@ -106,15 +104,18 @@ public class SnippetResource {
         }
         ResultSet rs = session.execute(select);
         Row row = rs.one();
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssZ");
+//        DateFormat df = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssZ");
 
         return new Snippet(
             row.getUUID("uuid"),
             row.getString("userId"),
             row.getString("title"),
             row.getString("content"),
-            df.parse(row.getString("dateCreated")),
-            df.parse(row.getString("dateCreated")),
+//            df.parse(row.getTimestamp("dateCreated").toString()),
+//            df.parse(row.getTimestamp("dateCreated").toString()),
+            row.getTimestamp("dateCreated"),
+            row.getTimestamp("dateUpdated"),
+//            df.parse(row.getString("dateCreated")),
             row.getBool("isPublic")
         );
     }

@@ -23,4 +23,5 @@ CREATE TABLE snippets (
 );
 CREATE INDEX userId ON codepal_test.snippets (userId);
 
-INSERT INTO snippets (uuid, userId, title, content, dateCreated, dateUpdated, isPublic) VALUES (8e803d9f-c1d2-41e0-af22-2e060d9bce6e, '19168015020712713', 'helloworld.js', 'Y29uc29sZS5sb2coImhlbGxvIHdvcmxkIik=', '2016-11-19T23:26:38+00:00', '2016-11-19T23:26:38+00:00', true)
+INSERT INTO snippets (uuid, userId, title, content, dateCreated, dateUpdated, isPublic) VALUES (8e803d9f-c1d2-41e0-af22-2e060d9bce6e, '19168015020712713', 'helloworld.js', 'Y29uc29sZS5sb2coImhlbGxvIHdvcmxkIik=', '1479615183863', '1479615183863', true)
+

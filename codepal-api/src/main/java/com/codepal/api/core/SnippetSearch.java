@@ -3,26 +3,27 @@ package com.codepal.api.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class SnippetSearch {
     @JsonProperty
-    private String uuid;
+    private UUID uuid;
 
     @JsonProperty
     private String userId;
 
     public SnippetSearch() {}
 
-    public SnippetSearch(String uuid, String userId) {
+    public SnippetSearch(UUID uuid, String userId) {
         this.uuid = uuid;
         this.userId = userId;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 

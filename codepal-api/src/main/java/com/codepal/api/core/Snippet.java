@@ -21,13 +21,10 @@ public class Snippet {
     @NotEmpty
     private String content;
     @JsonProperty
-    @NotEmpty
     private Date dateCreated;
     @JsonProperty
-    @NotEmpty
     private Date dateUpdated;
     @JsonProperty
-    @NotEmpty
     private boolean isPublic;
 
     public Snippet() {}
@@ -91,10 +88,12 @@ public class Snippet {
         this.dateUpdated = dateUpdated;
     }
 
+    @JsonProperty(value="isPublic")
     public boolean isPublic() {
         return isPublic;
     }
 
+    @JsonProperty(value="isPublic")
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
@@ -121,6 +120,6 @@ public class Snippet {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, userId, title, content, dateCreated, dateUpdated);
+        return Objects.hash(uuid, userId, title, content, dateCreated, dateUpdated, isPublic);
     }
 }

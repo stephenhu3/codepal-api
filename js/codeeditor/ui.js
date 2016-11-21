@@ -19,15 +19,17 @@ CodeEditor.prototype._ui = function(options) {
 		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
 
 	
-	// @SUMMARY	: changes the tab's name
+	// @SUMMARY	: updates tab's hash and name
 	// @PARAM	: [name] name to change to
 	// @PARAM	: [hash] hash corresponding to existing tab
+	// @PARAM	: [newHash] hash tab should now be linked to
 	// @RETURN	: jQuery tab element
-	function changeTabName(name, hash) {
+	function updateTab(name, hash, newHash) {
 		var $tab = $('[data-editorhash="' + hash + '"]'),
 			$name = $tab.find('[data-tab="name"]');
 
 		$name.html(name);
+		$tab.attr('data-editorhash', newHash);
 		return $tab;
 	}
 
@@ -181,7 +183,8 @@ CodeEditor.prototype._ui = function(options) {
 		getCurrLang				: getCurrLang,
 		restoreAdjacentTab		: restoreAdjacentTab,
 		generateAndAppendNewTab	: generateAndAppendNewTab,
-		destroyTab				: destroyTab
+		destroyTab				: destroyTab,
+		updateTab				: updateTab
 	};
 
 };

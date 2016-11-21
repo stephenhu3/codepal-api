@@ -51,16 +51,17 @@ CodeEditor.prototype._editor = function(options) {
 	// @RETURN	: the editor object itself and its sessions for fluency 
 	function initEditor(eleId, lang) {
 		aceEditor = ace.edit(eleId);
-		setEditorTheme(theme);
-		aceEditor.setShowPrintMargin(false);
-		setEditorLang(lang);
-		aceEditor.setAutoScrollEditorIntoView(true);
-		aceEditor.getSession().setTabSize(4);
 		
 		// RESTORE DEFAULT: empty, unnamed tab
 		sessions = {};
 		currHash = undefined;
 		createNewSession();
+
+		setEditorTheme(theme);
+		aceEditor.setShowPrintMargin(false);
+		setEditorLang(lang);
+		aceEditor.setAutoScrollEditorIntoView(true);
+		aceEditor.getSession().setTabSize(4);
 
 		return {
 			aceEditor: aceEditor,
@@ -113,6 +114,7 @@ CodeEditor.prototype._editor = function(options) {
 	function setEditorLang(newLang) {
 		aceEditor.getSession().setMode("ace/mode/" + aceLangMap[newLang]);
 		$extension.html(extensionMap[newLang]);
+		sessions[currHash].lang = newLang;
 
 		var newMode = aceEditor.session.$modeId.split('ace/mode/')[1];
 		if (aceLangMap[newLang] !== newMode) {
@@ -186,6 +188,44 @@ CodeEditor.prototype._editor = function(options) {
 		return sessions[hash];
 	}
 
+	function getCurrSessionObj() {
+		return {
+			hash		: currHash,
+			sessionObj	: sessions[currHash]
+		};
+	}
+
+	function saveCurrSession() {
+		saveSession(currHash);
+	}
+
+	// @SUMMARY	: generates a  new session object to be stored in sessions { }
+	// @RETURN	: the newly created session obj
+	function generateSessionObject(session, lang, name) {
+		return {
+			aceSession	: session,
+			lang		: lang,
+			name		: name
+		};
+	}
+
+    // @SUMMARY	: Changes the hash of a saved session
+    // @PARAM	: [hash] 
+    // @PARAM	: [newHash]
+	function updateSession(hash, newHash, newName) {
+		if (sessions[hash] === 'undefined') {
+			return;
+		}
+		var sessionObj = sessions[hash];
+		delete sessions[hash];
+		sessions[newHash] = sessionObj;
+		sessions[newHash].name = newName;
+
+		if (currHash == hash) {
+			currHash = newHash;
+		}
+	}
+
 	// PRIVATE
 	// -------------------------------
 
@@ -212,25 +252,20 @@ CodeEditor.prototype._editor = function(options) {
 		sessions[hash].lang = self.ui.getCurrLang();
 	}
 
-	// @SUMMARY	: generates a  new session object to be stored in sessions { }
-	// @RETURN	: the newly created session obj
-	function generateSessionObject(session, lang, name) {
-		return {
-			aceSession	: session,
-			lang		: lang,
-			name		: name
-		};
-	}
-
 	return {
-		initEditor			: initEditor,
-		download			: download,
-		getEditorText		: getEditorText,
-		setEditorText		: setEditorText,
-		setEditorTheme		: setEditorTheme,
-		setEditorLang		: setEditorLang,
-		deleteSession		: deleteSession,
-		createNewSession	: createNewSession,
-		switchSession		: switchSession,
+		initEditor				: initEditor,
+		download				: download,
+		getEditorText			: getEditorText,
+		setEditorText			: setEditorText,
+		setEditorTheme			: setEditorTheme,
+		setEditorLang			: setEditorLang,
+		deleteSession			: deleteSession,
+		createNewSession		: createNewSession,
+		switchSession			: switchSession,
+		generateSessionObject 	: generateSessionObject,
+		updateSession			: updateSession,
+		getCurrSessionObj		: getCurrSessionObj,
+		saveCurrSession			: saveCurrSession,
+		aceLangMap				: aceLangMap
 	};
 };

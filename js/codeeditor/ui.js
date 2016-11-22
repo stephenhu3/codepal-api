@@ -12,12 +12,37 @@ CodeEditor.prototype._ui = function(options) {
 	var self 			= this,
 		$tabContainer 	= options.$tabContainer,
 		$langContainer	= options.$langContainer,
+		$themeContainer	= options.$themeContainer,
 		defn_tab 		= "<li class=''></li>",
 		defn_anchor		= "<a></a>",
 		defn_span		= "<span></span>",
 		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
 
 	
+	// @SUMMARY	: updates tab's hash and name
+	// @PARAM	: [name] name to change to
+	// @PARAM	: [hash] hash corresponding to existing tab
+	// @PARAM	: [newHash] hash tab should now be linked to
+	// @RETURN	: jQuery tab element
+	function updateTab(name, hash, newHash) {
+		var $tab = $('[data-editorhash="' + hash + '"]'),
+			$name = $tab.find('[data-tab="name"]');
+
+		$name.html(name);
+		$tab.attr('data-editorhash', newHash);
+		return $tab;
+	}
+
+	// @SUMMARY	: sets the theme select to a specified theme
+	// @PARAM	: [theme] the language to set to
+	// @RETURN	: the jQuery theme select element 
+	function setTheme(theme) {
+		$themeContainer.find(':selected').prop('selected', false);
+		$themeContainer.find('option[value="' + theme + '"]')
+			.prop('selected', true);
+		return $themeContainer;
+	}
+
 	// @SUMMARY	: sets the language select to a specified language
 	// @PARAM	: [lang] the language to set to
 	// @RETURN	: the jQuery language select element 
@@ -153,11 +178,13 @@ CodeEditor.prototype._ui = function(options) {
 	}
 
 	return {
+		setTheme				: setTheme,
 		setLang					: setLang,
 		getCurrLang				: getCurrLang,
 		restoreAdjacentTab		: restoreAdjacentTab,
 		generateAndAppendNewTab	: generateAndAppendNewTab,
-		destroyTab				: destroyTab
+		destroyTab				: destroyTab,
+		updateTab				: updateTab
 	};
 
 };

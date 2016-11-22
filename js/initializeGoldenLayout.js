@@ -85,11 +85,14 @@ myLayout.registerComponent('codeEditorInput', function(container, componentState
 	integrateCodeEditor(container);
 });
 myLayout.registerComponent('codeEditorOutput', function(container, componentState) {
-	//integrateCodeEditor(container); //@alec change this accordingly
+	//To-DO: @alec: Must change the following code
+	window.setInterval(function () {
+		var outputDiv = $('div#outConsole.jumbotron.wordBreak')[0];
+		container.getElement().html(outputDiv);
+		}, 100);
 });
 
 // Registering Youtube component
-
 myLayout.registerComponent('youtube', function(container, componentState) {
 	integrateYoutube(container);
 });

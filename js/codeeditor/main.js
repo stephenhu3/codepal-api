@@ -12,4 +12,6 @@ function CodeEditor(options) {
 
 	// init
 	this.editor.initEditor(options.eleId, options.lang);
+	this.ui.setLang(options.lang);
+	this.ui.setTheme(options.editor.theme);
 }

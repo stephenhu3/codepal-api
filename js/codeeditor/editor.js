@@ -239,6 +239,7 @@ CodeEditor.prototype._editor = function(options) {
 		aceEditor.setSession(sessionObj.aceSession);
 		setEditorLang(sessionObj.lang);
 		self.ui.setLang(sessionObj.lang);
+		self.execute.initReplClient(sessionObj.lang);
 	}
 
 	// @SUMMARY	: updates a session's state within the session hash map

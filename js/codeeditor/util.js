@@ -5,12 +5,11 @@
 
 CodeEditor.prototype._util = function() {
 
-	var self 		= this,
+    var self = this,
 		messages 	= {
 			'COMPILER_ERR'	: 'Compiler has encountered an unknown error!',
 		    'RUNTIME_ERR'	: 'Error during runtime!'
 		};
-
 	function isInteger(num) {
 		return (typeof(num) === 'number' && num % 1 === 0);	
 	}
@@ -54,32 +53,16 @@ CodeEditor.prototype._util = function() {
 	            }
 	            else {
 	                //output relevant error type information
-                    //TODO - search SO and YT for this line
 	                output += lineArray[i] + newLine;
-	            }
-	        }
-	    }
 
-	    if (lang == 'CSHARP') {
-	        for (i = 0; i < numLines; i++) {
-	            var index = lineArray[i].search('.cs');
-	            if (index != -1)
-	                output += lineArray[i].substring(index + 3) + newLine;
-	            else
-	                output += lineArray[i] + newLine;
-	        }
-	    }
-        
-	    if (lang == 'JAVA') {
+	                //output += 'query value' + $('#query').val(); //debug
 
-	        //Handle the non-verbose HackerEarth error when there is no class and main method
-	        if (lineArray[0] == '') {
-	            output += 'The program must have at least one class declaration, and a main method within the class';
-	        }
-
-	        else {
-	            for (i = 0; i < numLines; i++) {
-	                output += lineArray[i] + newLine;
+	                //Trigger youtube and Stack Overflow search for the top level error
+                    //TODO -youtube dropdown activation
+	                $('#query').val(lineArray[i]);
+	                $('#search-button').trigger('click');
+	                $('#query1').val(lineArray[i]);
+	                $('#soSearch').trigger('click');
 	            }
 	        }
 	    }

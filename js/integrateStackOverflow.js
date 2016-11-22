@@ -6,7 +6,7 @@ container.getElement().html(
 '		</span>' +
 '		<input id="query1" type="text" class="form-control" placeholder="Search for..."></input>' +
 '		<span class="input-group-btn">' +
-'			<button onclick="myFunction()" class="btn btn-default" type="submit">Go!</button>' +
+'			<button id="soSearch" onclick="myFunction()" class="btn btn-default" type="submit">Go!</button>' +
 '		</span>' +
 '	</div>' +
 '	<p id="listOfQ"></p>'+

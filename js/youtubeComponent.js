@@ -100,7 +100,7 @@ function mvc() {
 }
 
 function init() {
-    var mvcTestArry = mvc();
+    var mvcTestArray = mvc();
     mvcTestArray[1].init();
 }
 var player;

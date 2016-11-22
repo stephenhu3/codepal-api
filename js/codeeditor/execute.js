@@ -5,7 +5,7 @@
 CodeEditor.prototype._execute = function(options) {
 
 	var self 			= this,
-		$outConsole 	= options.$outConsole,
+		$outConsole = options.$outConsole,
 		repl,
 		replMap		 	= { // user label hacker earth lang format 
 			'C'				: 'c',
@@ -82,9 +82,9 @@ CodeEditor.prototype._execute = function(options) {
 				if (result.error.length!==0) {				   			    
 				    output += 'ERROR:  '
                         + '<br/>'
-                        + self.util.translateErr(result.error, replMap[self.ui.getCurrLang()])
+                        + self.util.translateErr(result.error, replMap[self.ui.getCurrLang()]) 
                         + '<br/>';
-				    /*  
+				        /*  
                         + 'COMMAND: '       //debug
                         + result.command    //debug
                         + '<br/>'           //debug

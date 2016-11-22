@@ -52,7 +52,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
-                <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div>
+                <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div>
                 <div id="status"></div>
                </ul>
             </div>
@@ -139,6 +139,7 @@
 
 <!--OUR FACEBOOK LOGIN-->
  <script>
+        var pageUrl = 'http://codepal.ca/';
         // This is called with the results from from FB.getLoginStatus().
         function statusChangeCallback(response) {
             console.log('statusChangeCallback');
@@ -150,7 +151,7 @@
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
                 testAPI();
-                checkUserExists("sampleId", response.authResponse.accessToken);
+                checkUserExists(response.authResponse.userID, response.authResponse.accessToken);
                 //signUpUser(response.authResponse.userID);
                 //window.location.assign("http://128.189.213.178:8080/main.html");
             } else if (response.status === 'not_authorized') {
@@ -174,7 +175,7 @@
         }
         window.fbAsyncInit = function() {
             FB.init({
-                appId: '1254398761292760',
+                appId: '727716004048263',
                 cookie: true, // enable cookies to allow the server to access 
                 // the session
                 xfbml: true, // parse social plugins on this page
@@ -240,6 +241,10 @@
                  if(username != null){
                     signUpNewUser(userId, username, accessToken);
                  }
+                 else{
+                    alert("Username is invalid");
+                    FB.logout();
+                 }
             }
         });
     }
@@ -255,7 +260,7 @@
             data: JSON.stringify(data),
             success: function(data){
                 console.log("Updated new access token");
-                //window.location.assign("http://localhost:8888/codepal/main.html");
+                window.location.assign(pageUrl+'main.html');
             },
             error: function(){console.log("Fail updating access token!");}
         });
@@ -263,7 +268,8 @@
 
     function signUpNewUser(userId, username, accessToken){
         var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users";
-        var data = {"userId": userId, "username": username ,"accessToken": accessToken};
+        var data = {"userId": userId, "username": username ,"accessToken": accessToken, "settings": "sampleSettings"};
+        console.log(data);
         $.ajax({
             dataType: "json",
             contentType: "application/json",

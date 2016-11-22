@@ -15,30 +15,37 @@ var integrateCodeEditor = function (container){
 
 	function initCodeEditor() {
 
+		// init
+		var defaultLang = 'Node.js',
+			defaultTheme = 'monokai';
+
 		var codeEditor = new CodeEditor({
 			eleId		: 'editor',
-			lang 		: 'JavaScript',
+			lang 		: defaultLang,
 			execute		: {
-				$outConsole		: $('#outConsole'),
+				$outConsole		: $('#codeeditor #outConsole'),
 			},
 			editor 		: {
-				$filename 		: $('#filename'),
-				$extension		: $('#extension'),
-				theme 			: 'monokai'
+				$filename 		: $('#codeeditor #filename'),
+				$extension		: $('#codeeditor #extension'),
+				theme 			: defaultTheme
 			},
 			ui   		: {
-				$tabContainer	: $('#tabContainer'),
-				$langContainer	: $('#lang')
+				$tabContainer	: $('#codeeditor #tabContainer'),
+				$langContainer	: $('#codeeditor #lang'),
+				$themeContainer	: $('#codeeditor #theme'),
 			}	
 		});
+		codeEditor.execute.initReplClient('Node.js');
 
 		// Bindings
-		$('[data-editoraction="add"]').click(codeEditor.editor.createNewSession);
+		$('#codeeditor [data-editoraction="add"]').click(function() {
+			codeEditor.editor.createNewSession();
+		});
 
 		$('#codeeditor #runBtn').click(function() {
 			$(this).prop('disabled', true);
-			var currLang = codeEditor.ui.getCurrLang();
-			codeEditor.execute.run($(this), currLang);
+			codeEditor.execute.run($(this));
 		});
 		$('#codeeditor #saveBtn').click(function() { // TODO: Hook up
 			alert('Code snippet save feature -- coming soon...');
@@ -47,8 +54,9 @@ var integrateCodeEditor = function (container){
 		$('#codeeditor #lang').on('change', function() {
 			var lang = $(this).find('option:selected').val();
 			codeEditor.editor.setEditorLang(lang);
+			codeEditor.execute.initReplClient(lang);
 		});
-		$('#theme').on('change', function () {
+		$('#codeeditor #theme').on('change', function () {
 		    var theme = $(this).find('option:selected').val();
 		    codeEditor.editor.setEditorTheme(theme);
 		});

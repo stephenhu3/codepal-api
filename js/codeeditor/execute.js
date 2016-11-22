@@ -5,24 +5,23 @@
 CodeEditor.prototype._execute = function(options) {
 
 	var self 			= this,
-		$outConsole 	= options.$outConsole,
-		clientSecretKey = '4eeeaac13d99353ed9968239d2629cc50b1f171e', // TODO: move to env var 
-		hackerLangMap 	= { // user label hacker earth lang format 
-			'C'				: 'C',
-			'C++'			: 'CPP',
-			'Clojure'		: 'CLOJURE',
-			'C#'			: 'CSHARP',
-			'Go'			: 'GO',
-			'Haskell'		: 'HASKELL',
-			'Java'			: 'JAVA',
-			'JavaScript'	: 'JAVASCRIPT_NODE',
-			'Objective-C'	: 'OBJECTIVEC',
-			'Pascal'		: 'PASCAL',
-			'Perl'			: 'PERL',
-			'Python'		: 'PYTHON',
-			'R'				: 'R',
-			'Ruby'			: 'RUBY',
-			'Scala'			: 'Scala'
+		$outConsole = options.$outConsole,
+		repl,
+		replMap		 	= { // user label hacker earth lang format 
+			'C'				: 'c',
+			'C#'			: 'csharp',
+			'C++'			: 'cpp',
+			'C++11'			: 'cpp11',
+			'Go'			: 'go',
+			'Java'			: 'java',
+			'Node.js'		: 'nodejs',
+			'Python'		: 'python',
+			'Python 3'		: 'python3',
+			'Ruby'			: 'ruby'
+		},
+		token   = { 
+			time_created: 1479420962000,
+			msg_mac: 'IWXV2BX035qV1LckeAGHq0gzntGb/tC8PUf1RdpyBSo=' 
 		},
 		constants = { 
 			'COMPILE_OK'	: 'OK',
@@ -36,59 +35,84 @@ CodeEditor.prototype._execute = function(options) {
 				+ 'and try again.',
 		};
 
-	function run($btn, currLang) {
-		if (!self.editor.getEditorText()) {
+
+	// @SUMMARY	: instantiates a new ReplClient everytime we want to swtich languages
+	// @PARAM	: [lang] label of language we want to compile and run
+	// @RETURN	: the new ReplClient instance
+	function initReplClient(lang) {
+		repl = new ReplitClient('api.repl.it', '80', replMap[lang], token);
+		return repl;
+	}
+
+	// @SUMMARY	: Compiiles and runs the code in the current editor instance and populates
+	//				the output window with any errors and stdout
+	// @PARAM	: [$btn] the run button to control disable timing
+	function run($btn) {
+	    var evalCode = self.editor.getEditorText();
+	    var output = '';
+
+		if (!evalCode) {
 			alert('Please enter at least one statement to run.');
 			$btn.prop('disabled', false);
 			return;
 		}
 		
 		$outConsole.html('Working...');
-		hackerLang = hackerLangMap[currLang];
-
-		$.ajax({
-			url: 'https://api.hackerearth.com/v3/code/run/',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				client_secret: clientSecretKey,
-				lang: hackerLang,
-				source: self.editor.getEditorText()
-			},
-		})
-		.done(function(data, textStatus, jqXHR) {
-			// Check for comilation errors
-			if (data.compile_status !== constants.COMPILE_OK) {
-				var textErr = data.run_status.status_detail + 
-					'<br/>' + self.util.translateErr(data.compile_status, hackerLang);
-				$outConsole.html(textErr);
-				return;
-			}
-
-			var resp = data.run_status;
-			var consoleOutput = "Time Used: " + resp.time_used + "<br/><br/>";
-
-			// Check if there were runtime errors
-			if (resp.stderr) {
-			    consoleOutput += self.util.translateErr(resp.stderr, hackerLang);
-			} else {
-				// Check if operation exceeded 5 seconds
-				if (resp.status === constants.TIME_EXCEEDED) {
-					consoleOutput += messages.TIME_EXCEEDED;
+		repl.evaluateOnce(
+			evalCode,
+			{
+				stdout: function(out) {
+				    output += 'Console output: ' + '<br/>' + out + '<br/><br/>';
+				},
+				time: 5000,
+				callback: function() {
+					return true;
 				}
-				consoleOutput += resp.output_html;			
 			}
-			$outConsole.html(consoleOutput);
-		})
-		.fail(function(jqXHR, textStatus, errorThrown) {
-			$outConsole.html(messages.RUN_ERROR);
-		})
-		.always(function() {
-			$btn.prop('disabled', false);
-		});
+		).then(
+			function success(result) {
+				/*
+					{ 
+						command: "result"
+						data: "if data - result of evaluation here"
+						error: "if error - error message here"
+					}
+				*/
+				
+				if (result.error.length!==0) {				   			    
+				    output += 'ERROR:  '
+                        + '<br/>'
+                        + self.util.translateErr(result.error, replMap[self.ui.getCurrLang()]) 
+                        + '<br/>';
+				        /*  
+                        + 'COMMAND: '       //debug
+                        + result.command    //debug
+                        + '<br/>'           //debug
+                        + 'DATA: '          //debug
+                        + result.data       //debug
+                        + '<br/>';          //debug 
+                    */
+				}
+             
+				else {
+				    output += 'SUCCESS: <br/>'
+                        + result.data                        
+				}
+				
+				$outConsole.html(output);
+				$btn.prop('disabled', false);
+			},
+
+			function error(err) {
+				console.log('err ' + err);
+				$output.html(messages.RUN_ERROR);
+				$btn.prop('disabled', false);
+			}
+		);
 	}
 
 	return {
+		initReplClient: initReplClient,
 		run	: run
 	};
 

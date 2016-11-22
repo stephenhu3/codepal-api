@@ -5,12 +5,11 @@
 
 CodeEditor.prototype._util = function() {
 
-	var self 		= this,
+    var self = this,
 		messages 	= {
 			'COMPILER_ERR'	: 'Compiler has encountered an unknown error!',
 		    'RUNTIME_ERR'	: 'Error during runtime!'
 		};
-
 	function isInteger(num) {
 		return (typeof(num) === 'number' && num % 1 === 0);	
 	}
@@ -37,38 +36,46 @@ CodeEditor.prototype._util = function() {
 	    /* Generic translation
         *  prints each line directly from HackerEarth's return error
         */
-	    if (lang == 'CSHARP') {
+	    if (lang == 'nodejs') {	        
 	        for (i = 0; i < numLines; i++) {
-	            var index = lineArray[i].search('.cs');
-	            if (index != -1)
-	                output += lineArray[i].substring(index + 3) + newLine;
-	            else
-	                output += lineArray[i] + newLine;
-	        }
-	    }
-        
-	    if (lang == 'JAVA') {
+	            var index = lineArray[i].search('evalmachine');
+	            //output += index + '<br/>'; //Debug
 
-	        //Handle the non-verbose HackerEarth error when there is no class and main method
-	        if (lineArray[0] == '') {
-	            output += 'The program must have at least one class declaration, and a main method within the class';
-	        }
-
-	        else {
-	            for (i = 0; i < numLines; i++) {
+	            if (index != -1) {
+                    //identify error line
+	                output += 'at' + lineArray[i].substring(index + 12) + newLine;
+	                { continue; }
+	            }
+	            index = lineArray[i].search('.js');
+	            //output += 'intermediate index: ' + index; //Debug
+	            if (index != -1) {
+	                //don't print this line
+	            }
+	            else {
+	                //output relevant error type information
 	                output += lineArray[i] + newLine;
+
+	                //output += 'query value' + $('#query').val(); //debug
+
+	                //Trigger youtube and Stack Overflow search for the top level error
+                    //TODO -youtube dropdown activation
+	                $('#query').val(lineArray[i]);
+	                $('#search-button').trigger('click');
+	                $('#query1').val(lineArray[i]);
+	                $('#soSearch').trigger('click');
 	            }
 	        }
 	    }
         
 	  //Debug
 	  //output += 'Original message' + newLine;    
+/*
 	    else {
 	        for (i = 0; i < numLines; i++) {
-	            output += lineArray[i] + newLine;
+	            output += lineArray[i] + newLine + 'current language is: ' + lang;
 	        }
 	    }
-
+        */
         //Debug
 //	    output += "The current language is:" + newLine + lang;  //debug
 

@@ -6,3 +6,4 @@ RemoteSystemsTempFiles/*
 /node_modules
 /coverage
 code/*
+.settings/*

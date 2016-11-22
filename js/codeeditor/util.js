@@ -37,6 +37,29 @@ CodeEditor.prototype._util = function() {
 	    /* Generic translation
         *  prints each line directly from HackerEarth's return error
         */
+	    if (lang == 'nodejs') {	        
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('evalmachine');
+	            //output += index + '<br/>'; //Debug
+
+	            if (index != -1) {
+                    //identify error line
+	                output += 'at' + lineArray[i].substring(index + 12) + newLine;
+	                { continue; }
+	            }
+	            index = lineArray[i].search('.js');
+	            //output += 'intermediate index: ' + index; //Debug
+	            if (index != -1) {
+	                //don't print this line
+	            }
+	            else {
+	                //output relevant error type information
+                    //TODO - search SO and YT for this line
+	                output += lineArray[i] + newLine;
+	            }
+	        }
+	    }
+
 	    if (lang == 'CSHARP') {
 	        for (i = 0; i < numLines; i++) {
 	            var index = lineArray[i].search('.cs');
@@ -63,12 +86,13 @@ CodeEditor.prototype._util = function() {
         
 	  //Debug
 	  //output += 'Original message' + newLine;    
+/*
 	    else {
 	        for (i = 0; i < numLines; i++) {
-	            output += lineArray[i] + newLine;
+	            output += lineArray[i] + newLine + 'current language is: ' + lang;
 	        }
 	    }
-
+        */
         //Debug
 //	    output += "The current language is:" + newLine + lang;  //debug
 

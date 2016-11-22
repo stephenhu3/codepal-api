@@ -62,7 +62,7 @@ CodeEditor.prototype._execute = function(options) {
 			evalCode,
 			{
 				stdout: function(out) {
-				    output += 'Console output: ' + '<br/>' + out + '<br/>';
+				    output += 'Console output: ' + '<br/>' + out + '<br/><br/>';
 				},
 				time: 5000,
 				callback: function() {
@@ -82,20 +82,21 @@ CodeEditor.prototype._execute = function(options) {
 				if (result.error.length!==0) {				   			    
 				    output += 'ERROR:  '
                         + '<br/>'
-                        + self.util.translateErr(result.error, repl.language) 
-                        + '<br/>'           
+                        + self.util.translateErr(result.error, replMap[self.ui.getCurrLang()])
+                        + '<br/>';
+				    /*  
                         + 'COMMAND: '       //debug
                         + result.command    //debug
                         + '<br/>'           //debug
                         + 'DATA: '          //debug
                         + result.data       //debug
-                        + '<br/>';          //debug              
+                        + '<br/>';          //debug 
+                    */
 				}
              
 				else {
-				    output += 'SUCCESS RESULT <br/>'
-                        + result.data
-                        + result.command;                           
+				    output += 'SUCCESS: <br/>'
+                        + result.data                        
 				}
 				
 				$outConsole.html(output);

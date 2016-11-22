@@ -85,7 +85,7 @@
     var executeModule;
     $btn = $('#runBtn');
     $outConsole = $('#outConsole');
-    testLang = 'Javascript';
+    testLang = 'Node.js';
 
     beforeEach(function () {
         ace.config.set('basePath', 'ace');
@@ -94,7 +94,7 @@
 
         var codeEditor = new CodeEditor({
             eleId: 'editor',
-            lang: 'JavaScript',
+            lang: 'Node.js',
             execute: {
                 $outConsole: $('#outConsole'),                
             },
@@ -105,7 +105,8 @@
             },
             ui: {
                 $tabContainer: $('#tabContainer'),
-                $langContainer: $('#lang')
+                $langContainer: $('#lang'),
+                $themeContainer : $('#theme')
             }
         });
  

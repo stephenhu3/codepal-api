@@ -8,7 +8,7 @@ describe("ui", function() {
 
 		var codeEditor = new CodeEditor({
 	        eleId       : 'editor',
-	        lang        : 'JavaScript',
+	        lang        : 'Node.js',
 	        execute     : {
 	            $outConsole     : $('#outConsole'),
 	        },
@@ -19,7 +19,8 @@ describe("ui", function() {
 	        },
 	        ui          : {
 	            $tabContainer   : $('#tabContainer'),
-	            $langContainer  : $('#lang')
+	            $langContainer  : $('#lang'),
+	            $themeContainer	: $('#theme')
 	        }
 	    });
 	    uiModule = codeEditor.ui;

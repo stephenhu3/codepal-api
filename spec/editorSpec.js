@@ -8,7 +8,7 @@ describe("editor", function() {
 
 		var codeEditor = new CodeEditor({
 	        eleId       : 'editor',
-	        lang        : 'JavaScript',
+	        lang        : 'Node.js',
 	        execute     : {
 	            $outConsole     : $('#outConsole'),
 	        },
@@ -19,7 +19,8 @@ describe("editor", function() {
 	        },
 	        ui          : {
 	            $tabContainer   : $('#tabContainer'),
-	            $langContainer  : $('#lang')
+	            $langContainer  : $('#lang'),
+	            $themeContainer	: $('#theme')
 	        }
 	    });
 	    editorModule = codeEditor.editor;

@@ -18,6 +18,7 @@ module.exports = function(config) {
         // Dependencies
         'spec/support/jquery-3.1.1.min.js',
         'spec/support/jasmine-jquery.js',
+        'spec/support/repl_api.js',
         'js/ace/ace.js',
 
         // Files to test
@@ -26,6 +27,8 @@ module.exports = function(config) {
         'js/codeeditor/ui.js',
         'js/codeeditor/execute.js',
         'js/codeeditor/editor.js',
+        'js/codeeditor/api.js',
+        'js/codeeditor/snippet.js',
     
         // Fixtures
         'spec/fixtures/*',

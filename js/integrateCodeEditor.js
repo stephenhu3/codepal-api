@@ -36,6 +36,7 @@ var integrateCodeEditor = function (container){
 				$themeContainer	: $('#codeeditor #theme'),
 			}	
 		});
+		codeEditor.execute.initReplClient('Node.js');
 
 		// Bindings
 		$('#codeeditor [data-editoraction="add"]').click(function() {

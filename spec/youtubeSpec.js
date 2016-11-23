@@ -46,6 +46,7 @@ describe("youtubeComponent", function () {
             expect(localStorage.videos)
                 .toEqual(JSON.stringify([testObject1]));
         });
+
     it(
         "should have localStorage consist of an array of testObject1 and testObject2 {testing: model.getAllVideos()}",
         function () {
@@ -53,6 +54,13 @@ describe("youtubeComponent", function () {
             testModel.add(testObject2);
             expect(testModel.getAllVideos())
                 .toEqual([testObject1, testObject2]); //model.getAllVideos() being tested
+        });
+    it(
+        "should have localStorage consist of an empty array {testing: model.getAllVideos()}",
+        function () {
+            testModel.getAllVideos();
+            expect(localStorage.videos)
+                .toEqual('[]');
         });
     it(
         "should have localStorage be '[]' {testing: model.init()}",
@@ -79,4 +87,31 @@ describe("youtubeComponent", function () {
             localStorage.clear(); //resetting the changes to localStorage by previous calls
             //TO-do
         });
+    
+    it(
+        "should add the correct test object {testing: controller.addVideo()}",
+        function () {
+          testController.addVideo("Video #1", "test/url1.html", "12345", "This is a test video 1");
+          expect(localStorage.videos)
+              .toEqual(JSON.stringify([testObject1]));
+        });
+
+    it(
+        "should return the list of added test objects  {testing: controller.getVideos()}",
+        function () {
+          testModel.add(testObject1)
+          expect(testController.getVideos())
+              .toEqual([testObject1]);
+        });
+    it(
+        "should have localStorage equal to '[]'  {testing: controller.clearLocalStorage()}",
+        function () {
+          testModel.add(testObject1)
+          expect(localStorage.videos)
+              .toEqual(JSON.stringify([testObject1]));
+          testController.clearLocalStorage();
+          expect(localStorage.videos)
+              .toEqual('[]');
+        });
+
 });

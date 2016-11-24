@@ -5,7 +5,7 @@
 CodeEditor.prototype._execute = function(options) {
 
 	var self 			= this,
-		$outConsole = options.$outConsole,
+		$outConsole 	= options.$outConsole,
 		repl,
 		replMap		 	= { // user label hacker earth lang format 
 			'C'				: 'c',
@@ -20,8 +20,8 @@ CodeEditor.prototype._execute = function(options) {
 			'Ruby'			: 'ruby'
 		},
 		token   = { 
-			time_created: 1479420962000,
-			msg_mac: 'IWXV2BX035qV1LckeAGHq0gzntGb/tC8PUf1RdpyBSo=' 
+			time_created: 1479953011000,
+			msg_mac: 'SC6ofQ9c7A4/K8bWc52ZmF/DnRoRgQL4fPZQOxeZBhA=' 
 		},
 		constants = { 
 			'COMPILE_OK'	: 'OK',
@@ -105,7 +105,7 @@ CodeEditor.prototype._execute = function(options) {
 
 			function error(err) {
 				console.log('err ' + err);
-				$output.html(messages.RUN_ERROR);
+				$outConsole.html(messages.RUN_ERROR);
 				$btn.prop('disabled', false);
 			}
 		);

@@ -7,6 +7,7 @@ import com.codepal.api.cli.RenderCommand;
 import com.codepal.api.core.Person;
 import com.codepal.api.core.Template;
 import com.codepal.api.db.PersonDAO;
+import com.codepal.api.filter.CrossOriginResponseFilter;
 import com.codepal.api.filter.DateRequiredFeature;
 import com.codepal.api.health.TemplateHealthCheck;
 import com.codepal.api.resources.SnippetResource;
@@ -101,6 +102,7 @@ public class MainApplication extends Application<MainConfiguration> {
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
+        environment.jersey().register(CrossOriginResponseFilter.class);
         environment.jersey().register(DateRequiredFeature.class);
         // environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
         //         .setAuthenticator(new ExampleAuthenticator())

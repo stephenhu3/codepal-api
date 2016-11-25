@@ -64,6 +64,7 @@ public class SnippetResource {
         UUID uuid = UUIDs.random();
         String userId = snippet.getUserId();
         String title = snippet.getTitle();
+        String language= snippet.getLanguage();
         String content = snippet.getContent();
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         boolean isPublic = snippet.isPublic();
@@ -71,20 +72,22 @@ public class SnippetResource {
         LOGGER.warn("uuid:" + uuid);
         LOGGER.warn("userId:" + userId);
         LOGGER.warn("title:" + title);
+        LOGGER.warn("language:" + language);
         LOGGER.warn("content:" + content);
         LOGGER.warn("dateCreated:" + currentTime);
         LOGGER.warn("dateUpdated:" + currentTime);
         LOGGER.warn("isPublic:" + isPublic);
 
         PreparedStatement statement = session.prepare(
-                "INSERT INTO snippets (uuid, userId, title, content, dateCreated, dateUpdated,"
-                        + "isPublic) VALUES (?,?,?,?,?,?,?);"
+                "INSERT INTO snippets (uuid, userId, title, language, content, dateCreated,"
+                        + "dateUpdated, isPublic) VALUES (?,?,?,?,?,?,?,?);"
         );
 
         BoundStatement boundStatement = new BoundStatement(statement);
-        session.execute(boundStatement.bind(uuid, userId, title, content, currentTime, currentTime,
-                isPublic));
-        return new Snippet(uuid, userId, title, content, currentTime, currentTime, isPublic);
+        session.execute(boundStatement.bind(uuid, userId, title, language,
+                content, currentTime, currentTime, isPublic));
+        return new Snippet(uuid, userId, title, language,
+                content, currentTime, currentTime, isPublic);
     }
 
     // Get a specific snippet's contents
@@ -104,18 +107,15 @@ public class SnippetResource {
         }
         ResultSet rs = session.execute(select);
         Row row = rs.one();
-//        DateFormat df = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ssZ");
 
         return new Snippet(
             row.getUUID("uuid"),
             row.getString("userId"),
             row.getString("title"),
+            row.getString("language"),
             row.getString("content"),
-//            df.parse(row.getTimestamp("dateCreated").toString()),
-//            df.parse(row.getTimestamp("dateCreated").toString()),
             row.getTimestamp("dateCreated"),
             row.getTimestamp("dateUpdated"),
-//            df.parse(row.getString("dateCreated")),
             row.getBool("isPublic")
         );
     }

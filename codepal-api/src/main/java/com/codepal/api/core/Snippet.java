@@ -19,6 +19,9 @@ public class Snippet {
     private String title;
     @JsonProperty
     @NotEmpty
+    private String language;
+    @JsonProperty
+    @NotEmpty
     private String content;
     @JsonProperty
     private Date dateCreated;
@@ -29,11 +32,13 @@ public class Snippet {
 
     public Snippet() {}
 
-    public Snippet(UUID uuid, String userId, String title, String content, Date dateCreated,
+    public Snippet(UUID uuid, String userId, String title,
+                   String language, String content, Date dateCreated,
                    Date dateUpdated, boolean isPublic) {
         this.uuid = uuid;
         this.userId = userId;
         this.title = title;
+        this.language = language;
         this.content = content;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateUpdated;
@@ -62,6 +67,14 @@ public class Snippet {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public String getContent() {
@@ -112,6 +125,7 @@ public class Snippet {
         return Objects.equals(this.uuid, that.uuid) &&
                 Objects.equals(this.userId, that.userId) &&
                 Objects.equals(this.title, that.title) &&
+                Objects.equals(this.language, that.language) &&
                 Objects.equals(this.content, that.content) &&
                 Objects.equals(this.dateCreated, that.dateCreated) &&
                 Objects.equals(this.dateUpdated, that.dateUpdated) &&
@@ -120,6 +134,6 @@ public class Snippet {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, userId, title, content, dateCreated, dateUpdated, isPublic);
+        return Objects.hash(uuid, userId, title, language, content, dateCreated, dateUpdated);
     }
 }

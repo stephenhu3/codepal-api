@@ -237,6 +237,7 @@ HTTP 500 (generic error)
 {
     "userId": "01908170678902102",
     "title": "NewEntry.java",
+    "language": "java",
     "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
     "isPublic": true
 }
@@ -250,6 +251,7 @@ HTTP 200 (Success, echoes created snippet, along with generated UUID, and timest
   "uuid": "1bcd7d03-cccd-49ea-8dac-fc7bb14b3bca",
   "userId": "01908170678902102",
   "title": "NewEntry.java",
+  "language": "java",
   "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
   "dateCreated": 1479618665729,
   "dateUpdated": 1479618665729,
@@ -278,6 +280,7 @@ HTTP 200 (Success, contains snippet's fields)
   "uuid": "1bcd7d03-cccd-49ea-8dac-fc7bb14b3bca",
   "userId": "01318170671172102",
   "title": "NewEntry.java",
+  "language": "java",
   "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
   "dateCreated": 1479618665729,
   "dateUpdated": 1479618665729,

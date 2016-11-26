@@ -49,7 +49,7 @@ var integrateCodeEditor = function (container){
 		});
 
 		$('#codeeditor #saveBtn').click(
-			codeEditor.bindings.btnSave);
+			codeEditor.bindings.snippetSave);
 		
 		$('#codeeditor #downloadBtn').click(
 			codeEditor.util.download);

@@ -7,7 +7,7 @@ CodeEditor.prototype._execute = function(options) {
 	var self 			= this,
 		$outConsole 	= options.$outConsole,
 		repl,
-		replMap		 	= { // user label hacker earth lang format 
+		replMap		 	= { // user label -> repl.it lang
 			'C'				: 'c',
 			'C#'			: 'csharp',
 			'C++'			: 'cpp',

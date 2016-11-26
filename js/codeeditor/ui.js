@@ -13,12 +13,38 @@ CodeEditor.prototype._ui = function(options) {
 		$tabContainer 	= options.$tabContainer,
 		$langContainer	= options.$langContainer,
 		$themeContainer	= options.$themeContainer,
+		$snippetContainer, // TODO
 		defn_tab 		= "<li class=''></li>",
 		defn_anchor		= "<a></a>",
 		defn_span		= "<span></span>",
-		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
+		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>",
+		defn_snippet; // TODO
 
 	
+	// TODO
+	function createAppendNewSnippet(uuid, name) {
+		// generate new snippet defn
+		// assign uuid as a data attribute to top level container
+		// .html() span for name
+		// append to $snippetContainer
+	}
+
+	// TODO
+	function updateSnippetName(newName, uuid) {
+		$snippetContainer.find('[data-uuid="' + uuid + '"]');
+		// .html() span for newName
+	}
+
+	// TODO
+	function deleteSnippet(uuid) {
+		var $snippetToDel = $tabContainer.find('[data-uuid="' + uuid + '"]');
+		if ($snippetToDel.length === 1) {
+			$snippetToDel.remove();
+			return $snippetContainer;
+		}
+		return null;
+	}
+
 	// @SUMMARY	: updates tab's hash and name
 	// @PARAM	: [name] name to change to
 	// @PARAM	: [hash] hash corresponding to existing tab
@@ -169,11 +195,16 @@ CodeEditor.prototype._ui = function(options) {
 		setTheme				: setTheme,
 		setLang					: setLang,
 		getCurrLang				: getCurrLang,
+		
 		restoreAdjacentTab		: restoreAdjacentTab,
 		generateAndAppendNewTab	: generateAndAppendNewTab,
 		destroyTab				: destroyTab,
 		updateTab				: updateTab,
-		switchActiveTab			: switchActiveTab
+		switchActiveTab			: switchActiveTab,
+
+		createAppendNewSnippet 	: createAppendNewSnippet,
+		updateSnippetName		: updateSnippetName,
+		deleteSnippet			: deleteSnippet
 	};
 
 };

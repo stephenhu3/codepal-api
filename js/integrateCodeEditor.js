@@ -22,13 +22,13 @@ var integrateCodeEditor = function (container){
 		var codeEditor = new CodeEditor({
 			eleId		: 'editor',
 			lang 		: defaultLang,
+			theme		: defaultTheme,
 			execute		: {
 				$outConsole		: $('#codeeditor #outConsole'),
 			},
-			editor 		: {
+			util		: {
 				$filename 		: $('#codeeditor #filename'),
 				$extension		: $('#codeeditor #extension'),
-				theme 			: defaultTheme
 			},
 			ui   		: {
 				$tabContainer	: $('#codeeditor #tabContainer'),
@@ -49,7 +49,7 @@ var integrateCodeEditor = function (container){
 			codeEditor.bindings.btnSave);
 		
 		$('#codeeditor #downloadBtn').click(
-			codeEditor.editor.download);
+			codeEditor.util.download);
 		
 
 		$('#codeeditor #lang').on('change', function() {

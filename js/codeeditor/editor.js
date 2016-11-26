@@ -118,6 +118,11 @@ CodeEditor.prototype._editor = function(options) {
 		if (currentSessions[hash] !== 'undefined') {
 			delete currentSessions[hash];
 		}
+
+		var newHash = self.ui.restoreAdjacentTab(hash);
+		switchSession(newHash);
+		self.ui.destroyTab(hash);
+
 		return hash;
 	}
 
@@ -178,10 +183,6 @@ CodeEditor.prototype._editor = function(options) {
 		self.util.setFilename(name);
 
 		return sessions[hash];
-	}
-
-	function saveCurrSession() {
-		saveSession(currHash);
 	}
 
 	// @SUMMARY	: Changes the hash of a saved session
@@ -267,7 +268,6 @@ CodeEditor.prototype._editor = function(options) {
 		createNewSession		: createNewSession,
 		switchSession			: switchSession,
 		updateSession			: updateSession,
-		saveCurrSession			: saveCurrSession,
 
 		generateSessionObject 	: generateSessionObject,
 		getCurrSessionObj		: getCurrSessionObj,

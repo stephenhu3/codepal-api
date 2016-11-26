@@ -11,6 +11,7 @@ function CodeEditor(options) {
 	this.editor 	= this._editor();
 	this.bindings	= this._bindings();
 	this.snippet	= this._snippet();
+	this.api		= this._api(options.api);
 
 	// init
 	this.editor.initEditor(options.eleId, options.lang, options.theme);

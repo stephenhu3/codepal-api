@@ -34,7 +34,10 @@ var integrateCodeEditor = function (container){
 				$tabContainer	: $('#codeeditor #tabContainer'),
 				$langContainer	: $('#codeeditor #lang'),
 				$themeContainer	: $('#codeeditor #theme'),
-			}	
+			},
+			api			: {
+				userID			: window.userID
+			}
 		});
 
 		// Bindings

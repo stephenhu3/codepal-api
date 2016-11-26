@@ -7,110 +7,85 @@
  * - editor.js
  */
 
- // https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
- // Encode to bsae64 before sending
- // Decode from base64 when presenting
-
 CodeEditor.prototype._api = function(options) {
 
-	var self = this,
-		savedSnippets,
-		userId; // to be populated when user logs in
+	var self 	= this,
+		domain	= 'http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080',
+		userId 	= options.userID; // window.userID after login
 
-	// @SUMMARY	: GETS all saved code snippets for the logged in user
-	// @PARAM	: [userId] logged in user id
-	function getAllSavedSnippets() {
-		$.ajax({
-			url: '/domain/snippets?{userId}',
-			type: 'GET',
-			dataType: 'json',
-		})
-		.done(function(data, textStatus, jqXHR) {
-			// TODO: iterate through data for all saved snippets and store
-			// 	in savedSnippets
-			// TODO: call some method to populate the UI that holds all saved snippets
-		})
-		.fail(function(jqXHR, textStatus, errorThrown) {
-			// TODO: how can this done with graceful degredation? 
-			// Populate UI that holds saved snippets with error message?
-			alert('Failed getting saved snippets');
-		})
-		.always(function() {
-			// TODO: Let system know this async call is done
-		});
-	}
-
-	// @SUMMARY	: POSTS a new snippet to be saved against the user, and adds it to the saved snippet UI
-	// @PARAM	: [snippetObj] a converted sessionObj returned from generateSnippetObj()
-	function createSnippet(snippetObj, callback) {
-		$.ajax({
-			url: '/path/to/file',
-			type: 'GET',
-			dataType: 'json',
-			data: {
-				userId		: userId,
-				title		: snippetObj.name,
-				uuid		: snippetObj.hash,
-				lang		: snippetObj.lang,
-				contents 	: snippetObj.contents
+	function getAllSavedSnippets(callbacks) {
+		performCallout(
+			{
+				url			: domain + '/snippets',
+				contentType	: 'application/json',
+				type 		: 'POST',
+				dataType	: 'json',
+				data 		: {
+					userID	: userID
+				}
 			},
-		})
-		.done(function(data, textStatus, jqXHR) {
-			callback(data.uuid);
-			// TODO: add saved snippet to UI containing all UI
-			// TODO: success message for user
-		})
-		.fail(function(jqXHR, textStatus, errorThrown) {
-			alert('Failed creating a snippet.');
-			console.log(jqXHR);
-			console.log(textStatus);
-		});
+			callbacks
+		);
 	}
 
-	// @SUMMARY	: updates a previously saved code snippet's language and contents
-	// @PARAM	: [uuid] snippet's unique id
-	// @PARAM	: [content] new editor contents to be saved
-	// @PARAM	: [lang] new editor lang to be saved
-	function updateSnippet(uuid, content, lang, callback) {
-		$.ajax({
-			url: '/snippets/',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				uuid	: uuid,
-				content : content,
-				lang	: lang
+	function createSnippet(sessionObj, newName, callbacks) {
+		var snippetObj = generateSnippetObj(sessionObj);
+		performCallout(
+			{
+				url			: domain + '/snippets/search',
+				contentType	: 'application/json',
+				type 		: 'POST',
+				dataType	: 'json',
+				data 		: {
+					userID		: userID,
+					title		: newName,
+					language	: snippetObj.lang,
+					content 	: snippetObj.contents,
+					isPublic	: true
+				}
 			},
-		})
-		.done(function(data, textStatus, jqXHR) {
-			callback();
-		})
-		.fail(function(jqXHR, textStatus, errorThrown) {
-			alert('Failed getting saved snippets');
-			console.log(jqXHR);
-			console.log(textStatus);
-		});
+			callbacks
+		);
 	}
 
-	// @SUMMARY	: deletes a previously saved code snippet from the db and removes it from the UI
-	// @PARARM	: [uuid] snippet's unique ID
-	function deleteSnippet(uuid) {
-		$.ajax({
-			url: '/snippets/',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				userId	: userId,
-				uuid	: uuid,
+	function updateSnippet(sessionObj, newName, callbacks) {
+		var snippetObj = generateSnippetObj(sessionObj);
+		performCallout(
+			{
+				url			: domain + '/snippets/update',
+				contentType	: 'application/json',
+				type 		: 'POST',
+				dataType	: 'json',
+				data 		: {
+					userID		: userID,
+					title		: newName,
+					uuid		: snippetObj.hash,
+					lang		: snippetObj.lang,
+					content 	: snippetObj.contents,
+					isPublic	: true
+				}
 			},
-		})
-		.done(function(data, textStatus, jqXHR) {
-			// TODO: remove code snippet from UI container
-		})
-		.fail(function(jqXHR, textStatus, errorThrown) {
-			// TODO: error message for user
-		});
+			callbacks
+		);
 	}
+
+	function deleteSnippet(uuid, callbacks) {
+		performCallout(
+			{
+				url			: domain + '/snippets/delete',
+				contentType	: 'application/json',
+				type 		: 'POST',
+				dataType	: 'json',
+				data 		: {
+					uuid	: uuid
+				}
+			},
+			callbacks
+		);
+	}
+
+	// PRIVATE
+	// -------------------------------
 
 	// @SUMMARY	: Converts an editor session object to a snippet object
 	// @PARAM	: [hash] corresponding to the sessionObject
@@ -125,19 +100,42 @@ CodeEditor.prototype._api = function(options) {
 		};
 	}
 
-	// PRIVATE
-	// -------------------------------
+	// @SUMMARY	: Generic template for jQuery ajax()
+	// @PARAM	: (ajaxOptions) {url, contentType, type, dataType, data}
+	// @PARAM	: (callbacks) {function done, function fail, function always}
+	function performCallout(ajaxOptions, callbacks) {
+		$.ajax(
+			ajaxOptions
+		)
+		.done(function(data, textStatus, jqXHR) {
+			if (callbacks.done) {
+				callbacks.done(data);
+			}
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			if (callbacks.fail) {
+				callbacks.fail();
+			}
+			console.log(jqXHR);
+			console.log(textStatus);
+		})
+		.always(function() {
+			if (callbacks.always) {
+				callbacks.always();
+			}
+		});
+	}
 
 	// @SUMMARY	: Converts API response represnting code snippet to a session object
-	// @PARAM	: [responseObject]
+	// @PARAM	: [data]
 	// @RETURN	: {hash: uuid, sessionObj: {}}
-	function convertResponseToSessionObj(responseObj) {
-		var decodedContent 	= atob(responseObj.content),
+	function convertResponseToSessionObj(data) {
+		var decodedContent 	= atob(data.content),
 			session 		= new ace.EditSession(decodedContent, 
-				self.editor.aceLangMap[lang]);
+				self.editor.aceLangMap[data.lang]);
 
-		return self.editor.generateSessionObject(session, responseObj.lang, 
-			responseObj.name);
+		return self.editor.generateSessionObject(session, data.lang, 
+			data.name);
 	}
 
 	return {

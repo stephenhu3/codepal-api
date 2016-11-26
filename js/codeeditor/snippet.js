@@ -9,45 +9,120 @@
  * 
  */
 
-CodeEditor.prototype._api = function(options) {
+CodeEditor.prototype._snippet = function() {
 
 	var self = this;
 
-	// TODO: to be bound to button
-	function createSnippet(name) {
+	// @SUMMARY	: Hits API to create new snippet, changes tab accordingly
+	// @PARAM	: (newName) chosen filename from user input
+	function create(newName) {
+		var sessionObj 	= self.editor.getCurrSessionObj(),
+			callbacks	= {
+				done : done,
+				fail : fail 
+			};
 
-		var sessionObj = self.editor.getCurrSessionObj(),
-			snippetObj = self.api.generateSnippetObj(sessionObj);
+		self.api.createSnippet(sessionObj, newName, callbacks);
 
-		self.api.createSnippet(snippetObj.sessionObj, callback);
+		function done(data) {
+			var uuid = data.uuid;
+			self.editor.updateSession(sessionObj.hash, uuid, newName);
+			self.ui.updateTab(newName, sessionObj.hash, uuid);
+			self.ui.createAppendNewSnippet(uuid, newName);
+			alert('Snippet successfully created.');
+		}
 
-		function callback(uuid) {
-			self.editor.updateSessionHash(sessionObj.hash, uuid, name);
-			self.ui.updateTab(name, sessionObj.hash, uuid);
-			showSucess();
+		function fail() {
+			alert('Something failed when creating a snippet...');
 		}
 	}
 
-	function updateSnippet() {
-		self.editor.saveCurrSession();
+	// @SUMMARY	: Get singular saved code snippet
+	// @PARAM	: (uuid) of the snippet to get
+	function get(uuid) {
+		var callbacks = {
+			done : done,
+			fail : fail
+		};
+		self.api.getSnippet(uuid, callbacks);
 
-		// update
-
-		// post changes
-
-		// success message
+		function done(data) {
+			sessionObj = self.api.convertResponseToSessionObj(data);
+			self.editor.createNewSession(sessionObj);
+			alert('Snippet successfully retrieved and restored.');
+		}
+		function fail() {
+			// TODO 
+			alert('Snippet GET failed...');
+		}
 	}
 
-	// PRIVATE
-	// ----------------------------------------
+	function getAll() {
+		self.api.getAllSavedSnippets(callback);
 
-	function showSucess() {
-		// TODO
-		alert('Success!');
+		function done() {
+			/*
+				foreach snippet IN response
+					self.ui.createAppendNewSnippet(uuid, newName);
+			*/
+			alert('Sucessfully got all saved snippets.');
+		}
+
+		function fail() {
+			// TODO
+			// for UI that holds saved snippets, change text to show some 
+			// sort of error message
+			alert('Error in getting all saved snippets..');
+		}
+	} 
+
+	function update(newName) {
+		var sessionObj 	= self.editor.getCurrSessionObj(),
+			callbacks = {
+				done	: done,
+				fail	: fail
+			};
+		
+		self.api.createSnippet(sessionObj, newName, callbacks);
+
+		function done() {
+			self.editor.updateSession(sessionObj.hash, uuid, newName);
+			self.ui.updateTab(newName, sessionObj.hash, uuid);
+			self.ui.updateSnippetName(newName, sessionObj.hash);
+			// TODO
+			alert('Updating snippet successful!');
+		}
+
+		function fail() {
+			alert('Error in updating code snippet...');
+		}
+	}
+
+	function remove(uuid) {
+		var callbacks = {
+			done	: done,
+			fail	: fail
+		};
+
+		self.api.deleteSnippet(uuid);
+		
+		function done() {
+			self.editor.deleteSession(uuid);
+			self.ui.deleteSnippet(deleteSnippet);
+			// TODO
+			alert('deletion successful!');
+		}
+
+		function fail() {
+			alert('Error in deleting code snippet...');
+		}
 	}
 
 	return {
-
+		create	: create,
+		get 	: get,
+		getAll 	: getAll,
+		update	: update
 	};
 
 };

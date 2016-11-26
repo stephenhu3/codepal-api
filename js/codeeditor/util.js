@@ -1,17 +1,63 @@
 /*
  * CodeEditor
  * Util Module
+ * Dependencies:
+ * - editor.js
  */
 
-CodeEditor.prototype._util = function() {
+CodeEditor.prototype._util = function(options) {
 
-    var self = this,
+    var self 		= this,
+    	$filename 	= options.$filename,
+    	$extension 	= options.$extension,
 		messages 	= {
 			'COMPILER_ERR'	: 'Compiler has encountered an unknown error!',
 		    'RUNTIME_ERR'	: 'Error during runtime!'
+		},
+		extensionMap = {
+			'C'				: '.c',
+			'C#'			: '.cs',
+			'C++'			: '.cpp',
+			'C++11'			: '.cpp',
+			'Go'			: '.go',
+			'Java'			: '.java',
+			'Node.js'		: '.js',
+			'Python'		: '.py',
+			'Python 3'		: '.py',
+			'Ruby'			: '.rb',
 		};
-	function isInteger(num) {
-		return (typeof(num) === 'number' && num % 1 === 0);	
+
+	// @SUMMARY	: downloads curr session's contents to the user's local machine
+	function download() {
+		// lib will automatically replace any non-valid filename chars with '-'
+		var filename = $filename.val();
+		if (!$filename.val()) {
+			alert('Please enter a filename.');
+			return;
+		}
+		var text = self.editor.getEditorText(),
+			blob = new Blob([text], {
+				type: "text/plain;charset=utf-8"
+			}),
+			currSession = self.editor.getCurrSessionObj(),
+			lang = extensionMap[currSession.sessionObj.lang];
+
+		saveAs(blob, filename + lang);
+	}
+
+	// @SUMMARY	: changes extension in save modal according to lang chosen
+	// @PARAM	: (lang) to match with extensionMap
+	function changeExtension(lang) {
+		$extension.html(extensionMap[lang]);
+	}
+
+	// @RETURN	: filename input value
+	function getFilename() {
+		return $filename.val();
+	}
+
+	function setFilename(name) {
+		$filename.val(name);
 	}
 
 	function translateErr(msg, lang) {
@@ -67,17 +113,17 @@ CodeEditor.prototype._util = function() {
 	        }
 	    }
         
-	  //Debug
-	  //output += 'Original message' + newLine;    
-/*
-	    else {
-	        for (i = 0; i < numLines; i++) {
-	            output += lineArray[i] + newLine + 'current language is: ' + lang;
-	        }
-	    }
-        */
-        //Debug
-//	    output += "The current language is:" + newLine + lang;  //debug
+		//Debug
+		//output += 'Original message' + newLine;    
+		/*
+		    else {
+		        for (i = 0; i < numLines; i++) {
+		            output += lineArray[i] + newLine + 'current language is: ' + lang;
+		        }
+		    }
+	    */
+	     //Debug
+		// output += "The current language is:" + newLine + lang;  //debug
 
 	    //In case of unhandled error, print generic message
 	    if (output.length === 0) {
@@ -92,9 +138,12 @@ CodeEditor.prototype._util = function() {
 	}
 
 	return {
-	    isInteger		: isInteger,
 	    translateErr	: translateErr,
-	    genHash			: genHash
+	    genHash			: genHash,
+	    download		: download,
+	    getFilename		: getFilename,
+	    setFilename		: setFilename,
+	    changeExtension	: changeExtension
 	};
 
 };

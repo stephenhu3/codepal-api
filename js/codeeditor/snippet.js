@@ -59,6 +59,8 @@ CodeEditor.prototype._snippet = function() {
 		}
 	}
 
+	// @SUMMARY	: Gets all of the user's saved codesnippets and generates entries
+	// 			 	in saved snippet UI
 	function getAll() {
 		self.api.getAllSavedSnippets(callback);
 
@@ -79,6 +81,8 @@ CodeEditor.prototype._snippet = function() {
 		}
 	} 
 
+	// @SUMMARY	: Updates an existing saved snippet with contents, name and lang
+	//				and updates tab name accordingly
 	function update(newName) {
 		var sessionObj 	= self.editor.getCurrSessionObj(),
 			callbacks = {
@@ -101,6 +105,8 @@ CodeEditor.prototype._snippet = function() {
 		}
 	}
 
+	// @SUMMARY	: deletes an existing saved snippet with contents, name and lang
+	//				and deletes the tab accordingly, if session is loaded
 	function remove(uuid) {
 		var callbacks = {
 			done	: done,
@@ -122,6 +128,7 @@ CodeEditor.prototype._snippet = function() {
 		}
 	}
 
+	// @RETURN	: bool of whether hash param is a saved snippet uuid
 	function isHashSnippetId(hash) {
 		return (snippetIds.indexOf(hash) !== -1);
 	}

@@ -11,7 +11,8 @@
 
 CodeEditor.prototype._snippet = function() {
 
-	var self = this;
+	var self = this,
+		snippetIds = [];
 
 	// @SUMMARY	: Hits API to create new snippet, changes tab accordingly
 	// @PARAM	: (newName) chosen filename from user input
@@ -48,6 +49,7 @@ CodeEditor.prototype._snippet = function() {
 
 		function done(data) {
 			sessionObj = self.api.convertResponseToSessionObj(data);
+			addNewSnippetId(sessionObj.hash);
 			self.editor.createNewSession(sessionObj);
 			alert('Snippet successfully retrieved and restored.');
 		}
@@ -64,6 +66,7 @@ CodeEditor.prototype._snippet = function() {
 			/*
 				foreach snippet IN response
 					self.ui.createAppendNewSnippet(uuid, newName);
+					addNewSnippetId();
 			*/
 			alert('Sucessfully got all saved snippets.');
 		}
@@ -109,6 +112,7 @@ CodeEditor.prototype._snippet = function() {
 		function done() {
 			self.editor.deleteSession(uuid);
 			self.ui.deleteSnippet(deleteSnippet);
+			removeSnippetId(uuid);
 			// TODO
 			alert('deletion successful!');
 		}
@@ -118,11 +122,30 @@ CodeEditor.prototype._snippet = function() {
 		}
 	}
 
+	function isHashSnippetId(hash) {
+		return (snippetIds.indexOf(hash) !== -1);
+	}
+
+	// PRIVATE
+	// -----------------------------------------
+
+	function addNewSnippetId(uuid) {
+		snippetIds.push(uuid);
+	}
+
+	function removeSnippetId(uuid) {
+		var index = snippetIds.indexOf(uuid);
+		if (index !== -1) {
+			snippetIds.splice(index, 1);
+		}
+	}
+
 	return {
-		create	: create,
-		get 	: get,
-		getAll 	: getAll,
-		update	: update
+		isHashSnippetId : isHashSnippetId,
+		create			: create,
+		get 			: get,
+		getAll 			: getAll,
+		update			: update
 	};
 
 };

@@ -67,26 +67,23 @@ CodeEditor.prototype._util = function(options) {
 	    newLine = '<br/>'
 	    numLines = lineArray.length;
 	    /*TODO
-        *   Language specific compiler/runtime error handling
-        	'CPP',
-	    	'CSHARP',   Basic errors are now handled
-			'HASKELL',
-			'JAVA',
-			'JAVASCRIPT_NODE',  
-			'OBJECTIVEC',
-			'PASCAL',
-			'PERL',
-			'PYTHON',
-        */
-
-	    /* Generic translation
-        *  prints each line directly from HackerEarth's return error
+            Language specific compiler/runtime error handling
+            'C'				: 'c', -done
+			'C#'			: 'csharp',
+			'C++'			: 'cpp',
+			'C++11'			: 'cpp11',
+			'Go'			: 'go',
+			'Java'			: 'java',
+			'Node.js'		: 'nodejs', -done
+			'Python'		: 'python',
+			'Python 3'		: 'python3',
+			'Ruby'			: 'ruby'
         */
 	    if (lang == 'nodejs') {	        
 	        for (i = 0; i < numLines; i++) {
+
 	            var index = lineArray[i].search('evalmachine');
 	            //output += index + '<br/>'; //Debug
-
 	            if (index != -1) {
                     //identify error line
 	                output += 'at' + lineArray[i].substring(index + 12) + newLine;
@@ -100,30 +97,47 @@ CodeEditor.prototype._util = function(options) {
 	            else {
 	                //output relevant error type information
 	                output += lineArray[i] + newLine;
-
-	                //output += 'query value' + $('#query').val(); //debug
-
-	                //Trigger youtube and Stack Overflow search for the top level error
-                    //TODO -youtube dropdown activation
-	                $('#query').val(lineArray[i]);
-	                $('#search-button').trigger('click');
-	                $('#query1').val(lineArray[i]);
-	                $('#soSearch').trigger('click');
+	                errorSearch(lineArray[i]);
 	            }
 	        }
 	    }
-        
+	    if (lang == 'c') {
+	        for (i = 0; i < numLines; i++) {
+
+	            var index = lineArray[i].search('.c');
+	            //output += index + '<br/>'; //Debug
+	            if (index != -1) {
+	                //identify error line
+	                output += 'at ' + lineArray[i].substring(index + 2) + newLine;
+	                //{ continue; }
+	                index = lineArray[i].search('error: ');
+	                if (index != -1) {
+	                    //output += 'searching for ' + lineArray[i].substring(index + 7) + newLine; //debug
+	                    errorSearch(lineArray[i].substring(index + 7));
+	                    break;
+	                }
+	            }
+	            //index = lineArray[i].search('error: ');
+	            //output += 'intermediate index: ' + index +newLine; //Debug
+	            /*if (index != -1) {
+	                output += 'searching for ' + lineArray[i].substring(index + 7) + newLine; //debug
+	                errorSearch(lineArray[i].substring(index + 7));
+	                break;
+	            }*/
+	            else {
+	                //output relevant error type information
+	                output += lineArray[i] + newLine;
+	                //output += 'searching for ' + lineArray[i] + newLine; //debug
+	                errorSearch(lineArray[i]);
+	            }
+	        }
+	    }
+
 		//Debug
-		//output += 'Original message' + newLine;    
-		/*
-		    else {
-		        for (i = 0; i < numLines; i++) {
-		            output += lineArray[i] + newLine + 'current language is: ' + lang;
-		        }
-		    }
-	    */
-	     //Debug
-		// output += "The current language is:" + newLine + lang;  //debug
+	    output += 'DEBUG OUTPUT AFTER THIS LINE'+newLine+'current language is: ' + lang + newLine +'Original message' + newLine;
+	    for (i = 0; i < numLines; i++) {
+	        output += lineArray[i] + newLine;
+	    }
 
 	    //In case of unhandled error, print generic message
 	    if (output.length === 0) {
@@ -131,6 +145,16 @@ CodeEditor.prototype._util = function(options) {
 	    }
         
 	    return output;
+	}
+
+    //Trigger youtube and Stack Overflow search for the top level error
+    //TODO - youtube dropdown activation
+    //Param - error - string to search
+	function errorSearch(error) {
+	    $('#query').val(error);
+	    $('#search-button').trigger('click');
+	    $('#query1').val(error);
+	    $('#soSearch').trigger('click');
 	}
 
 	function genHash() {

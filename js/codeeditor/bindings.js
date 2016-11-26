@@ -27,12 +27,7 @@
 
  	function tabDelete($tab) {
  		var hash = $tab.attr('data-editorhash');
-
-		if (self.editor.deleteSession(hash)) {
-			var newHash = self.ui.restoreAdjacentTab(hash);
-			self.editor.switchSession(newHash);
-			self.ui.destroyTab(hash);
-		}
+		self.editor.deleteSession(hash);
 	}
 
 	function tabAdd() {
@@ -45,10 +40,6 @@
 	function btnRun($btn) {
 		$btn.prop('disabled', true);
 		self.execute.run($btn);
-	}
-
-	function btnSave() {
-		alert('Coming soon!');
 	}
 
 	// SELECT
@@ -65,14 +56,57 @@
 	    self.editor.setEditorTheme(theme);
  	}
 
+ 	// SNIPPET
+ 	// ------------------------------------------
+
+ 	// @SUMMARY	: If snippet hasn't been retrieved via API, GET it
+ 	//			  Switch current session to chosen snippet
+ 	function snippetGet($snippet) {
+ 		var uuid = $snippet.attr('data-uuid');
+ 		
+ 		if (self.editor.isSessionLoaded(uuid)) {
+ 			return;
+ 		}
+ 		if (self.editor.isSessionCached(uuid)) {
+ 			self.editor.switchSession(uuid);
+ 			return;
+ 		}
+
+ 		self.snippet.get(uuid);
+ 	}
+
+ 	function snippetDelete($snippet) {
+ 		var uuid = $snippet.attr('data-uuid');
+ 		self.snippet.remove(uuid);
+ 	}
+
+ 	// @SUMMARY	: If snippet hasn't been saved to db, call create
+ 	//				If it has, then call update
+ 	function snippetSave() {
+ 		var currHash = self.editor.getCurrSessionObj().hash;
+ 		var name = self.util.getFilename();
+
+ 		if (isHashSnippetId(currHash)) {
+ 			self.snippet.update(name);
+ 		} else {
+ 			self.snippet.create(name);
+ 		}
+
+ 	}
+
 	return {
 		tabSwitch	: tabSwitch,
 		tabDelete	: tabDelete,
 		tabAdd		: tabAdd,
+
 		btnRun		: btnRun,
-		btnSave		: btnSave,
+
 		selLang		: selLang,
-		selTheme	: selTheme
+		selTheme	: selTheme,
+
+		snippetGet		: snippetGet,
+		snippetDelete	: snippetDelete,
+		snippetSave		: snippetSave	
 	};
 
  };

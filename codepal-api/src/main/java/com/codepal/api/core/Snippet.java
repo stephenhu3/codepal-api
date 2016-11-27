@@ -1,5 +1,6 @@
 package com.codepal.api.core;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -8,6 +9,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Snippet {
     @JsonProperty
     private UUID uuid;
@@ -41,6 +43,18 @@ public class Snippet {
         this.language = language;
         this.content = content;
         this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+        this.isPublic = isPublic;
+    }
+
+    public Snippet(UUID uuid, String userId, String title,
+                   String language, String content, Date dateUpdated,
+                   boolean isPublic) {
+        this.uuid = uuid;
+        this.userId = userId;
+        this.title = title;
+        this.language = language;
+        this.content = content;
         this.dateUpdated = dateUpdated;
         this.isPublic = isPublic;
     }
@@ -134,6 +148,7 @@ public class Snippet {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, userId, title, language, content, dateCreated, dateUpdated);
+        return Objects.hash(uuid, userId, title, language,
+                content, dateCreated, dateUpdated, isPublic);
     }
 }

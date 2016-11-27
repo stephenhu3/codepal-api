@@ -2,6 +2,8 @@ package com.codepal.api.resources;
 
 import com.codepal.api.core.Snippet;
 import com.codepal.api.core.SnippetSearch;
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,6 +66,7 @@ public class SnippetResourceTest {
         assertThat(row.getUUID("uuid"), is(response.getUuid()));
         assertThat(row.getString("userId"), is(response.getUserId()));
         assertThat(row.getString("title"), is(response.getTitle()));
+        assertThat(row.getString("language"), is(response.getLanguage()));
         assertThat(row.getString("content"), is(response.getContent()));
         assertThat(row.getTimestamp("dateCreated"), is(response.getDateCreated()));
         assertThat(row.getTimestamp("dateUpdated"), is(response.getDateUpdated()));
@@ -75,10 +78,54 @@ public class SnippetResourceTest {
         SnippetSearch search = MAPPER.readValue(
                 fixture("fixtures/search-snippet-success-request.json"), SnippetSearch.class);
 
-        Snippet actualResult = snippetResource.searchSnippet(search);
+        Snippet actualResult = snippetResource.searchSnippetByUuid(search);
         Snippet expectedResult = MAPPER.readValue(
                 fixture("fixtures/search-snippet-success-response.json"), Snippet.class);
         // check that the snippet inserted during initialization was found
         assertTrue(actualResult.equals(expectedResult));
+    }
+
+    @Test
+    public void updateSnippetSuccess() throws IOException, ParseException {
+        Snippet update = MAPPER.readValue(
+                fixture("fixtures/update-snippet-success-request-response.json"), Snippet.class);
+
+        // check precondition
+        PreparedStatement statement = cassandraCQLUnit.session.prepare(
+                "SELECT * FROM snippets WHERE uuid = :uuid;"
+        );
+        BoundStatement precondition = new BoundStatement(statement);
+        ResultSet preresult = cassandraCQLUnit.session.execute(precondition.bind()
+                .setUUID("uuid", update.getUuid()));
+        assertThat(preresult.iterator().next().getString("content"),
+                is("aW1wb3J0IHJhbmRvbQ0KDQpkZWYgc2NyYW1ibGUodGV4dCk6DQoJc2NyYW1ibGVkID0gIiINCgl3aGl"
+                        + "sZSBsZW4odGV4dCkgPiAwOg0KCQlyYW5kb21JZHggPSByYW5kb20ucmFuZGludCgwLCBsZW4"
+                        + "odGV4dCkgLSAxKQ0KCQlzY3JhbWJsZWQgKz0gIHRleHRbcmFuZG9tSWR4XQ0KCQl0ZXh0ID0"
+                        + "gdGV4dFs6cmFuZG9tSWR4XSArIHRleHRbcmFuZG9tSWR4ICsgMTpdDQoJcmV0dXJuIHNjcmF"
+                        + "tYmxlZA0KDQppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOg0KCXByaW50IHNjcmFtYmxlKCI"
+                        + "xMTE1NzY5MTI4MzIwMTAwNyIpDQo="));
+
+        Snippet actualResult = snippetResource.updateSnippet(update);
+
+        // check postcondition
+        BoundStatement postcondition = new BoundStatement(statement);
+        ResultSet postResult = cassandraCQLUnit.session.execute(precondition.bind()
+                .setUUID("uuid", update.getUuid()));
+        assertThat(postResult.iterator().next().getString("content"),
+                is("aW1wb3J0IHJhbmRvbQ0KDQpkZWYgc2NyYW1ibGVVcGRhdGVkKHRleHQpOg0KCXNjcmFtYmxlZCA9ICI"
+                        + "iDQoJd2hpbGUgbGVuKHRleHQpID4gMDoNCgkJcmFuZG9tSWR4ID0gcmFuZG9tLnJhbmRpbnQ"
+                        + "oMCwgbGVuKHRleHQpIC0gMSkNCgkJc2NyYW1ibGVkICs9ICB0ZXh0W3JhbmRvbUlkeF0NCgk"
+                        + "JdGV4dCA9IHRleHRbOnJhbmRvbUlkeF0gKyB0ZXh0W3JhbmRvbUlkeCArIDE6XQ0KCXJldHV"
+                        + "ybiBzY3JhbWJsZWQNCg0KaWYgX19uYW1lX18gPT0gIl9fbWFpbl9fIjoNCglwcmludCBzY3J"
+                        + "hbWJsZVVwZGF0ZWQoIjExMTU3NjkxMjgzMjAxMDA3IikNCg=="));
+
+        Snippet expectedResult = MAPPER.readValue(
+                fixture("fixtures/update-snippet-success-request-response.json"), Snippet.class);
+        assertThat(actualResult.getUuid(), is(expectedResult.getUuid()));
+        assertThat(actualResult.getUserId(), is(expectedResult.getUserId()));
+        assertThat(actualResult.getTitle(), is(expectedResult.getTitle()));
+        assertThat(actualResult.getLanguage(), is(expectedResult.getLanguage()));
+        assertThat(actualResult.getContent(), is(expectedResult.getContent()));
+        assertThat(actualResult.isPublic(), is(expectedResult.isPublic()));
     }
 }

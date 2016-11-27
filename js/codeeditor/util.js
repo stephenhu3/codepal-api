@@ -69,28 +69,25 @@ CodeEditor.prototype._util = function(options) {
 	    /*TODO
             Language specific compiler/runtime error handling
             'C'				: 'c', -done
-			'C#'			: 'csharp',
-			'C++'			: 'cpp',
-			'C++11'			: 'cpp11',
-			'Go'			: 'go',
-			'Java'			: 'java',
+			'C#'			: 'csharp', -done
+			'C++'			: 'cpp', -done
+			'C++11'			: 'cpp11', -done
+			'Go'			: 'go', -done
+			'Java'			: 'java', -done
 			'Node.js'		: 'nodejs', -done
-			'Python'		: 'python',
-			'Python 3'		: 'python3',
+			'Python'		: 'python', -done
+			'Python 3'		: 'python3', -done
 			'Ruby'			: 'ruby'
         */
 	    if (lang == 'nodejs') {	        
 	        for (i = 0; i < numLines; i++) {
-
-	            var index = lineArray[i].search('evalmachine');
-	            //output += index + '<br/>'; //Debug
+	            var index = lineArray[i].search('evalmachine');	            
 	            if (index != -1) {
                     //identify error line
 	                output += 'at' + lineArray[i].substring(index + 12) + newLine;
 	                { continue; }
 	            }
-	            index = lineArray[i].search('.js');
-	            //output += 'intermediate index: ' + index; //Debug
+	            index = lineArray[i].search('.js');	           
 	            if (index != -1) {
 	                //don't print this line
 	            }
@@ -117,13 +114,7 @@ CodeEditor.prototype._util = function(options) {
 	                    break;
 	                }
 	            }
-	            //index = lineArray[i].search('error: ');
-	            //output += 'intermediate index: ' + index +newLine; //Debug
-	            /*if (index != -1) {
-	                output += 'searching for ' + lineArray[i].substring(index + 7) + newLine; //debug
-	                errorSearch(lineArray[i].substring(index + 7));
-	                break;
-	            }*/
+	           
 	            else {
 	                //output relevant error type information
 	                output += lineArray[i] + newLine;
@@ -132,13 +123,147 @@ CodeEditor.prototype._util = function(options) {
 	            }
 	        }
 	    }
+	    if (lang == 'csharp') {
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('.cs');
+	            
+	            if (index != -1) {
+	                //identify error line
+	                output += 'at ' + lineArray[i].substring(index + 3) + newLine;	                
+	                index = lineArray[i].search('error ');
+	                if (index != -1) {	                    
+	                    errorSearch(lineArray[i].substring(index + 6));
+	                    break;
+	                }
+	            }
+	            else {
+	                //output relevant error type information
+	                output += lineArray[i] + newLine;	                
+	                errorSearch(lineArray[i]);
+	            }
+	        }
+	    }
+	    if (lang == 'cpp' || lang == 'cpp11') {
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('.cpp');	            
+	            if (index != -1) {
+	                //identify error line
+	                output += 'at ' + lineArray[i].substring(index + 4) + newLine;	                
+	                index = lineArray[i].search('error: ');
+	                if (index != -1) {	                    
+	                    errorSearch(lineArray[i].substring(index + 6));
+	                    break;
+	                }
+	            }
+	            else {
+	                //output relevant error type information
+	                output += lineArray[i] + newLine;	                
+	                errorSearch(lineArray[i]);
+	            }
+	        }
+	    }
+	    if (lang == 'go') {
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('.go:');
+	            if (index != -1) {
+	                //identify error line
+	                output += 'at ' + lineArray[i].substring(index + 4) + newLine;
+	               
+                    //TODO - more elegant handling of this
+	                errorSearch(lineArray[i].substring(index + 8));
+	                break;
+	            }
+	            else {
+	                //output relevant error type information
+	                output += lineArray[i] + newLine;
+	                errorSearch(lineArray[i]);
+	            }
+	        }
+	    }
+	    if (lang == 'java') {
+            //TODO instantiate java with a precooked main class and main method as follows
+	        output += 'NOTE - Java programs run in CodePal must have the form '
+                + newLine
+	            + '  public class Main{'
+                + newLine
+                + '  public static void main(String[] args){'
+                + newLine
+                + '      }'                
+                + '   }'
+                +newLine;
+                
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('.java:');
 
-		//Debug
+	            if (index != -1) {
+	                //identify error line
+	                output += 'at ' + lineArray[i].substring(index + 6) + newLine;
+	                index = lineArray[i].search('error: ');
+	                if (index != -1) {
+	                    errorSearch(lineArray[i].substring(index + 7));
+	                    break;
+	                }
+	            }
+	            else {
+	                //output relevant error type information
+	                output += lineArray[i] + newLine;
+	                errorSearch(lineArray[i]);
+	            }
+	        }
+	    }
+	    if (lang == 'python' || lang == 'python3') {
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('line ');
+
+	            if (index != -1) {
+	                //identify error line
+	                output += 'at ' + lineArray[i].substring(index + 5) + newLine;	                
+	                {continue;}
+	            }
+	            index = lineArray[i].search('Error: ');
+	            if (index != -1) {
+	                output += lineArray[i] + newLine;	                
+	                errorSearch(lineArray[i]);
+	                break;
+	            }
+	            index = lineArray[i].search('Warning: ');
+	            if (index != -1) {
+	                output += lineArray[i] + newLine;	                
+	                errorSearch(lineArray[i]);
+	                break;
+	            }
+	            else {
+	                //do nothing
+	            }
+	        }
+	    }
+        //TODO - more research and cleanup on Ruby errors and exceptions
+	    if (lang == 'ruby') {
+	        for (i = 0; i < numLines; i++) {
+	            var index = lineArray[i].search('repl');
+	            if (index != -1) {
+	                //identify error line
+	                output += 'at ' + lineArray[i].substring(index+ 6) + newLine;	                
+	                index = lineArray[i].search(': ');
+	                if (index != -1) {	                   
+	                    errorSearch(lineArray[i].substring(index +2));
+	                    break;
+	                }
+	            }                
+	            else {
+	                //output relevant error type information
+	                output += lineArray[i] + newLine;	                
+	                errorSearch(lineArray[i]);
+	            }
+	        }
+	    }
+	    //Debug
+        /*
 	    output += 'DEBUG OUTPUT AFTER THIS LINE'+newLine+'current language is: ' + lang + newLine +'Original message' + newLine;
 	    for (i = 0; i < numLines; i++) {
 	        output += lineArray[i] + newLine;
 	    }
-
+        */
 	    //In case of unhandled error, print generic message
 	    if (output.length === 0) {
 	        msg = messages.RUNTIME_ERR;
@@ -146,7 +271,6 @@ CodeEditor.prototype._util = function(options) {
         
 	    return output;
 	}
-
     //Trigger youtube and Stack Overflow search for the top level error
     //TODO - youtube dropdown activation
     //Param - error - string to search

@@ -372,3 +372,88 @@ HTTP 200 (Success, contains snippet's fields)
   "isPublic": true
 }
 ```
+
+
+**POST {domain}/snippets/user**
+
+*Get all snippets by a particular user:*
+
+**Request:**
+
+```json
+{
+  "userId": "01318170671172102"
+}
+
+```
+
+**Response:**
+
+HTTP 200 (Success, get all user's snippets in JSON array)
+```json
+[
+  {
+    "uuid": "4b286e3f-dfa8-4fbd-a7dc-9fcacfd1036b",
+    "userId": "01318170671172102",
+    "title": "NewEntry.java",
+    "language": "java",
+    "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
+    "dateCreated": 1480111119552,
+    "dateUpdated": 1480111119552,
+    "isPublic": true
+  },
+  {
+    "uuid": "436115f8-988e-4737-b2f9-97ba8bf17719",
+    "userId": "01318170671172102",
+    "title": "NewEntry2.java",
+    "language": "java",
+    "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
+    "dateCreated": 1480159064421,
+    "dateUpdated": 1480159064421,
+    "isPublic": true
+  },
+  {
+    "uuid": "7cb73f17-90c5-454a-9e95-b7cb61ee3468",
+    "userId": "01318170671172102",
+    "title": "NewEntry3.java",
+    "language": "java",
+    "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
+    "dateCreated": 1480159066028,
+    "dateUpdated": 1480159066028,
+    "isPublic": true
+  }
+]
+```
+
+
+**POST {domain}/snippets/update**
+
+*Update a snippet with new values:*
+
+**Request:**
+
+```json
+{
+  "uuid": "436115f8-988e-4737-b2f9-97ba8bf17719",
+  "title": "scramble.py",
+  "userId": "01318170671172102",
+  "language": "python",
+  "content": "aW1wb3J0IHJhbmRvbQ0KDQpkZWYgc2NyYW1ibGUodGV4dCk6DQoJc2NyYW1ibGVkID0gIiINCgl3aGlsZSBsZW4odGV4dCkgPiAwOg0KCQlyYW5kb21JZHggPSByYW5kb20ucmFuZGludCgwLCBsZW4odGV4dCkgLSAxKQ0KCQlzY3JhbWJsZWQgKz0gIHRleHRbcmFuZG9tSWR4XQ0KCQl0ZXh0ID0gdGV4dFs6cmFuZG9tSWR4XSArIHRleHRbcmFuZG9tSWR4ICsgMTpdDQoJcmV0dXJuIHNjcmFtYmxlZA0KDQppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOg0KCXByaW50IHNjcmFtYmxlKCIxMTE1NzY5MTI4MzIwMTAwNyIpDQo=",
+  "isPublic": true
+}
+```
+
+**Response:**
+
+HTTP 200 (Success, updated snippet's values)
+```json
+{
+  "uuid": "436115f8-988e-4737-b2f9-97ba8bf17719",
+  "userId": "01318170671172102",
+  "title": "scramble.py",
+  "language": "python",
+  "content": "aW1wb3J0IHJhbmRvbQ0KDQpkZWYgc2NyYW1ibGUodGV4dCk6DQoJc2NyYW1ibGVkID0gIiINCgl3aGlsZSBsZW4odGV4dCkgPiAwOg0KCQlyYW5kb21JZHggPSByYW5kb20ucmFuZGludCgwLCBsZW4odGV4dCkgLSAxKQ0KCQlzY3JhbWJsZWQgKz0gIHRleHRbcmFuZG9tSWR4XQ0KCQl0ZXh0ID0gdGV4dFs6cmFuZG9tSWR4XSArIHRleHRbcmFuZG9tSWR4ICsgMTpdDQoJcmV0dXJuIHNjcmFtYmxlZA0KDQppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOg0KCXByaW50IHNjcmFtYmxlKCIxMTE1NzY5MTI4MzIwMTAwNyIpDQo=",
+  "dateUpdated": 1480213015538,
+  "isPublic": true
+}
+```

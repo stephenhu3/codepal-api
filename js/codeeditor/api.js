@@ -57,10 +57,10 @@ CodeEditor.prototype._api = function(options) {
 				type 		: 'POST',
 				dataType	: 'json',
 				data 		: {
-					userID		: userID,
-					title		: newName,
 					uuid		: snippetObj.hash,
-					lang		: snippetObj.lang,
+					title		: newName,
+					userID		: userID,
+					language	: snippetObj.lang,
 					content 	: snippetObj.contents,
 					isPublic	: true
 				}

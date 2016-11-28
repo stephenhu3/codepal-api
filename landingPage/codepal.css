@@ -211,3 +211,11 @@ h1, h1 {
     margin-top: 120px;
   }
 }
+
+/* Username Input Styling
+-------------------------------------------------- */
+#usernameInput {
+  width: 20vw;
+  height: 2.3vw;
+  margin-bottom: 10px;
+}

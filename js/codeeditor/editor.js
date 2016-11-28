@@ -185,19 +185,24 @@ CodeEditor.prototype._editor = function(options) {
 		return sessions[hash];
 	}
 
-	// @SUMMARY	: Changes the hash of a saved session
+	// @SUMMARY	: Change hash or name of a session
     // @PARAM	: [hash] 
     // @PARAM	: [newHash]
+    // @PARAM	: [newName]
 	function updateSession(hash, newHash, newName) {
 		if (sessions[hash] === 'undefined') {
 			return;
 		}
 		var sessionObj = sessions[hash];
-		delete sessions[hash];
-		sessions[newHash] = sessionObj;
-		sessions[newHash].name = newName;
 
-		if (currHash == hash) {
+		if (hash != newHash) { // change hash?
+			delete sessions[hash];
+			sessions[newHash] = sessionObj;
+		}
+		if (newName) { // change name?
+			sessions[newHash].name = newName;
+		}
+		if (currHash == hash) { // update curr hash?
 			currHash = newHash;
 		}
 	}

@@ -100,6 +100,18 @@ CodeEditor.prototype._api = function(options) {
 		);
 	}
 
+	// @SUMMARY	: Converts API response represnting code snippet to a session object
+	// @PARAM	: [data]
+	// @RETURN	: {hash: uuid, sessionObj: {}}
+	function convertResponseToSessionObj(data) {
+		var decodedContent 	= atob(data.content),
+			session 		= new ace.EditSession(decodedContent, 
+				self.editor.aceLangMap[data.lang]);
+
+		return self.editor.generateSessionObject(session, data.lang, 
+			data.name);
+	}
+
 	// PRIVATE
 	// -------------------------------
 
@@ -142,25 +154,14 @@ CodeEditor.prototype._api = function(options) {
 		});
 	}
 
-	// @SUMMARY	: Converts API response represnting code snippet to a session object
-	// @PARAM	: [data]
-	// @RETURN	: {hash: uuid, sessionObj: {}}
-	function convertResponseToSessionObj(data) {
-		var decodedContent 	= atob(data.content),
-			session 		= new ace.EditSession(decodedContent, 
-				self.editor.aceLangMap[data.lang]);
-
-		return self.editor.generateSessionObject(session, data.lang, 
-			data.name);
-	}
-
 	return {
 		getAllSavedSnippets	: getAllSavedSnippets,
 		createSnippet		: createSnippet,
 		updateSnippet		: updateSnippet,
 		deleteSnippet		: deleteSnippet,
 		generateSnippetObj	: generateSnippetObj,
-		getSnippet			: getSnippet
+		getSnippet			: getSnippet,
+		convertResponseToSessionObj	: convertResponseToSessionObj
 	};
 
 };

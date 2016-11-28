@@ -27,6 +27,7 @@ CodeEditor.prototype._snippet = function() {
 
 		function done(data) {
 			var uuid = data.uuid;
+			addNewSnippetId(uuid);
 			self.editor.updateSession(sessionObj.hash, uuid, newName);
 			self.ui.updateTab(newName, sessionObj.hash, uuid);
 			self.ui.createAppendNewSnippet(uuid, newName);
@@ -49,7 +50,6 @@ CodeEditor.prototype._snippet = function() {
 
 		function done(data) {
 			sessionObj = self.api.convertResponseToSessionObj(data);
-			addNewSnippetId(sessionObj.hash);
 			self.editor.createNewSession(sessionObj);
 			alert('Snippet successfully retrieved and restored.');
 		}
@@ -62,7 +62,11 @@ CodeEditor.prototype._snippet = function() {
 	// @SUMMARY	: Gets all of the user's saved codesnippets and generates entries
 	// 			 	in saved snippet UI
 	function getAll() {
-		self.api.getAllSavedSnippets(callback);
+		var callbacks = {
+			done : done,
+			fail : fail 
+		};
+		self.api.getAllSavedSnippets(callbacks);
 
 		function done() {
 			/*
@@ -93,7 +97,7 @@ CodeEditor.prototype._snippet = function() {
 		self.api.createSnippet(sessionObj, newName, callbacks);
 
 		function done() {
-			self.editor.updateSession(sessionObj.hash, uuid, newName);
+			self.editor.updateSession(sessionObj.hash, sessionObj.hash, newName);
 			self.ui.updateTab(newName, sessionObj.hash, uuid);
 			self.ui.updateSnippetName(newName, sessionObj.hash);
 			// TODO

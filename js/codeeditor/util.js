@@ -66,19 +66,7 @@ CodeEditor.prototype._util = function(options) {
 	    output = '';
 	    newLine = '<br/>'
 	    numLines = lineArray.length;
-	    /*TODO
-            Language specific compiler/runtime error handling
-            'C'				: 'c', -done
-			'C#'			: 'csharp', -done
-			'C++'			: 'cpp', -done
-			'C++11'			: 'cpp11', -done
-			'Go'			: 'go', -done
-			'Java'			: 'java', -done
-			'Node.js'		: 'nodejs', -done
-			'Python'		: 'python', -done
-			'Python 3'		: 'python3', -done
-			'Ruby'			: 'ruby'
-        */
+
 	    if (lang == 'nodejs') {	        
 	        for (i = 0; i < numLines; i++) {
 	            var index = lineArray[i].search('evalmachine');	            
@@ -101,15 +89,13 @@ CodeEditor.prototype._util = function(options) {
 	    if (lang == 'c') {
 	        for (i = 0; i < numLines; i++) {
 
-	            var index = lineArray[i].search('.c');
-	            //output += index + '<br/>'; //Debug
+	            var index = lineArray[i].search('.c');	           
 	            if (index != -1) {
 	                //identify error line
 	                output += 'at ' + lineArray[i].substring(index + 2) + newLine;
 	                //{ continue; }
 	                index = lineArray[i].search('error: ');
-	                if (index != -1) {
-	                    //output += 'searching for ' + lineArray[i].substring(index + 7) + newLine; //debug
+	                if (index != -1) {	                    
 	                    errorSearch(lineArray[i].substring(index + 7));
 	                    break;
 	                }
@@ -117,8 +103,7 @@ CodeEditor.prototype._util = function(options) {
 	           
 	            else {
 	                //output relevant error type information
-	                output += lineArray[i] + newLine;
-	                //output += 'searching for ' + lineArray[i] + newLine; //debug
+	                output += lineArray[i] + newLine;	                
 	                errorSearch(lineArray[i]);
 	            }
 	        }
@@ -168,7 +153,7 @@ CodeEditor.prototype._util = function(options) {
 	            if (index != -1) {
 	                //identify error line
 	                output += 'at ' + lineArray[i].substring(index + 4) + newLine;
-	               
+
                     //TODO - more elegant handling of this
 	                errorSearch(lineArray[i].substring(index + 8));
 	                break;
@@ -180,8 +165,8 @@ CodeEditor.prototype._util = function(options) {
 	            }
 	        }
 	    }
-	    if (lang == 'java') {
-            //TODO instantiate java with a precooked main class and main method as follows
+	    //TODO instantiate java with a precooked main class and main method
+	    if (lang == 'java') {           
 	        output += 'NOTE - Java programs run in CodePal must have the form '
                 + newLine
 	            + '  public class Main{'
@@ -194,7 +179,6 @@ CodeEditor.prototype._util = function(options) {
                 
 	        for (i = 0; i < numLines; i++) {
 	            var index = lineArray[i].search('.java:');
-
 	            if (index != -1) {
 	                //identify error line
 	                output += 'at ' + lineArray[i].substring(index + 6) + newLine;
@@ -257,14 +241,20 @@ CodeEditor.prototype._util = function(options) {
 	            }
 	        }
 	    }
+
 	    //Debug
         /*
-	    output += 'DEBUG OUTPUT AFTER THIS LINE'+newLine+'current language is: ' + lang + newLine +'Original message' + newLine;
+	    output += 'DEBUG OUTPUT AFTER THIS LINE'
+        + newLine
+        + 'current language is: ' 
+        + lang + newLine +'Original message' 
+        + newLine;
 	    for (i = 0; i < numLines; i++) {
 	        output += lineArray[i] + newLine;
 	    }
         */
 	    //In case of unhandled error, print generic message
+        //Not sure if this will ever run
 	    if (output.length === 0) {
 	        msg = messages.RUNTIME_ERR;
 	    }
@@ -272,11 +262,13 @@ CodeEditor.prototype._util = function(options) {
 	    return output;
 	}
     //Trigger youtube and Stack Overflow search for the top level error
-    //TODO - youtube dropdown activation
     //Param - error - string to search
+    //TODO - youtube dropdown activation - waiting on other team to change
 	function errorSearch(error) {
+        //YouTube search
 	    $('#query').val(error);
 	    $('#search-button').trigger('click');
+        //Stack Overflow search
 	    $('#query1').val(error);
 	    $('#soSearch').trigger('click');
 	}

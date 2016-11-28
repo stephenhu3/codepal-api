@@ -11,18 +11,34 @@ CodeEditor.prototype._api = function(options) {
 
 	var self 	= this,
 		domain	= 'http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080',
-		userId 	= options.userId; // window.userId after login
+		userId = "10154533296490027" // for testing
+		// userId 	= options.userId; // window.userId after login
 
 	function getAllSavedSnippets(callbacks) {
 		performCallout(
 			{
-				url			: domain + '/snippets',
+				url			: domain + '/snippets/user',
 				contentType	: 'application/json',
 				type 		: 'POST',
 				dataType	: 'json',
-				data 		: {
+				data 		: JSON.stringify({
 					userId	: userId
-				}
+				})
+			},
+			callbacks
+		);
+	}
+
+	function getSnippet(uuid, callbacks) {
+		performCallout(
+			{
+				url			: domain + '/snippets/search',
+				contentType	: 'application/json',
+				type 		: 'POST',
+				dataType	: 'json',
+				data 		: JSON.stringify({
+					uuid	: uuid
+				})
 			},
 			callbacks
 		);
@@ -32,17 +48,17 @@ CodeEditor.prototype._api = function(options) {
 		var snippetObj = generateSnippetObj(sessionObj);
 		performCallout(
 			{
-				url			: domain + '/snippets/search',
+				url			: domain + '/snippets/',
 				contentType	: 'application/json',
 				type 		: 'POST',
 				dataType	: 'json',
-				data 		: {
+				data 		: JSON.stringify({
 					userId		: userId,
 					title		: newName,
 					language	: snippetObj.lang,
 					content 	: snippetObj.contents,
 					isPublic	: true
-				}
+				})
 			},
 			callbacks
 		);
@@ -56,14 +72,14 @@ CodeEditor.prototype._api = function(options) {
 				contentType	: 'application/json',
 				type 		: 'POST',
 				dataType	: 'json',
-				data 		: {
+				data 		: JSON.stringify({
 					uuid		: snippetObj.hash,
 					title		: newName,
 					userId		: userId,
 					language	: snippetObj.lang,
 					content 	: snippetObj.contents,
 					isPublic	: true
-				}
+				})
 			},
 			callbacks
 		);
@@ -76,9 +92,9 @@ CodeEditor.prototype._api = function(options) {
 				contentType	: 'application/json',
 				type 		: 'POST',
 				dataType	: 'json',
-				data 		: {
+				data 		: JSON.stringify({
 					uuid	: uuid
-				}
+				})
 			},
 			callbacks
 		);
@@ -143,7 +159,8 @@ CodeEditor.prototype._api = function(options) {
 		createSnippet		: createSnippet,
 		updateSnippet		: updateSnippet,
 		deleteSnippet		: deleteSnippet,
-		generateSnippetObj	: generateSnippetObj
+		generateSnippetObj	: generateSnippetObj,
+		getSnippet			: getSnippet
 	};
 
 };

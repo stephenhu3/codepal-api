@@ -86,7 +86,7 @@
  		var currHash = self.editor.getCurrSessionObj().hash;
  		var name = self.util.getFilename();
 
- 		if (isHashSnippetId(currHash)) {
+ 		if (self.snippet.isHashSnippetId(currHash)) {
  			self.snippet.update(name);
  		} else {
  			self.snippet.create(name);

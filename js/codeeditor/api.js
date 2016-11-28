@@ -11,7 +11,7 @@ CodeEditor.prototype._api = function(options) {
 
 	var self 	= this,
 		domain	= 'http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080',
-		userId 	= options.userID; // window.userID after login
+		userId 	= options.userId; // window.userId after login
 
 	function getAllSavedSnippets(callbacks) {
 		performCallout(
@@ -21,7 +21,7 @@ CodeEditor.prototype._api = function(options) {
 				type 		: 'POST',
 				dataType	: 'json',
 				data 		: {
-					userID	: userID
+					userId	: userId
 				}
 			},
 			callbacks
@@ -37,7 +37,7 @@ CodeEditor.prototype._api = function(options) {
 				type 		: 'POST',
 				dataType	: 'json',
 				data 		: {
-					userID		: userID,
+					userId		: userId,
 					title		: newName,
 					language	: snippetObj.lang,
 					content 	: snippetObj.contents,
@@ -59,7 +59,7 @@ CodeEditor.prototype._api = function(options) {
 				data 		: {
 					uuid		: snippetObj.hash,
 					title		: newName,
-					userID		: userID,
+					userId		: userId,
 					language	: snippetObj.lang,
 					content 	: snippetObj.contents,
 					isPublic	: true

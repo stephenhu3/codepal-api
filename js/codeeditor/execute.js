@@ -20,8 +20,8 @@ CodeEditor.prototype._execute = function(options) {
 			'Ruby'			: 'ruby'
 		},
 		token   = { 
-			time_created: 1479953011000,
-			msg_mac: 'SC6ofQ9c7A4/K8bWc52ZmF/DnRoRgQL4fPZQOxeZBhA=' 
+			time_created: 1480401579000,
+			msg_mac: 'GINiXV8Vztcu3DsbdqFCjq0EXVgbj3rR/G6Cn8GuIxA=' 
 		},
 		constants = { 
 			'COMPILE_OK'	: 'OK',

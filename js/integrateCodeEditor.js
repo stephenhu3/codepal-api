@@ -22,43 +22,45 @@ var integrateCodeEditor = function (container){
 		var codeEditor = new CodeEditor({
 			eleId		: 'editor',
 			lang 		: defaultLang,
+			theme		: defaultTheme,
 			execute		: {
 				$outConsole		: $('#codeeditor #outConsole'),
 			},
-			editor 		: {
+			util		: {
 				$filename 		: $('#codeeditor #filename'),
 				$extension		: $('#codeeditor #extension'),
-				theme 			: defaultTheme
 			},
 			ui   		: {
 				$tabContainer	: $('#codeeditor #tabContainer'),
 				$langContainer	: $('#codeeditor #lang'),
 				$themeContainer	: $('#codeeditor #theme'),
-			}	
+			},
+			api			: {
+				userID			: window.userID
+			}
 		});
-		codeEditor.execute.initReplClient('Node.js');
 
 		// Bindings
-		$('#codeeditor [data-editoraction="add"]').click(function() {
-			codeEditor.editor.createNewSession();
-		});
+		$('#codeeditor [data-editoraction="add"]').click(
+			codeEditor.bindings.tabAdd);
 
 		$('#codeeditor #runBtn').click(function() {
-			$(this).prop('disabled', true);
-			codeEditor.execute.run($(this));
+			codeEditor.bindings.btnRun($(this));
 		});
-		$('#codeeditor #saveBtn').click(function() { // TODO: Hook up
-			alert('Code snippet save feature -- coming soon...');
-		});
-		$('#codeeditor #downloadBtn').click(codeEditor.editor.download);
+
+		$('#codeeditor #saveBtn').click(
+			codeEditor.bindings.snippetSave);
+		
+		$('#codeeditor #downloadBtn').click(
+			codeEditor.util.download);
+		
+
 		$('#codeeditor #lang').on('change', function() {
-			var lang = $(this).find('option:selected').val();
-			codeEditor.editor.setEditorLang(lang);
-			codeEditor.execute.initReplClient(lang);
+			codeEditor.bindings.selLang($(this));
 		});
+
 		$('#codeeditor #theme').on('change', function () {
-		    var theme = $(this).find('option:selected').val();
-		    codeEditor.editor.setEditorTheme(theme);
+		   codeEditor.bindings.selTheme($(this)); 
 		});
 
 	}

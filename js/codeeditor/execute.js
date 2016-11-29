@@ -7,7 +7,7 @@ CodeEditor.prototype._execute = function(options) {
 	var self 			= this,
 		$outConsole 	= options.$outConsole,
 		repl,
-		replMap		 	= { // user label hacker earth lang format 
+		replMap		 	= { // user label -> repl.it lang
 			'C'				: 'c',
 			'C#'			: 'csharp',
 			'C++'			: 'cpp',
@@ -25,7 +25,8 @@ CodeEditor.prototype._execute = function(options) {
 		},
 		constants = { 
 			'COMPILE_OK'	: 'OK',
-			'TIME_EXCEEDED'	: 'TLE'
+			'TIME_EXCEEDED' : 'TLE',
+            'MAX_TIME'      : 5000
 		},
 		messages = {
 			'TIME_EXCEEDED'	: 'Your code exceeded the maximum run time of 5 ' 
@@ -64,9 +65,13 @@ CodeEditor.prototype._execute = function(options) {
 				stdout: function(out) {
 				    output += 'Console output: ' + '<br/>' + out + '<br/><br/>';
 				},
-				time: 5000,
-				callback: function() {
-					return true;
+				timeout: 
+                    {
+                        time: constants.MAX_TIME,
+                        callback: function () {
+                            output += messages.TIME_EXCEEDED;                            
+                            return true;
+				    }
 				}
 			}
 		).then(
@@ -84,14 +89,6 @@ CodeEditor.prototype._execute = function(options) {
                         + '<br/>'
                         + self.util.translateErr(result.error, replMap[self.ui.getCurrLang()]) 
                         + '<br/>';
-				        /*  
-                        + 'COMMAND: '       //debug
-                        + result.command    //debug
-                        + '<br/>'           //debug
-                        + 'DATA: '          //debug
-                        + result.data       //debug
-                        + '<br/>';          //debug 
-                    */
 				}
              
 				else {
@@ -103,9 +100,8 @@ CodeEditor.prototype._execute = function(options) {
 				$btn.prop('disabled', false);
 			},
 
-			function error(err) {
-				console.log('err ' + err);
-				$outConsole.html(messages.RUN_ERROR);
+			function error(err) {				
+			    $outConsole.html(output);
 				$btn.prop('disabled', false);
 			}
 		);

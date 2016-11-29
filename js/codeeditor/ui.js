@@ -13,12 +13,38 @@ CodeEditor.prototype._ui = function(options) {
 		$tabContainer 	= options.$tabContainer,
 		$langContainer	= options.$langContainer,
 		$themeContainer	= options.$themeContainer,
+		$snippetContainer, // TODO
 		defn_tab 		= "<li class=''></li>",
 		defn_anchor		= "<a></a>",
 		defn_span		= "<span></span>",
-		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>";
+		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>",
+		defn_snippet; // TODO
 
 	
+	// TODO
+	function createAppendNewSnippet(uuid, name) {
+		// generate new snippet defn
+		// assign uuid as a data attribute to top level container
+		// .html() span for name
+		// append to $snippetContainer
+	}
+
+	// TODO
+	function updateSnippetName(newName, uuid) {
+		$snippetContainer.find('[data-uuid="' + uuid + '"]');
+		// .html() span for newName
+	}
+
+	// TODO
+	function deleteSnippet(uuid) {
+		var $snippetToDel = $tabContainer.find('[data-uuid="' + uuid + '"]');
+		if ($snippetToDel.length === 1) {
+			$snippetToDel.remove();
+			return $snippetContainer;
+		}
+		return null;
+	}
+
 	// @SUMMARY	: updates tab's hash and name
 	// @PARAM	: [name] name to change to
 	// @PARAM	: [hash] hash corresponding to existing tab
@@ -95,37 +121,6 @@ CodeEditor.prototype._ui = function(options) {
 		return null;
 	}
 
-	// PRIVATE
-	// -------------------------------
-
-	// @SUMMARY	: attaches switching and delete event handlers to a tab element
-	// @PARAM	: [$tab] the jQuery tab element to attach event handlers to
-	function bindTab($tab) {
-		$tab.find('[data-editoraction="switch"]')
-			.click(function() {
-				var $tab = $(this).closest('[data-tab="tab"]'),
-					hash = $tab.attr('data-editorhash');
-				
-				if ($tab.hasClass('active')) {
-					return;
-				}
-				self.editor.switchSession(hash);
-				switchActiveTab(hash);
-			});
-
-		$tab.find('[data-editoraction="delete"]')
-			.click(function() {
-				var $tab = $(this).closest('[data-tab="tab"]'),
-					hash = $tab.attr('data-editorhash');
-
-				if (self.editor.deleteSession(hash)) {
-					var newHash = restoreAdjacentTab(hash);
-					self.editor.switchSession(newHash);
-					destroyTab(hash);
-				}
-			});
-	}
-
 	// @SUMMARY	: sets a specified tab to be active and sets all others as inactive
 	// @PARAM	: [hash] the hash of the tab to set to be active
 	function switchActiveTab(hash) {
@@ -135,6 +130,25 @@ CodeEditor.prototype._ui = function(options) {
 		$('[data-editorhash=' + hash + ']')
 			.closest('[data-tab="tab"]')
 			.addClass('active');
+	}
+
+	// PRIVATE
+	// -------------------------------
+
+	// @SUMMARY	: attaches switching and delete event handlers to a tab element
+	// @PARAM	: [$tab] the jQuery tab element to attach event handlers to
+	function bindTab($tab) {
+		$tab.find('[data-editoraction="switch"]')
+			.click(function() {
+				var $tab = $(this).closest('[data-tab="tab"]');
+				self.bindings.tabSwitch($tab);
+			});
+
+		$tab.find('[data-editoraction="delete"]')
+			.click(function() {
+				var $tab = $(this).closest('[data-tab="tab"]');
+				self.bindings.tabDelete($tab);
+			});
 	}
 
 	// @SUMMARY	: creates a new active jQuery tab element
@@ -181,10 +195,16 @@ CodeEditor.prototype._ui = function(options) {
 		setTheme				: setTheme,
 		setLang					: setLang,
 		getCurrLang				: getCurrLang,
+		
 		restoreAdjacentTab		: restoreAdjacentTab,
 		generateAndAppendNewTab	: generateAndAppendNewTab,
 		destroyTab				: destroyTab,
-		updateTab				: updateTab
+		updateTab				: updateTab,
+		switchActiveTab			: switchActiveTab,
+
+		createAppendNewSnippet 	: createAppendNewSnippet,
+		updateSnippetName		: updateSnippetName,
+		deleteSnippet			: deleteSnippet
 	};
 
 };

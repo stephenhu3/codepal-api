@@ -1,7 +1,7 @@
 #codeeditor #editor {
 	margin: auto;
 	width: 100%;
-	min-height: 200px;
+	min-height: 250px;
 }
 #codeeditor .wordBreak {
 	word-break: break-word;

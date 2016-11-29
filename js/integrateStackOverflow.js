@@ -6,43 +6,60 @@ container.getElement().html(
 '		</span>' +
 '		<input id="query1" type="text" class="form-control" placeholder="Search for..."></input>' +
 '		<span class="input-group-btn">' +
-'			<button id="soSearch" onclick="myFunction()" class="btn btn-default" type="submit">Go!</button>' +
+'			<button id="soSearch" onclick="getQuestions()" class="btn btn-default" type="submit">Go!</button>' +
 '		</span>' +
 '	</div>' +
 '	<p id="listOfQ"></p>'+
 '	<ol id="show-data"></ol>');
 }
-function myFunction() {
-	console.log("hello1");
-	var originalLink = "https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&site=stackoverflow";
+function getQuestions() {
 	var query = $('#query1').val();
-	var urlToAPI = originalLink + '&q=' + query;
+	var urlToAPI = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&accepted=True&site=stackoverflow&q=${query}`;
+	//var urlToAPI = originalLink + '&q=' + query;
+	var questData;
+	var ansData = [];
+	var num = 1;
   	$.getJSON(urlToAPI, function (data) {
-  		console.log("hello");
+  		questData = data;
   		if(data.items.length == 0){
   			$('#show-data').empty();
   			$('#show-data').append("Oops! We can't find your query!");
   		}
   		else if(data.items.length >= 10){
-	  		$('#show-data').empty();
+  			$('#show-data').empty();
 	  		$('#listOfQ').empty();
 	  		$('#listOfQ').append('List of questions:');
-	    	for(i = 0; i < 10; i++){
-	    		var link = "<a target='_blank' id='questionFont' href='" + data.items[i].link +"'>";
-	    		$('#show-data').append("<li id='questionFont' >" + link + data.items[i].title + '</a>' + '</li>');
-	    		$('#show-data').append('</br>');
-	    	}
-    	}
-    	else{
-    		$('#show-data').empty();
-    		$('#listOfQ').empty();
+  			for(i = 0; i < 10; i++){
+  				ansData[i] = getAnswerBody(data.items[i].question_id,data.items[i].title,num);
+  				num++;
+  			}
+  		}
+  		else {
+  			$('#show-data').empty();
+	  		$('#listOfQ').empty();
 	  		$('#listOfQ').append('List of questions:');
-	  		$('#show-data').append('</br>');
-	    	for(i = 0; i < data.items.length; i++){
-	    		var link = "<a id='questionFont' href='" + data.items[i].link +"'>";
-	    		$('#show-data').append('<li>' + link + data.items[i].title + '</a>' + '</li>');
-	    		$('#show-data').append('</br>');
-	    	}
-    	}
+  			for(i = 0; i < data.items.length; i++){
+  				ansData[i] = getAnswerBody(data.items[i].question_id,data.items[i].title,num);
+  				num++;
+  			}
+  		}
 	});
 }
+
+function getAnswerBody(questionId,title,num){
+	var urlToAPI = `https://api.stackexchange.com/2.2/questions/${questionId}/answers?order=desc&sort=activity&site=stackoverflow&filter=!-.1*WTz0(T_D`;
+	$.getJSON(urlToAPI, function (data) {
+		for(i = 0; i < data.items.length; i++){
+			if(data.items[i].is_accepted == true){
+				$('#show-data').append(`<li><a value='hide/show' id='questionFont' href='#' class='question${num}'> ${title} </a></li>`);
+				$('#show-data').append(`<div class='hideAnswer answer${num}' style="display:none"> ${data.items[i].body} </div>`);
+				$('#show-data').append('</br>');
+			}
+		}
+	});
+}
+
+$(document).on('click','[class^="question"]',function(){
+    var numb = this.className.replace('question', '');
+    $('.answer' + numb).toggle(600);
+});

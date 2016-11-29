@@ -12,9 +12,6 @@
 CodeEditor.prototype._editor = function(options) {
 
 	var self		= this,
-		theme		= options.theme,
-		$filename 	= options.$filename,
-		$extension 	= options.$extension,
 		currHash,
 		aceEditor,
 		aceLangMap	= { // user label to ace .js file name 
@@ -29,27 +26,18 @@ CodeEditor.prototype._editor = function(options) {
 			'Python 3'		: 'python',
 			'Ruby'			: 'ruby',
 		},
-		extensionMap = {
-			'C'				: '.c',
-			'C#'			: '.cs',
-			'C++'			: '.cpp',
-			'C++11'			: '.cpp',
-			'Go'			: '.go',
-			'Java'			: '.java',
-			'Node.js'		: '.js',
-			'Python'		: '.py',
-			'Python 3'		: '.py',
-			'Ruby'			: '.rb',
-		},
 		sessions = {
 			// Stores aceEditor sessions to mimic tab funcitonality
+		};
+		currentSessions = {
+			// 
 		};
 
 	// @SUMMARY	: initializes an Ace Editor instance
 	// @PARAM	: [eleId] id of the container to hold the editor instance
 	// @PARAM	: [lang] default language for syntax highlighting
 	// @RETURN	: the editor object itself and its sessions for fluency 
-	function initEditor(eleId, lang) {
+	function initEditor(eleId, lang, theme) {
 		aceEditor = ace.edit(eleId);
 		
 		// RESTORE DEFAULT: empty, unnamed tab
@@ -69,18 +57,8 @@ CodeEditor.prototype._editor = function(options) {
 		};
 	}
 
-	// @SUMMARY	: downloads the current instance's contents to the user's local machine
-	function download() {
-		// lib will automatically replace any non-valid filename chars with '-'
-		var filename = $filename.val();
-		if (!$filename.val()) {
-			alert('Please enter a filename.');
-			return;
-		}
-		var text = getEditorText();
-		var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-		saveAs(blob, filename + extensionMap[sessions[currHash].lang]);
-	}
+	// EDITOR
+	// --------------------------------------------------------
 
 	// @AUMMARY	: sets the editor's contents
 	// @PARAM	: [str] the content to set the editor to
@@ -113,7 +91,7 @@ CodeEditor.prototype._editor = function(options) {
 	// @RETURN	: the new language, in ace format
 	function setEditorLang(newLang) {
 		aceEditor.getSession().setMode("ace/mode/" + aceLangMap[newLang]);
-		$extension.html(extensionMap[newLang]);
+		self.util.changeExtension(newLang);
 		sessions[currHash].lang = newLang;
 
 		var newMode = aceEditor.session.$modeId.split('ace/mode/')[1];
@@ -123,17 +101,28 @@ CodeEditor.prototype._editor = function(options) {
 		return newLang;
 	}
 
+	// SESSIONS [Action]
+	// --------------------------------------------------------
+
 	// @SUMMARY	: removes the session designated by the hash from the session hash map
 	// @PARAM	: [hash] the hash of the session to delete
 	// @RETURN	: null if the session doesn't exist, or the hash itself on successful
 	// 				deletion
 	function deleteSession(hash) {
-		// LIMITATION - always have at least one tab open
 		var numSessions = Object.keys(sessions).length;
+		// LIMITATION - always have at least one tab open
 		if (numSessions === 1 || typeof(sessions[hash]) === 'undefined') {
 			return null;
 		}
 		delete sessions[hash];
+		if (currentSessions[hash] !== 'undefined') {
+			delete currentSessions[hash];
+		}
+
+		var newHash = self.ui.restoreAdjacentTab(hash);
+		switchSession(newHash);
+		self.ui.destroyTab(hash);
+
 		return hash;
 	}
 
@@ -182,11 +171,44 @@ CodeEditor.prototype._editor = function(options) {
 			return;
 		}
 		saveSession(currHash);
+		delete currentSessions[currHash];
+
 		currHash = hash;
 		restoreSession(currHash);
+		currentSessions[currHash] = true;
+
+		var name = sessions[currHash].name === 'untitled' 
+			? ''
+			: sessions[currHash].name;
+		self.util.setFilename(name);
 
 		return sessions[hash];
 	}
+
+	// @SUMMARY	: Change hash or name of a session
+    // @PARAM	: [hash] 
+    // @PARAM	: [newHash]
+    // @PARAM	: [newName]
+	function updateSession(hash, newHash, newName) {
+		if (sessions[hash] === 'undefined') {
+			return;
+		}
+		var sessionObj = sessions[hash];
+
+		if (hash != newHash) { // change hash?
+			delete sessions[hash];
+			sessions[newHash] = sessionObj;
+		}
+		if (newName) { // change name?
+			sessions[newHash].name = newName;
+		}
+		if (currHash == hash) { // update curr hash?
+			currHash = newHash;
+		}
+	}
+
+	// SESSIONS [Properties]
+	// --------------------------------------------------------
 
 	function getCurrSessionObj() {
 		return {
@@ -195,11 +217,15 @@ CodeEditor.prototype._editor = function(options) {
 		};
 	}
 
-	function saveCurrSession() {
-		saveSession(currHash);
+	function isSessionCached(hash) {
+		return (sessions[hash] !== 'undefined');
 	}
 
-	// @SUMMARY	: generates a  new session object to be stored in sessions { }
+	function isSessionLoaded(hash) {
+		return (currentSessions[hash] !== 'undefined');
+	}
+
+	// @SUMMARY	: generates a new session object to be stored in sessions { }
 	// @RETURN	: the newly created session obj
 	function generateSessionObject(session, lang, name) {
 		return {
@@ -207,23 +233,6 @@ CodeEditor.prototype._editor = function(options) {
 			lang		: lang,
 			name		: name
 		};
-	}
-
-    // @SUMMARY	: Changes the hash of a saved session
-    // @PARAM	: [hash] 
-    // @PARAM	: [newHash]
-	function updateSession(hash, newHash, newName) {
-		if (sessions[hash] === 'undefined') {
-			return;
-		}
-		var sessionObj = sessions[hash];
-		delete sessions[hash];
-		sessions[newHash] = sessionObj;
-		sessions[newHash].name = newName;
-
-		if (currHash == hash) {
-			currHash = newHash;
-		}
 	}
 
 	// PRIVATE
@@ -255,18 +264,21 @@ CodeEditor.prototype._editor = function(options) {
 
 	return {
 		initEditor				: initEditor,
-		download				: download,
 		getEditorText			: getEditorText,
 		setEditorText			: setEditorText,
 		setEditorTheme			: setEditorTheme,
 		setEditorLang			: setEditorLang,
+
 		deleteSession			: deleteSession,
 		createNewSession		: createNewSession,
 		switchSession			: switchSession,
-		generateSessionObject 	: generateSessionObject,
 		updateSession			: updateSession,
+
+		generateSessionObject 	: generateSessionObject,
 		getCurrSessionObj		: getCurrSessionObj,
-		saveCurrSession			: saveCurrSession,
+		isSessionCached			: isSessionCached,
+		isSessionLoaded			: isSessionLoaded,
+
 		aceLangMap				: aceLangMap
 	};
 };

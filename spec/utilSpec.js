@@ -26,13 +26,6 @@
         utilModule = codeEditor.util;
     });
 
-    it('checks if param is integer', function () {
-       var integer =  1;
-        expect(utilModule.isInteger(integer)).toBe(true);
-        var rational = 0.5;
-      expect(utilModule.isInteger(rational)).toBe(false);
-    });
-
     it('makes unspecified language error message readable', function () {
         var dummyError = 'error line 1\nerror line 2\nerror line 3\nend of error';
         var readableError = 'error line 1<br/>error line 2<br/>error line 3<br/>end of error<br/>';

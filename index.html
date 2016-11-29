@@ -30,6 +30,13 @@
 
     <!-- Custom styles for this template -->
     <link href="./landingPage/codepal.css" rel="stylesheet">
+
+    <!-- Facebook Login -->
+    <script type="text/javascript" src="js/fbLogin.js"></script>
+
+    <!-- Facebook Login To Server API -->
+    <script type="text/javascript" src="js/loginServerAPI.js"></script>
+
   </head>
 
 
@@ -121,169 +128,39 @@
      
     </div><!-- /.container -->
 
-   <div 
+    <!-- Modal content-->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Welcome to CodePal!</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <input class="text-center" id="usernameInput" type="text" name="usernameInput" placeholder="Your username">
+                    </br>
+                    <button onclick="signUpNewUser()" data-dismiss="modal" type="button" class="btn btn-default">Submit</button>
+                </div>
+                <div class="modal-footer text-center">
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
     <script src="../../assets/js/vendor/holder.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   
-  <!-- Javascript for typer Js -->
+    <!-- Javascript for typer Js -->
     <script src='./landingPage/assets/js/typer.js'></script>
 
-
-<!--OUR FACEBOOK LOGIN-->
- <script>
-        var pageUrl = 'http://codepal.ca/';
-        // This is called with the results from from FB.getLoginStatus().
-        function statusChangeCallback(response) {
-            console.log('statusChangeCallback');
-            console.log(response);
-            // The response object is returned with a status field that lets the
-            // app know the current login status of the person.
-            // Full docs on the response object can be found in the documentation
-            // for FB.getLoginStatus().
-            if (response.status === 'connected') {
-                // Logged into your app and Facebook.
-                testAPI();
-                checkUserExists(response.authResponse.userID, response.authResponse.accessToken);
-                //signUpUser(response.authResponse.userID);
-                //window.location.assign("http://128.189.213.178:8080/main.html");
-            } else if (response.status === 'not_authorized') {
-                // The person is logged into Facebook, but not your app.
-                document.getElementById('status').innerHTML = 'Please log ' +
-                    'into this app.';
-            } else {
-                // The person is not logged into Facebook, so we're not sure if
-                // they are logged into this app or not.
-                document.getElementById('status').innerHTML = 'Please log ' +
-                    'into Facebook.';
-            }
-        }
-        // This function is called when someone finishes with the Login
-        // Button.  See the onlogin handler attached to it in the sample
-        // code below.
-        function checkLoginState() {
-            FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
-        }
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '727716004048263',
-                cookie: true, // enable cookies to allow the server to access 
-                // the session
-                xfbml: true, // parse social plugins on this page
-                version: 'v2.5' // use graph api version 2.5
-            });
-            // Now that we've initialized the JavaScript SDK, we call 
-            // FB.getLoginStatus().  This function gets the state of the
-            // person visiting this page and can return one of three states to
-            // the callback you provide.  They can be:
-            //
-            // 1. Logged into your app ('connected')
-            // 2. Logged into Facebook, but not your app ('not_authorized')
-            // 3. Not logged into Facebook and can't tell if they are logged into
-            //    your app or not.
-            //
-            // These three cases are handled in the callback function.
-            FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
-        };
-        // Load the SDK asynchronously
-        (function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=727716004048263";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-        // Here we run a very simple test of the Graph API after login is
-        // successful.  See statusChangeCallback() for when this call is made.
-        function testAPI() {
-            console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me/permissions', function(response) {
-                /*
-                console.log('Successful login for: ' + response.name);
-                document.getElementById('status').innerHTML =
-                    'Thanks for logging in, ' + response.name + '!';
-                */
-                console.log();
-            });
-        }
-  </script>
-
-<script type="text/javascript">
-    function checkUserExists(userId, accessToken){
-        var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users/search";
-        var data = {"userId": userId};
-        $.ajax({
-            dataType: "json",
-            contentType: "application/json",
-            method: "POST",
-            url: url,
-            data: JSON.stringify(data),
-            success: function(data){
-                console.log(data);
-                if(accessToken !== data.accessToken){
-                    console.log("The user exists");
-                    updateAccessToken(userId, accessToken);
-                }
-            },
-            error: function(){
-                 var username = prompt("Do you want to sign up? Please enter your username below");
-                 if(username != null){
-                    signUpNewUser(userId, username, accessToken);
-                 }
-                 else{
-                    alert("Username is invalid");
-                    FB.logout();
-                 }
-            }
-        });
-    }
-
-    function updateAccessToken(userId, newAccessToken){
-        var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users/accesstokens";
-        var data = {"userId": userId, "accessToken": newAccessToken};
-        $.ajax({
-            dataType: "json",
-            contentType: "application/json",
-            method: "POST",
-            url: url,
-            data: JSON.stringify(data),
-            success: function(data){
-                console.log("Updated new access token");
-                window.location.assign(pageUrl+'main.html');
-            },
-            error: function(){console.log("Fail updating access token!");}
-        });
-    }
-
-    function signUpNewUser(userId, username, accessToken){
-        var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users";
-        var data = {"userId": userId, "username": username ,"accessToken": accessToken, "settings": "sampleSettings"};
-        console.log(data);
-        $.ajax({
-            dataType: "json",
-            contentType: "application/json",
-            method: "POST",
-            url: url,
-            data: JSON.stringify(data),
-            success: function(){
-                alert("You already signed up! Thanks!");
-            }
-        });
-    }
-</script>
-
-
-  </body>
+</body>
 
 </html>

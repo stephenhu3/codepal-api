@@ -1,6 +1,4 @@
 describe("youtubeComponent", function () {
-    //console.log(mvcTestArray);
-    //mvcFunction();
     var mvcTestArray, testModel, testController, testView,
         testObject;
     beforeEach(function () {
@@ -82,12 +80,19 @@ describe("youtubeComponent", function () {
                 .toEqual('{}');
         });
     it(
+        "should return the list of added test objects  {testing: controller.getVideos()}",
+        function () {
+            spyOn(testController,'init');
+            testController.init();
+            expect(testController.init).toHaveBeenCalled();
+        });
+    it(
         "should set up YoutubeAPI {testing: controller.setUpYoutubeAPI()}",
         function () {
             localStorage.clear(); //resetting the changes to localStorage by previous calls
             //TO-do
         });
-    
+
     it(
         "should add the correct test object {testing: controller.addVideo()}",
         function () {
@@ -113,5 +118,11 @@ describe("youtubeComponent", function () {
           expect(localStorage.videos)
               .toEqual('[]');
         });
-
+    it(
+        "should return the list of added test objects  {testing: controller.getVideos()}",
+        function () {
+          spyOn(testView,'init');
+          testView.init();
+          expect(testView.init).toHaveBeenCalled();
+      });
 });

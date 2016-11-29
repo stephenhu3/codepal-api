@@ -84,6 +84,7 @@ var myLayout = new GoldenLayout(config); // remove this when adding
 myLayout.registerComponent('codeEditorInput', function(container, componentState) {
 	integrateCodeEditor(container);
 });
+
 myLayout.registerComponent('codeEditorOutput', function(container, componentState) {
 	//To-DO: @alec: Must change the following code
 	window.setInterval(function () {
@@ -93,20 +94,16 @@ myLayout.registerComponent('codeEditorOutput', function(container, componentStat
 });
 
 // Registering Youtube component
-myLayout.registerComponent('youtube', function(container, componentState) {
-	integrateYoutube(container);
+myLayout.registerComponent('youtube',
+  function(container, componentState) {
+	   integrateYoutube(container);
 });
 
 myLayout.registerComponent('StackOverflow',
 		function(container, componentState) {
-			container.getElement().html("<p>BLAH</p>");
+			//container.getElement().html("<p>BLAH</p>");
 			integrateStackOverflow(container);
-		});
-
-myLayout.registerComponent('testComponent',
-		function(container, componentState) {
-			// integrateStackOverflow(container);
-		});
+	});
 
 myLayout.init();
 }

@@ -1,7 +1,7 @@
 var codeEditor;
 
 var integrateCodeEditor = function (container){
-	
+
 	// Load HTML
 	$.ajax({
 	    type: 'GET',
@@ -9,7 +9,7 @@ var integrateCodeEditor = function (container){
 	})
     .done(function(data, textStatus, jqXHR) {
 		container.getElement().html(data);
-		initCodeEditor();		
+		initCodeEditor();
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {
 		throw 'Code Editor module could not be loaded.';
@@ -52,17 +52,19 @@ var integrateCodeEditor = function (container){
 
 		$('#codeeditor #saveBtn').click(
 			codeEditor.bindings.snippetSave);
-		
+
 		$('#codeeditor #downloadBtn').click(
 			codeEditor.util.download);
-		
+
+		//Set up observer for resizing coede editor
+		codeEditor.util.startObserver();
 
 		$('#codeeditor #lang').on('change', function() {
 			codeEditor.bindings.selLang($(this));
 		});
 
 		$('#codeeditor #theme').on('change', function () {
-		   codeEditor.bindings.selTheme($(this)); 
+		   codeEditor.bindings.selTheme($(this));
 		});
 
 	}

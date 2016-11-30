@@ -6,7 +6,7 @@
  * - ace.js
  * - ui.js
  * - util.js
- * 
+ *
  */
 
 CodeEditor.prototype._editor = function(options) {
@@ -14,7 +14,7 @@ CodeEditor.prototype._editor = function(options) {
 	var self		= this,
 		currHash,
 		aceEditor,
-		aceLangMap	= { // user label to ace .js file name 
+		aceLangMap	= { // user label to ace .js file name
 			'C'				: 'c_cpp',
 			'C#'			: 'csharp',
 			'C++'			: 'c_cpp',
@@ -30,16 +30,16 @@ CodeEditor.prototype._editor = function(options) {
 			// Stores aceEditor sessions to mimic tab funcitonality
 		};
 		currentSessions = {
-			// 
+			//
 		};
 
 	// @SUMMARY	: initializes an Ace Editor instance
 	// @PARAM	: [eleId] id of the container to hold the editor instance
 	// @PARAM	: [lang] default language for syntax highlighting
-	// @RETURN	: the editor object itself and its sessions for fluency 
+	// @RETURN	: the editor object itself and its sessions for fluency
 	function initEditor(eleId, lang, theme) {
 		aceEditor = ace.edit(eleId);
-		
+
 		// RESTORE DEFAULT: empty, unnamed tab
 		sessions = {};
 		currHash = undefined;
@@ -51,6 +51,9 @@ CodeEditor.prototype._editor = function(options) {
 		aceEditor.setAutoScrollEditorIntoView(true);
 		aceEditor.getSession().setTabSize(4);
 
+		aceEditor.setOptions({
+			maxLines: 25
+		});
 		return {
 			aceEditor: aceEditor,
 			sessions : sessions
@@ -129,7 +132,7 @@ CodeEditor.prototype._editor = function(options) {
 	// @SUMMARY	: creates a new session object and stores it in the session hash map
 	//				switches the editor's current session to the newly created one
 	// @PARAM	: [savedSnippet]
-	// @RETURN	: the new session object	
+	// @RETURN	: the new session object
 	function createNewSession(savedSnippet){
 		if (savedSnippet && sessions[savedSnippet.hash] !== 'undefined') {
 			return; // saved snippet is already loaded in the editor
@@ -177,7 +180,7 @@ CodeEditor.prototype._editor = function(options) {
 		restoreSession(currHash);
 		currentSessions[currHash] = true;
 
-		var name = sessions[currHash].name === 'untitled' 
+		var name = sessions[currHash].name === 'untitled'
 			? ''
 			: sessions[currHash].name;
 		self.util.setFilename(name);
@@ -186,7 +189,7 @@ CodeEditor.prototype._editor = function(options) {
 	}
 
 	// @SUMMARY	: Change hash or name of a session
-    // @PARAM	: [hash] 
+    // @PARAM	: [hash]
     // @PARAM	: [newHash]
     // @PARAM	: [newName]
 	function updateSession(hash, newHash, newName) {

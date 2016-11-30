@@ -1,10 +1,7 @@
 integrateStackOverflow = function (container){
 container.getElement().html(
 '	<div class="input-group">' +
-'		<span class="input-group-btn">' +
-'			<button class="btn btn-default">Back</button>' +
-'		</span>' +
-'		<input id="query1" type="text" class="form-control" placeholder="Search for..."></input>' +
+'		<input id="query1" type="text" class="form-control" style="width:70%;" placeholder="Search for..."></input>' +
 '		<span class="input-group-btn">' +
 '			<button id="soSearch" onclick="getQuestions()" class="btn btn-default" type="submit">Go!</button>' +
 '		</span>' +

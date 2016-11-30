@@ -62,7 +62,6 @@ CodeEditor.prototype._util = function(options) {
 
   //Observe the changing code editor panel for resizing
   function startObserver(){
-    alert('observer started');
     var targetNodes = $('.lm_content');
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     var myObserver = new MutationObserver (mutationHandler);
@@ -83,7 +82,6 @@ CodeEditor.prototype._util = function(options) {
   }
   //Resize code editor when golden layout changes
   function resizeEditor(height){
-    alert('resize function called with ' +height);
     return $('#editor').height(height);
   }
 

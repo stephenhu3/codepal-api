@@ -1,9 +1,9 @@
 integrateStackOverflow = function (container){
 container.getElement().html(
 '	<div class="input-group">' +
-'		<input id="query1" type="text" class="form-control" style="width:70%;" placeholder="Search for..."></input>' +
+'		<input id="query1" type="text" class="form-control" style= "width: 70% ;" placeholder="Search for..."></input>' +
 '		<span class="input-group-btn">' +
-'			<button id="soSearch" onclick="getQuestions()" class="btn btn-default" type="submit">Go!</button>' +
+'			<button id="soSearch" onclick="getQuestions()" class="btn btn-default" type="submit" style= "right: 210px;">Go!</button>' +
 '		</span>' +
 '	</div>' +
 '	<p id="listOfQ"></p>'+
@@ -48,7 +48,7 @@ function getAnswerBody(questionId,title,num){
 	$.getJSON(urlToAPI, function (data) {
 		for(i = 0; i < data.items.length; i++){
 			if(data.items[i].is_accepted == true){
-				$('#show-data').append(`<li><a onclick='toggleAns(${num})' value='hide/show' id='questionFont' href='#' class='question ${num}'> ${title} </a></li>`);
+				$('#show-data').append(`<li><a value='hide/show' id='questionFont' href='#' class='question ${num}'> ${title} </a></li>`);
 				$('#show-data').append(`<div class='hideAnswer answer${num}' style="display:none"> ${data.items[i].body} </div>`);
 				$('#show-data').append('</br>');
 			}
@@ -56,6 +56,8 @@ function getAnswerBody(questionId,title,num){
 	});
 }
 
-function toggleAns(num){
-  $('.answer' + num).toggle();
-}
+$(document).on('click','a',function(){
+    var myClasses = this.classList;
+    var numb = myClasses[1];
+    $('.answer' + numb).toggle();
+});

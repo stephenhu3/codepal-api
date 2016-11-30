@@ -1,5 +1,6 @@
 // This is called with the results from from FB.getLoginStatus().
-var pageUrl = 'http://codepal.ca/';
+var pageUrl = 'http://192.168.56.1:8080';
+
 function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);

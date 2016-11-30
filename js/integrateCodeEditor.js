@@ -1,3 +1,5 @@
+var codeEditor;
+
 var integrateCodeEditor = function (container){
 	
 	// Load HTML
@@ -19,7 +21,7 @@ var integrateCodeEditor = function (container){
 		var defaultLang = 'Node.js',
 			defaultTheme = 'monokai';
 
-		var codeEditor = new CodeEditor({
+		codeEditor = new CodeEditor({
 			eleId		: 'editor',
 			lang 		: defaultLang,
 			theme		: defaultTheme,

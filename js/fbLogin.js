@@ -1,5 +1,5 @@
-var pageUrl = 'http://localhost:8888/codepal/';
 // This is called with the results from from FB.getLoginStatus().
+var pageUrl = 'http://codepal.ca/';
 function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -9,7 +9,6 @@ function statusChangeCallback(response) {
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
         // Logged into your app and Facebook.
-        testAPI();
         document.userId = response.authResponse.userID;
         document.accessToken = response.authResponse.accessToken;
         checkUserExists();

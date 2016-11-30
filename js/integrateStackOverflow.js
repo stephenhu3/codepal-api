@@ -48,7 +48,7 @@ function getAnswerBody(questionId,title,num){
 	$.getJSON(urlToAPI, function (data) {
 		for(i = 0; i < data.items.length; i++){
 			if(data.items[i].is_accepted == true){
-				$('#show-data').append(`<li><a value='hide/show' id='questionFont' href='#' class='question ${num}'> ${title} </a></li>`);
+				$('#show-data').append(`<li><a onclick='toggleAns(${num})' value='hide/show' id='questionFont' href='#' class='question ${num}'> ${title} </a></li>`);
 				$('#show-data').append(`<div class='hideAnswer answer${num}' style="display:none"> ${data.items[i].body} </div>`);
 				$('#show-data').append('</br>');
 			}
@@ -56,8 +56,6 @@ function getAnswerBody(questionId,title,num){
 	});
 }
 
-$(document).on('click','a',function(){
-    var myClasses = this.classList;
-    var numb = myClasses[1];
-    $('.answer' + numb).toggle();
-});
+function toggleAns(num){
+  $('.answer' + num).toggle();
+}

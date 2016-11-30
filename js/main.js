@@ -1,20 +1,3 @@
-
-var initializeMainPage = function(){
-    // Load HTML
-	$.ajax({
-            type: 'GET',
-            url: 'html/mainPage.html'
-        })
-        .done(function(data, textStatus, jqXHR) {
-			$("body").append(data);
-			})
-			.fail(function(jqXHR, textStatus, errorThrown) {
-				throw 'mainPage module could not be loaded.';
-			});
-}
-
-
-
 var initializeLogin = function(){
 	// This is called with the results from from FB.getLoginStatus().
 	function statusChangeCallback(response) {
@@ -39,12 +22,12 @@ var initializeLogin = function(){
 	window.fbAsyncInit = function() {
 		FB.init({
 			appId: '1228679720529744',
-			cookie: true, // enable cookies to allow the server to access 
+			cookie: true, // enable cookies to allow the server to access
 			// the session
 			xfbml: true, // parse social plugins on this page
 			version: 'v2.5' // use graph api version 2.5
 		});
-		// Now that we've initialized the JavaScript SDK, we call 
+		// Now that we've initialized the JavaScript SDK, we call
 		// FB.getLoginStatus().  This function gets the state of the
 		// person visiting this page and can return one of three states to
 		// the callback you provide.  They can be:
@@ -81,9 +64,7 @@ var initializeLogin = function(){
 		});
 	}
 }
-			
-initializeMainPage(this);
+
 initializeLogin();
 //Load GoldenLayout
 initializeGoldenLayout();
-			

@@ -68,6 +68,11 @@ img:hover{
     margin-bottom: 0 !important;
 }
 
+#navB{
+	font-family: 'Ubuntu Mono', monospace;
+    color: lightgreen;
+    font-size: 22px;
+}
 .row
 {
 	height:9% !important;

@@ -51,9 +51,12 @@ function getAnswerBody(questionId,title,num){
 	$.getJSON(urlToAPI, function (data) {
 		for(i = 0; i < data.items.length; i++){
 			if(data.items[i].is_accepted == true){
-				$('#show-data').append(`<li><a onclick='toggleAns(${num})' value='hide/show' id='questionFont' href='#' class='question ${num}'> ${title} </a></li>`);
+				$('#show-data').append(`<li><a onclick='toggleAns(${num})' value='hide/show' id='questionFont' href='#' class='count question ${num}'> ${title} </a></li>`);
 				$('#show-data').append(`<div class='hideAnswer answer${num}' style="display:none"> ${data.items[i].body} </div>`);
-				$('#show-data').append('</br>');
+				$('#show-data').append('<br>');
+        if($("#show-data .count").length == 10){
+          $('#show-data').append('<br><br><br>');
+        }
 			}
 		}
 	});

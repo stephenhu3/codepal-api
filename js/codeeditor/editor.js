@@ -29,7 +29,7 @@ CodeEditor.prototype._editor = function(options) {
 		sessions = {
 			// Stores aceEditor sessions to mimic tab funcitonality
 		};
-		currentSessions = {
+		cachedSessions = {
 			//
 		};
 
@@ -118,9 +118,6 @@ CodeEditor.prototype._editor = function(options) {
 			return null;
 		}
 		delete sessions[hash];
-		if (currentSessions[hash] !== 'undefined') {
-			delete currentSessions[hash];
-		}
 
 		var newHash = self.ui.restoreAdjacentTab(hash);
 		switchSession(newHash);
@@ -134,16 +131,13 @@ CodeEditor.prototype._editor = function(options) {
 	// @PARAM	: [savedSnippet]
 	// @RETURN	: the new session object
 	function createNewSession(savedSnippet){
-		if (savedSnippet && sessions[savedSnippet.hash] !== 'undefined') {
-			return; // saved snippet is already loaded in the editor
-		}
-
 		var lang, contents, hash, name;
 		if (savedSnippet) {
 			lang = savedSnippet.lang;
 			contents = savedSnippet.contents;
 			hash = savedSnippet.hash;
 			name = savedSnippet.name;
+			cacheSnippet(savedSnippet);
 		} else {
 			lang = self.ui.getCurrLang();
 			contents = '';
@@ -174,11 +168,9 @@ CodeEditor.prototype._editor = function(options) {
 			return;
 		}
 		saveSession(currHash);
-		delete currentSessions[currHash];
 
 		currHash = hash;
 		restoreSession(currHash);
-		currentSessions[currHash] = true;
 
 		var name = sessions[currHash].name === 'untitled'
 			? ''
@@ -213,6 +205,10 @@ CodeEditor.prototype._editor = function(options) {
 	// SESSIONS [Properties]
 	// --------------------------------------------------------
 
+	function getCachedSnippet(uuid) {
+		return cachedSessions[uuid];
+	}
+
 	function getCurrSessionObj() {
 		return {
 			hash		: currHash,
@@ -221,11 +217,11 @@ CodeEditor.prototype._editor = function(options) {
 	}
 
 	function isSessionCached(hash) {
-		return (sessions[hash] !== 'undefined');
+		return typeof(cachedSessions[hash]) !== 'undefined';
 	}
 
 	function isSessionLoaded(hash) {
-		return (currentSessions[hash] !== 'undefined');
+		return typeof(sessions[hash]) !== 'undefined';
 	}
 
 	// @SUMMARY	: generates a new session object to be stored in sessions { }
@@ -240,6 +236,15 @@ CodeEditor.prototype._editor = function(options) {
 
 	// PRIVATE
 	// -------------------------------
+
+	function cacheSnippet(savedSnippet) {
+		cachedSessions[savedSnippet.hash] = {
+			hash		: savedSnippet.hash,
+			lang		: savedSnippet.lang,
+			contents	: savedSnippet.contents,
+			name		: savedSnippet.name
+		};
+	}
 
 	// @SUMMARY	: restores the editor to a saved session, replacing text and language
 	// @PARAM	: [hash] the hash representing the session to restore to
@@ -281,6 +286,7 @@ CodeEditor.prototype._editor = function(options) {
 		getCurrSessionObj		: getCurrSessionObj,
 		isSessionCached			: isSessionCached,
 		isSessionLoaded			: isSessionLoaded,
+		getCachedSnippet		: getCachedSnippet,
 
 		aceLangMap				: aceLangMap
 	};

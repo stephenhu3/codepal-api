@@ -28,14 +28,15 @@ CodeEditor.prototype._ui = function(options) {
 		$cross.attr('data-snippetaction', 'delete');
 
 		$anchor.html(name)
-			.attr('data-snippetaction', 'load')
-			.append($cross);
+			.attr('data-snippetaction', 'load');
 
 		$snippet.attr('role', 'snippet')
 			.attr('data-uuid', uuid)
 			.attr('href', '#')
+			.append($cross)
 			.append($anchor);
 
+		bindSnippet($snippet);
 		$snippetContainer.append($snippet);
 
 		return $snippet;
@@ -166,6 +167,20 @@ CodeEditor.prototype._ui = function(options) {
 			.click(function() {
 				var $tab = $(this).closest('[data-tab="tab"]');
 				self.bindings.tabDelete($tab);
+			});
+	}
+
+	function bindSnippet($snippet) {
+		$snippet.find('[data-snippetaction="load"]')
+			.click(function() {
+				var $parent = $(this).closest('[role="snippet"]');
+				self.bindings.snippetGet($parent);
+			});
+
+		$snippet.find('[data-snippetaction="delete"]')
+			.click(function() {
+				var $parent = $(this).closest('[role="snippet"]');
+				self.bindings.snippetDelete($parent);
 			});
 	}
 

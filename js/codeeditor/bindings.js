@@ -65,10 +65,13 @@
  		var uuid = $snippet.attr('data-uuid');
  		
  		if (self.editor.isSessionLoaded(uuid)) {
+ 			self.editor.switchSession(uuid);
+ 			self.ui.switchActiveTab(uuid);
  			return;
  		}
  		if (self.editor.isSessionCached(uuid)) {
- 			self.editor.switchSession(uuid);
+ 			var cachedSession = self.editor.getCachedSnippet(uuid);
+ 			self.editor.createNewSession(cachedSession);
  			return;
  		}
 

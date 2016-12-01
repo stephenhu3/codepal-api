@@ -3,7 +3,7 @@ container.getElement().html(
 ' <div class="input-group">' +
 '   <input id="query1" type="text" class="form-control" style="width:70%;" placeholder="Search for..."></input>' +
 '   <span class="input-group-btn">' +
-'     <button id="soSearch" onclick="getQuestions()" class="btn btn-default" type="submit" style="right: 210px;">Go!</button>' +
+'     <button id="soSearch" onclick="getQuestions()" class="btn btn-default" type="submit" style="right: 210px; font-size: 20px;">Go!</button>' +
 '   </span>' +
 ' </div>' +
 ' <p id="listOfQ"></p>'+

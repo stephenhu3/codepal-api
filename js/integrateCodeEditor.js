@@ -33,9 +33,10 @@ var integrateCodeEditor = function (container){
 				$extension		: $('#codeeditor #extension'),
 			},
 			ui   		: {
-				$tabContainer	: $('#codeeditor #tabContainer'),
-				$langContainer	: $('#codeeditor #lang'),
-				$themeContainer	: $('#codeeditor #theme'),
+				$tabContainer		: $('#codeeditor #tabContainer'),
+				$langContainer		: $('#codeeditor #lang'),
+				$themeContainer		: $('#codeeditor #theme'),
+				$snippetContainer 	: $('#saved-snippets')
 			},
 			api			: {
 				userID			: window.userID

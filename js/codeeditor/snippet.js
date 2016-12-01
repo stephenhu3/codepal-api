@@ -94,11 +94,11 @@ CodeEditor.prototype._snippet = function() {
 				fail	: fail
 			};
 		
-		self.api.createSnippet(sessionObj, newName, callbacks);
+		self.api.updateSnippet(sessionObj, newName, callbacks);
 
 		function done() {
 			self.editor.updateSession(sessionObj.hash, sessionObj.hash, newName);
-			self.ui.updateTab(newName, sessionObj.hash, uuid);
+			self.ui.updateTab(newName, sessionObj.hash);
 			self.ui.updateSnippetName(newName, sessionObj.hash);
 			// TODO
 			alert('Updating snippet successful!');

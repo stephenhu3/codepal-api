@@ -60,7 +60,7 @@ CodeEditor.prototype._snippet = function() {
 	}
 
 	// @SUMMARY	: Gets all of the user's saved codesnippets and generates entries
-	// 			 	in saved snippet UI
+	// 	in saved snippet UI
 	function getAll() {
 		var callbacks = {
 			done : done,
@@ -68,12 +68,13 @@ CodeEditor.prototype._snippet = function() {
 		};
 		self.api.getAllSavedSnippets(callbacks);
 
-		function done() {
-			/*
-				foreach snippet IN response
-					self.ui.createAppendNewSnippet(uuid, newName);
-					addNewSnippetId();
-			*/
+		function done(data) {
+			var snippet;
+			for (var i = 0; i < data.length; i++) {
+				snippet = data[i];
+				addNewSnippetId(snippet.uuid);
+				self.ui.createAppendNewSnippet(snippet.uuid, snippet.title);
+			}
 			alert('Sucessfully got all saved snippets.');
 		}
 
@@ -86,7 +87,7 @@ CodeEditor.prototype._snippet = function() {
 	} 
 
 	// @SUMMARY	: Updates an existing saved snippet with contents, name and lang
-	//				and updates tab name accordingly
+	// 	and updates tab name accordingly
 	function update(newName) {
 		var sessionObj 	= self.editor.getCurrSessionObj(),
 			callbacks = {
@@ -110,14 +111,14 @@ CodeEditor.prototype._snippet = function() {
 	}
 
 	// @SUMMARY	: deletes an existing saved snippet with contents, name and lang
-	//				and deletes the tab accordingly, if session is loaded
+	// 	and deletes the tab accordingly, if session is loaded
 	function remove(uuid) {
 		var callbacks = {
 			done	: done,
 			fail	: fail
 		};
 
-		self.api.deleteSnippet(uuid);
+		self.api.deleteSnippet(uuid, callbacks);
 		
 		function done() {
 			self.editor.deleteSession(uuid);
@@ -156,7 +157,8 @@ CodeEditor.prototype._snippet = function() {
 		create			: create,
 		get 			: get,
 		getAll 			: getAll,
-		update			: update
+		update			: update,
+		remove			: remove
 	};
 
 };

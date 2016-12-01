@@ -9,30 +9,46 @@
 
 CodeEditor.prototype._ui = function(options) {
 
-	var self 			= this,
-		$tabContainer 	= options.$tabContainer,
-		$langContainer	= options.$langContainer,
-		$themeContainer	= options.$themeContainer,
-		$snippetContainer, // TODO
-		defn_tab 		= "<li class=''></li>",
-		defn_anchor		= "<a></a>",
-		defn_span		= "<span></span>",
-		defn_cross		= "<i class='glyphicon glyphicon-remove'></i>",
-		defn_snippet; // TODO
-
+	var self 				= this,
+		$tabContainer 		= options.$tabContainer,
+		$langContainer		= options.$langContainer,
+		$themeContainer		= options.$themeContainer,
+		$snippetContainer 	= options.$snippetContainer,
+		defn_li 			= "<li class=''></li>",
+		defn_anchor			= "<a></a>",
+		defn_span			= "<span></span>",
+		defn_cross			= "<i class='glyphicon glyphicon-remove'></i>";
 	
-	// TODO
+	
 	function createAppendNewSnippet(uuid, name) {
-		// generate new snippet defn
-		// assign uuid as a data attribute to top level container
-		// .html() span for name
-		// append to $snippetContainer
+		var $snippet	= $(defn_li),
+			$anchor		= $(defn_anchor),
+			$cross		= $(defn_cross);
+
+		$cross.attr('data-snippetaction', 'delete');
+
+		$anchor.html(name)
+			.attr('data-snippetaction', 'load')
+			.append($cross);
+
+		$snippet.attr('role', 'snippet')
+			.attr('data-uuid', uuid)
+			.attr('href', '#')
+			.append($anchor);
+
+		$snippetContainer.append($snippet);
+
+		return $snippet;
 	}
 
 	// TODO
 	function updateSnippetName(newName, uuid) {
-		$snippetContainer.find('[data-uuid="' + uuid + '"]');
-		// .html() span for newName
+		var $anchor = $snippetContainer
+			.find('[data-uuid="' + uuid + '"]')
+			.children('[data-snippetaction="load"]');
+
+		$anchor.html(newName);
+		return $anchor;
 	}
 
 	// TODO
@@ -55,7 +71,9 @@ CodeEditor.prototype._ui = function(options) {
 			$name = $tab.find('[data-tab="name"]');
 
 		$name.html(name);
-		$tab.attr('data-editorhash', newHash);
+		if (hash !== newHash) {
+			$tab.attr('data-editorhash', newHash);
+		}
 		return $tab;
 	}
 
@@ -156,7 +174,7 @@ CodeEditor.prototype._ui = function(options) {
 	// @PARAM	: [name] optional, the nam of the tab
 	// @RETURN	: the jQuery tab element 
 	function createTab(hash, name) {
-		var $tab 	= $(defn_tab),
+		var $tab 	= $(defn_li),
 			$anchor	= $(defn_anchor),
 			$cross	= $(defn_cross),
 			$name	= $(defn_span),

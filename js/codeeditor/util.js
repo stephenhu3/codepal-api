@@ -76,7 +76,6 @@ CodeEditor.prototype._util = function(options) {
       myObserver.observe (this, obsConfig);
     });
     function mutationHandler(mutationRecords) {
-      console.info('mutationHandler: ');
       resizeEditor($('.lm_content').height() - 100);
     }
   }

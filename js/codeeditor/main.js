@@ -18,4 +18,5 @@ function CodeEditor(options) {
 	this.ui.setLang(options.lang);
 	this.ui.setTheme(options.theme);
 	this.execute.initReplClient(options.lang);
+	this.snippet.getAll();
 }

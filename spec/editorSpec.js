@@ -6,28 +6,35 @@ describe("editor", function() {
 		ace.config.set('basePath', 'ace');
 		this.result = fixture.load('fixture.html');
 
-		var codeEditor = new CodeEditor({
-	        eleId       : 'editor',
-	        lang        : 'Node.js',
-	        execute     : {
-	            $outConsole     : $('#outConsole'),
-	        },
-	        editor      : {
-	            $filename       : $('#filename'),
-	            $extension      : $('#extension'),
-	            theme           : 'monokai'
-	        },
-	        ui          : {
-	            $tabContainer   : $('#tabContainer'),
-	            $langContainer  : $('#lang'),
-	            $themeContainer	: $('#theme')
-	        }
-	    });
+		var defaultLang = 'Node.js',
+			defaultTheme = 'monokai';
+
+		codeEditor = new CodeEditor({
+			eleId		: 'editor',
+			lang 		: defaultLang,
+			theme		: defaultTheme,
+			execute		: {
+				$outConsole		: $('#codeeditor #outConsole'),
+			},
+			util		: {
+				$filename 		: $('#codeeditor #filename'),
+				$extension		: $('#codeeditor #extension'),
+			},
+			ui   		: {
+				$tabContainer		: $('#codeeditor #tabContainer'),
+				$langContainer		: $('#codeeditor #lang'),
+				$themeContainer		: $('#codeeditor #theme'),
+				$snippetContainer 	: $('#saved-snippets')
+			},
+			api			: {
+				userID			: window.userID
+			}
+		});
 	    editorModule = codeEditor.editor;
 	});
 
 	it('initializes the editor instance correctly', function() {
-		var editorBundle = editorModule.initEditor('editor', 'JavaScript');
+		var editorBundle = editorModule.initEditor('editor', 'Node.js', 'monokai');
 
 		expect(Object.keys(editorBundle.sessions).length).toBe(1);
 		expect($('#editor')).not.toBeEmpty();

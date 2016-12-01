@@ -92,21 +92,28 @@
         this.result = fixture.load('fixture.html');
         jasmine.Ajax.install();
 
-        var codeEditor = new CodeEditor({
-            eleId: 'editor',
-            lang: 'Node.js',
-            execute: {
-                $outConsole: $('#outConsole'),                
+        var defaultLang = 'Node.js',
+            defaultTheme = 'monokai';
+
+        codeEditor = new CodeEditor({
+            eleId       : 'editor',
+            lang        : defaultLang,
+            theme       : defaultTheme,
+            execute     : {
+                $outConsole     : $('#codeeditor #outConsole'),
             },
-            editor: {
-                $filename: $('#filename'),
-                $extension: $('#extension'),
-                theme: 'monokai'
+            util        : {
+                $filename       : $('#codeeditor #filename'),
+                $extension      : $('#codeeditor #extension'),
             },
-            ui: {
-                $tabContainer: $('#tabContainer'),
-                $langContainer: $('#lang'),
-                $themeContainer : $('#theme')
+            ui          : {
+                $tabContainer       : $('#codeeditor #tabContainer'),
+                $langContainer      : $('#codeeditor #lang'),
+                $themeContainer     : $('#codeeditor #theme'),
+                $snippetContainer   : $('#saved-snippets')
+            },
+            api         : {
+                userID          : window.userID
             }
         });
  

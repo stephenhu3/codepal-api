@@ -29,6 +29,7 @@ module.exports = function(config) {
         'js/codeeditor/editor.js',
         'js/codeeditor/api.js',
         'js/codeeditor/snippet.js',
+        'js/codeeditor/bindings.js',
     
         // Fixtures
         'spec/fixtures/*',
@@ -50,7 +51,8 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
         '**/*.html' : ['html2js'],
-        'js/*.js' : 'coverage'
+        'js/*.js' : 'coverage',
+        'js/codeeditor/*.js' : 'coverage'
     },
 
 

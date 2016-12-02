@@ -99,6 +99,7 @@
             eleId       : 'editor',
             lang        : defaultLang,
             theme       : defaultTheme,
+            omitCallout : true,
             execute     : {
                 $outConsole     : $('#codeeditor #outConsole'),
             },

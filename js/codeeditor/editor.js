@@ -235,9 +235,7 @@ CodeEditor.prototype._editor = function(options) {
 		};
 	}
 
-	// PRIVATE
-	// -------------------------------
-
+	// @SUMMARY	: saves snippet info in arr to prevent repeated callouts
 	function cacheSnippet(savedSnippet) {
 		cachedSessions[savedSnippet.hash] = {
 			hash		: savedSnippet.hash,
@@ -246,6 +244,9 @@ CodeEditor.prototype._editor = function(options) {
 			name		: savedSnippet.name
 		};
 	}
+
+	// PRIVATE
+	// -------------------------------
 
 	// @SUMMARY	: restores the editor to a saved session, replacing text and language
 	// @PARAM	: [hash] the hash representing the session to restore to
@@ -288,6 +289,7 @@ CodeEditor.prototype._editor = function(options) {
 		isSessionCached			: isSessionCached,
 		isSessionLoaded			: isSessionLoaded,
 		getCachedSnippet		: getCachedSnippet,
+		cacheSnippet			: cacheSnippet,
 
 		aceLangMap				: aceLangMap
 	};

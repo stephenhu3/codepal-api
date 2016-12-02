@@ -186,7 +186,7 @@ CodeEditor.prototype._editor = function(options) {
     // @PARAM	: [newHash]
     // @PARAM	: [newName]
 	function updateSession(hash, newHash, newName) {
-		if (sessions[hash] === 'undefined') {
+		if (typeof(sessions[hash]) === 'undefined') {
 			return;
 		}
 		var sessionObj = sessions[hash];
@@ -201,6 +201,10 @@ CodeEditor.prototype._editor = function(options) {
 		if (currHash == hash) { // update curr hash?
 			currHash = newHash;
 		}
+		return {
+			hash	: newHash,
+			sessionObj	: sessions[newHash]
+		};
 	}
 
 	// SESSIONS [Properties]

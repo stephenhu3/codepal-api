@@ -13,6 +13,7 @@ describe("editor", function() {
 			eleId		: 'editor',
 			lang 		: defaultLang,
 			theme		: defaultTheme,
+			omitCallout	: true,
 			execute		: {
 				$outConsole		: $('#codeeditor #outConsole'),
 			},
@@ -53,8 +54,8 @@ describe("editor", function() {
 	});
 
 	it('is able to change language syntax highlighting', function() {
-		var supportedLanguages = ['C#', 'C++', 'Haskell', 'Java', 'JavaScript'
-			, 'Objective-C' , 'Perl', 'Pascal', 'Python', 'JavaScript'];
+		var supportedLanguages = ['C', 'C#', 'C++', 'C++11', 'Go'
+			, 'Java' , 'Node.js', 'Python', 'Python 3', 'Ruby'];
 
 		for (var i = 0; i < supportedLanguages.length; i++) {
 			var setLang = editorModule.setEditorLang(supportedLanguages[i]);
@@ -85,7 +86,7 @@ describe("editor", function() {
 	it('is able to switch between different existing sessions', function() {
 		var session1 			= editorModule.createNewSession(),
 			session1Contents 	= 'Test Str',
-			session1Lang		= 'JavaScript';
+			session1Lang		= 'Node.js';
 		editorModule.setEditorText(session1Contents);
 		editorModule.setEditorLang(session1Lang);
 

@@ -50,6 +50,7 @@ CodeEditor.prototype._editor = function(options) {
 		setEditorLang(lang);
 		aceEditor.setAutoScrollEditorIntoView(true);
 		aceEditor.getSession().setTabSize(4);
+		aceEditor.$blockScrolling = Infinity;
 
 		aceEditor.setOptions({
 			maxLines: 25

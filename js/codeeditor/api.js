@@ -73,7 +73,7 @@ CodeEditor.prototype._api = function(options) {
 				type 		: 'POST',
 				dataType	: 'json',
 				data 		: JSON.stringify({
-					uuid		: snippetObj.hash,
+					uuid		: snippetObj.uuid,
 					title		: newName,
 					userId		: userId,
 					language	: snippetObj.lang,

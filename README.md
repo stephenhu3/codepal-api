@@ -1,9 +1,7 @@
-# codepal
+# CodePal
 http://codepal.ca/
 
-Branches
-
-MASTER -> Only push to this after each project milestone (i.e. prototype 1)
-DEVELOPMENT -> Only merge to this after each stable integration
-
-For each separate development task, branch off of development. These ad-hoc branches can be pushed to origin but should be deleted once it has been successfully merged back into development.
+**Branches**
+- [gh-pages](https://github.com/stephenhu3/codepal/tree/gh-pages): installation guide, source and documentation
+- [api](https://github.com/stephenhu3/codepal/tree/api): REST API documentation
+- [documents](https://github.com/stephenhu3/codepal/tree/documents): Submission PDFs

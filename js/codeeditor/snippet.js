@@ -35,7 +35,7 @@ CodeEditor.prototype._snippet = function() {
 		}
 
 		function fail() {
-			alert('Something failed when creating a snippet...');
+			alert("We're sorry, we can't create the snippet at the moment. Please try again.");
 		}
 	}
 
@@ -51,11 +51,9 @@ CodeEditor.prototype._snippet = function() {
 		function done(data) {
 			sessionObj = self.api.convertResponseToSessionObj(data);
 			self.editor.createNewSession(sessionObj);
-			alert('Snippet successfully retrieved and restored.');
 		}
 		function fail() {
-			// TODO 
-			alert('Snippet GET failed...');
+			alert("We're sorry, we can't create fetch snippet at the moment. Please try again.");
 		}
 	}
 
@@ -75,14 +73,10 @@ CodeEditor.prototype._snippet = function() {
 				addNewSnippetId(snippet.uuid);
 				self.ui.createAppendNewSnippet(snippet.uuid, snippet.title);
 			}
-			alert('Sucessfully got all saved snippets.');
 		}
 
 		function fail() {
-			// TODO
-			// for UI that holds saved snippets, change text to show some 
-			// sort of error message
-			alert('Error in getting all saved snippets..');
+			alert("We're sorry, we can't create your snippets at the moment. Please try again.");
 		}
 	} 
 
@@ -97,16 +91,18 @@ CodeEditor.prototype._snippet = function() {
 		
 		self.api.updateSnippet(sessionObj, newName, callbacks);
 
-		function done() {
-			self.editor.updateSession(sessionObj.hash, sessionObj.hash, newName);
-			self.ui.updateTab(newName, sessionObj.hash);
-			self.ui.updateSnippetName(newName, sessionObj.hash);
-			// TODO
-			alert('Updating snippet successful!');
+		function done(data) {
+			var snippetObj = self.api.convertResponseToSessionObj(data);
+
+			self.editor.updateSession(snippetObj.hash, snippetObj.hash, snippetObj.name);
+			self.ui.updateTab(snippetObj.name, snippetObj.hash);
+			self.ui.updateSnippetName(snippetObj.name, snippetObj.hash);
+			self.editor.cacheSnippet(snippetObj);
+			alert('Your snippet has been successfully updated!');
 		}
 
 		function fail() {
-			alert('Error in updating code snippet...');
+			alert("We're sorry, we can't update the snippet at the moment. Please try again.");
 		}
 	}
 
@@ -124,12 +120,11 @@ CodeEditor.prototype._snippet = function() {
 			self.editor.deleteSession(uuid);
 			self.ui.deleteSnippet(deleteSnippet);
 			removeSnippetId(uuid);
-			// TODO
-			alert('deletion successful!');
+			alert('Your snippet was successfully deleted.');
 		}
 
 		function fail() {
-			alert('Error in deleting code snippet...');
+			alert("We're sorry, we can't delete the snippet at the moment. Please try again.");
 		}
 	}
 

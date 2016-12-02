@@ -24,6 +24,7 @@ CodeEditor.prototype._ui = function(options) {
 		$saveModal.modal('hide');
 	}
 	
+	// @SUMMARY	: appends and binds and new snippet ele to the $snippetContainer
 	function createAppendNewSnippet(uuid, name) {
 		var $snippet	= $(defn_li),
 			$anchor		= $(defn_anchor),
@@ -43,10 +44,10 @@ CodeEditor.prototype._ui = function(options) {
 		bindSnippet($snippet);
 		$snippetContainer.append($snippet);
 
-		return $snippet;
+		return $snippetContainer;
 	}
 
-	// TODO
+	// @SUMMARY	: changes name in snippet ui to newName
 	function updateSnippetName(newName, uuid) {
 		var $anchor = $snippetContainer
 			.find('[data-uuid="' + uuid + '"]')
@@ -56,9 +57,9 @@ CodeEditor.prototype._ui = function(options) {
 		return $anchor;
 	}
 
-	// TODO
+	// @SUMMARY	: removes snippet li ele from snippet container
 	function deleteSnippet(uuid) {
-		var $snippetToDel = $tabContainer.find('[data-uuid="' + uuid + '"]');
+		var $snippetToDel = $snippetContainer.find('[data-uuid="' + uuid + '"]');
 		if ($snippetToDel.length === 1) {
 			$snippetToDel.remove();
 			return $snippetContainer;

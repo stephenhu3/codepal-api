@@ -25,7 +25,8 @@
                 $tabContainer       : $('#codeeditor #tabContainer'),
                 $langContainer      : $('#codeeditor #lang'),
                 $themeContainer     : $('#codeeditor #theme'),
-                $snippetContainer   : $('#saved-snippets')
+                $snippetContainer   : $('#saved-snippets'),
+                $saveModal          : $('#fileModal')
             },
             api         : {
                 userID          : window.userID

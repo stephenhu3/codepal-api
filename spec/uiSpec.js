@@ -78,6 +78,54 @@ describe("ui", function() {
 		expect($tabDeleted).not.toExist();
 	});
 
+	it('updates a tab', function() {
+		var hash = Date.now(),
+			newHash = Date.now() + 1,
+			newName = 'testname',
+			$tabContainer = uiModule.generateAndAppendNewTab(hash);
+
+		uiModule.updateTab(newName, hash, newHash);
+		$updatedTab = $tabContainer.find('[data-editorhash="' + newHash + '"]');
+		expect($updatedTab).toExist();
+	});
+
+	it('generates and appends a new snippet', function() {
+		var uuid = Date.now(),
+			name = 'testname';
+
+		$snippetContainer = uiModule.createAppendNewSnippet(uuid, name);
+		var $addedSnippet = $snippetContainer.find('[data-uuid="' + uuid + '"]');
+		expect($addedSnippet).toExist();
+
+		var $load = $addedSnippet.find('[data-snippetaction="load"]'),
+			$delete = $addedSnippet.find('[data-snippetaction="delete"]');
+
+		expect($load).toExist();
+		expect($delete).toExist();
+	});
+
+	it('deletes a snippet', function() {
+		var uuid = Date.now(),
+			name = 'testname';
+			$snippetContainer = uiModule.createAppendNewSnippet(uuid, name);
+
+		$snippetContainer = uiModule.deleteSnippet(uuid);
+		$deletedSnippet = $snippetContainer.find('[data-uuid="' + uuid + '"]');
+		expect($deletedSnippet).not.toExist();
+	});
+
+	it('updates a snippet', function() {
+		var uuid = Date.now(),
+			name = 'testname',
+			newName = 'newname',
+			$snippetContainer = uiModule.createAppendNewSnippet(uuid, name);
+
+		uiModule.updateSnippetName(newName, uuid);
+		var $updatedSnippet = $snippetContainer.find('[data-uuid="' + uuid + '"]'),
+			$anchor = $updatedSnippet.children('[data-snippetaction="load"]');
+		expect($anchor.html()).toBe(newName);
+	});
+
 	describe('tab interaction', function() {
 
 		var hash_tab1 = Date.now(),
@@ -85,8 +133,8 @@ describe("ui", function() {
 			$tabContainer;
 
 		beforeEach(function() {
-			$tabContainer = uiModule.generateAndAppendNewTab(hash_tab1);
-			uiModule.generateAndAppendNewTab(hash_tab2);
+			uiModule.generateAndAppendNewTab(hash_tab1);
+			$tabContainer = uiModule.generateAndAppendNewTab(hash_tab2);
 		});
 
 		it('restores a tab adjacent to another one', function() {

@@ -35,6 +35,66 @@ describe("editor", function() {
 	    editorModule = codeEditor.editor;
 	});
 
+	it('updates an existing session', function() {
+		var newSesh;
+
+		// doesn't exist
+		newSesh = editorModule.updateSession('test', 'test', 'test');
+		expect(newSesh).toBe(undefined);
+
+		// exists, change name
+		var oldSesh = editorModule.createNewSession(),
+			newHash = 'newHash',
+			newName = 'newName';
+		newSesh = editorModule.updateSession(oldSesh.hash, newHash, newName);
+		expect(newSesh.sessionObj.name).toBe(newName);
+		expect(newSesh.hash).toBe(newHash);
+	});
+
+	it('caches a snippet', function() {
+		var savedSnippet = {
+			hash		: 'testhash',
+			lang		: 'testlang',
+			contents	: 'testcontent',
+			name		: 'testname'
+		};
+		editorModule.cacheSnippet(savedSnippet);
+		var cachedSnippet = editorModule.getCachedSnippet(savedSnippet.hash);
+		expect(cachedSnippet).toEqual(savedSnippet);
+	});
+
+	it('determines the state of a session', function() {
+		var savedSnippet = {
+			hash		: 'testhash',
+			lang		: 'Node.js',
+			contents	: 'testcontent',
+			name		: 'testname'
+		};
+		expect(editorModule.isSessionCached(savedSnippet.hash)).toBe(false);
+		expect(editorModule.isSessionLoaded(savedSnippet.hash)).toBe(false);
+
+		editorModule.cacheSnippet(savedSnippet);
+		expect(editorModule.isSessionCached(savedSnippet.hash)).toBe(true);
+
+		editorModule.createNewSession(savedSnippet);
+		expect(editorModule.isSessionLoaded(savedSnippet.hash)).toBe(true);		
+	});
+
+	it('returns the current session', function() {
+		var savedSnippet = {
+			hash		: 'testhash',
+			lang		: 'Node.js',
+			contents	: 'testcontent',
+			name		: 'testname'
+		};
+		editorModule.createNewSession(savedSnippet);
+		var currSessionObj = editorModule.getCurrSessionObj();
+
+		expect(currSessionObj.hash).toBe(savedSnippet.hash);
+		expect(currSessionObj.sessionObj.name).toBe(savedSnippet.name);
+		expect(currSessionObj.sessionObj.lang).toBe(savedSnippet.lang);
+	});
+
 	it('initializes the editor instance correctly', function() {
 		var editorBundle = editorModule.initEditor('editor', 'Node.js', 'monokai');
 

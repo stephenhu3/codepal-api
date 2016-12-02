@@ -14,11 +14,15 @@ CodeEditor.prototype._ui = function(options) {
 		$langContainer		= options.$langContainer,
 		$themeContainer		= options.$themeContainer,
 		$snippetContainer 	= options.$snippetContainer,
+		$saveModal			= options.$saveModal,
 		defn_li 			= "<li class=''></li>",
 		defn_anchor			= "<a></a>",
 		defn_span			= "<span></span>",
 		defn_cross			= "<i class='glyphicon glyphicon-remove'></i>";
 	
+	function closeSaveModal() {
+		$saveModal.modal('hide');
+	}
 	
 	function createAppendNewSnippet(uuid, name) {
 		var $snippet	= $(defn_li),
@@ -225,6 +229,8 @@ CodeEditor.prototype._ui = function(options) {
 	}
 
 	return {
+		closeSaveModal			: closeSaveModal,
+
 		setTheme				: setTheme,
 		setLang					: setLang,
 		getCurrLang				: getCurrLang,

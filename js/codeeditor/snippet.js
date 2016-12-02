@@ -31,6 +31,7 @@ CodeEditor.prototype._snippet = function() {
 			self.editor.updateSession(sessionObj.hash, uuid, newName);
 			self.ui.updateTab(newName, sessionObj.hash, uuid);
 			self.ui.createAppendNewSnippet(uuid, newName);
+			self.ui.closeSaveModal();
 			alert('Snippet successfully created.');
 		}
 
@@ -98,6 +99,7 @@ CodeEditor.prototype._snippet = function() {
 			self.ui.updateTab(snippetObj.name, snippetObj.hash);
 			self.ui.updateSnippetName(snippetObj.name, snippetObj.hash);
 			self.editor.cacheSnippet(snippetObj);
+			self.ui.closeSaveModal();
 			alert('Your snippet has been successfully updated!');
 		}
 

@@ -35,7 +35,7 @@
 				<i class="fa fa-save"></i> Save
 			</button>
 			<button data-toggle="modal" data-target="#configModal" type="button" class="pull-right" id="configBtn">
-				<i class="fa fa-cog"></i> Settings
+				<i class="fa fa-cog"></i> Themes
 			</button>
 		</div>
 	</div>
@@ -60,6 +60,14 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
+						<div class="col-md-12">
+							Your current tab's contents, language, and chosen filename will be 
+							saved to your account. If this tab has already been saved, then 
+							the information will be updated.
+							<br/><br/>
+						</div>
+					</div>
+					<div class="row">
 						<div class="col-md-6">Filename</div>
 						<div class="col-md-6">
 							<input class="form=control" id="filename" type="text" />
@@ -68,7 +76,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" id="downloadBtn"><i class="fa fa-download"></i> Download</button>
+					<button type="button" id="downloadBtn"><i class="fa fa-download"></i> Download Local Copy</button>
 					<button type="button" id="saveBtn"><i class="fa fa-save"></i> Save</button>
 				</div>
 			</div>
@@ -85,20 +93,10 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="configModalLabel">Custom Settings</h4>
+					<h4 class="modal-title" id="configModalLabel">Theme Settings</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-6">Tab Size</div>
-						<div class="col-md-6">
-							<input type="number" class="form-control" />
-						</div>
-						
-						<div class="col-md-6">Font Size</div>
-						<div class="col-md-6">
-							<input type="number" class="form-control" />
-						</div>
-
 						<div class="col-md-6">Theme</div>
 						<div class="col-md-6">
 							<select class="form-control" name="theme" id="theme">
@@ -141,11 +139,6 @@
 				            </select>
 						</div>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<button id="configSave" type="button" class="btn btn-primary">
-						<i class="fa fa-save"></i>  Save as Default
-					</button>
 				</div>
 			</div>
 		</div>

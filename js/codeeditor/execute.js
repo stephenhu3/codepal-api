@@ -1,6 +1,6 @@
 /* CodeEditor
  * Execute Module
- * Compiles and run code using HackerEarth REST API
+ * Compiles and run code using Repl.it REST API
  */ 
 CodeEditor.prototype._execute = function(options) {
 

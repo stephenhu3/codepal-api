@@ -23,20 +23,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">codePal</a>
+          <a class="navbar-brand" id="navB" href="#">CodePal</a>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Menu <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">About [add about page]</a></li>
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-              <li class="divider"></li>
-              <li><a href="#">One more separated link</a></li>
+            <a href="#" class="dropdown-toggle" id="navB" data-toggle="dropdown" aria-expanded="false"> Saved Snippets <b class="caret"></b></a>
+            <ul id="saved-snippets" class="dropdown-menu">
             </ul>
             </li>
           </ul>
@@ -69,9 +62,6 @@
     <!-- google API for youtube-->
     <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=init"></script>
 
-    <!-- Facebook Logout -->
-    <script type="text/javascript" src="js/fbLogout.js"></script>
-
 	<!-- Code Editor Scripts -->
 	<script type="text/javascript" src="js/codeeditor/main.js"></script>
 	<script type="text/javascript" src="js/codeeditor/util.js"></script>
@@ -95,70 +85,8 @@
 	<!-- google API for youtube-->
 	<script type="text/javascript" src="https://apis.google.com/js/client.js?onload=init"></script>
 
-<!--OUR FACEBOOK LOGIN-->
- <script>
-        // This is called with the results from from FB.getLoginStatus().
-  		var pageUrl = 'http://codepal.ca/';
-        function statusChangeCallback(response) {
-            console.log('statusChangeCallback');
-            console.log(response);
-            // The response object is returned with a status field that lets the
-            // app know the current login status of the person.
-            // Full docs on the response object can be found in the documentation
-            // for FB.getLoginStatus().
-            if (response.status !== 'connected') {
-                // Logged into your app and Facebook.
-                FB.logout();
-                window.location.assign(pageUrl);
-            }
-        }
-        // This function is called when someone finishes with the Login
-        // Button.  See the onlogin handler attached to it in the sample
-        // code below.
-        function checkLoginState() {
-            FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
-        }
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '727716004048263',
-                cookie: true, // enable cookies to allow the server to access
-                // the session
-                xfbml: true, // parse social plugins on this page
-                version: 'v2.5' // use graph api version 2.5
-            });
-            // Now that we've initialized the JavaScript SDK, we call
-            // FB.getLoginStatus().  This function gets the state of the
-            // person visiting this page and can return one of three states to
-            // the callback you provide.  They can be:
-            //
-            // 1. Logged into your app ('connected')
-            // 2. Logged into Facebook, but not your app ('not_authorized')
-            // 3. Not logged into Facebook and can't tell if they are logged into
-            //    your app or not.
-            //
-            // These three cases are handled in the callback function.
-            FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
-        };
-        // Load the SDK asynchronously
-        (function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=727716004048263";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-        // Here we run a very simple test of the Graph API after login is
-        // successful.  See statusChangeCallback() for when this call is made.
-        function testAPI() {
-            console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me/permissions', function(response) {
+   <!-- Facebook Logout -->
+    <script type="text/javascript" src="js/fbLogout.js"></script>
 
-            });
-        }
-  </script>
 </body>
 </html>

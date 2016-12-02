@@ -1,5 +1,6 @@
 // This is called with the results from from FB.getLoginStatus().
 var pageUrl = 'http://codepal.ca/';
+
 function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -11,7 +12,11 @@ function statusChangeCallback(response) {
         // Logged into your app and Facebook.
         FB.logout();
         window.location.assign(pageUrl);
-    } 
+    }
+    else{
+        document.userId = response.authResponse.userID;
+        document.accessToken = response.authResponse.accessToken;
+    }
 }
 // This function is called when someone finishes with the Login
 // Button.  See the onlogin handler attached to it in the sample

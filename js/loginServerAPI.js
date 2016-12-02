@@ -75,9 +75,3 @@ function unsubmitUsername(){
     FB.logout();
     window.location.assign(pageUrl);
 }
-
-$(document).ready(function(){
-    $("#myBtn").click(function(){
-        $("#myModal").modal();
-    });
-});

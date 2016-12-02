@@ -11,7 +11,7 @@ CodeEditor.prototype._api = function(options) {
 
 	var self 	= this,
 		domain	= 'http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080',
-		userId = "10154533296490027" // for testing
+		userId = "10154533296490027"; // for testing
 		// userId 	= options.userId; // window.userId after login
 
 	function getAllSavedSnippets(callbacks) {
@@ -73,7 +73,7 @@ CodeEditor.prototype._api = function(options) {
 				type 		: 'POST',
 				dataType	: 'json',
 				data 		: JSON.stringify({
-					uuid		: snippetObj.hash,
+					uuid		: snippetObj.uuid,
 					title		: newName,
 					userId		: userId,
 					language	: snippetObj.lang,
@@ -104,12 +104,13 @@ CodeEditor.prototype._api = function(options) {
 	// @PARAM	: [data]
 	// @RETURN	: {hash: uuid, sessionObj: {}}
 	function convertResponseToSessionObj(data) {
-		var decodedContent 	= atob(data.content),
-			session 		= new ace.EditSession(decodedContent, 
-				self.editor.aceLangMap[data.lang]);
-
-		return self.editor.generateSessionObject(session, data.lang, 
-			data.name);
+		var decodedContent 	= atob(data.content);
+		return {
+			hash		: data.uuid,
+			contents	: decodedContent,
+			lang		: data.language,
+			name		: data.title
+		};
 	}
 
 	// PRIVATE

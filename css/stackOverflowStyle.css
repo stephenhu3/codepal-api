@@ -12,3 +12,12 @@
   margin: 10px 0px 10px 20px;
   color: grey;
 }
+
+button#soSearch{
+	right: 210px;
+    background: transparent;
+    border: transparent;
+    color: lightgreen;
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 20px;
+}

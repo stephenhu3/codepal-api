@@ -6,28 +6,37 @@ describe("editor", function() {
 		ace.config.set('basePath', 'ace');
 		this.result = fixture.load('fixture.html');
 
-		var codeEditor = new CodeEditor({
-	        eleId       : 'editor',
-	        lang        : 'Node.js',
-	        execute     : {
-	            $outConsole     : $('#outConsole'),
-	        },
-	        editor      : {
-	            $filename       : $('#filename'),
-	            $extension      : $('#extension'),
-	            theme           : 'monokai'
-	        },
-	        ui          : {
-	            $tabContainer   : $('#tabContainer'),
-	            $langContainer  : $('#lang'),
-	            $themeContainer	: $('#theme')
-	        }
-	    });
+		var defaultLang = 'Node.js',
+			defaultTheme = 'monokai';
+
+		codeEditor = new CodeEditor({
+			eleId		: 'editor',
+			lang 		: defaultLang,
+			theme		: defaultTheme,
+			omitCallout	: true,
+			execute		: {
+				$outConsole		: $('#codeeditor #outConsole'),
+			},
+			util		: {
+				$filename 		: $('#codeeditor #filename'),
+				$extension		: $('#codeeditor #extension'),
+			},
+			ui   		: {
+				$tabContainer		: $('#codeeditor #tabContainer'),
+				$langContainer		: $('#codeeditor #lang'),
+				$themeContainer		: $('#codeeditor #theme'),
+				$snippetContainer 	: $('#saved-snippets'),
+                $saveModal          : $('#fileModal')
+			},
+			api			: {
+				userID			: window.userID
+			}
+		});
 	    editorModule = codeEditor.editor;
 	});
 
 	it('initializes the editor instance correctly', function() {
-		var editorBundle = editorModule.initEditor('editor', 'JavaScript');
+		var editorBundle = editorModule.initEditor('editor', 'Node.js', 'monokai');
 
 		expect(Object.keys(editorBundle.sessions).length).toBe(1);
 		expect($('#editor')).not.toBeEmpty();
@@ -46,8 +55,8 @@ describe("editor", function() {
 	});
 
 	it('is able to change language syntax highlighting', function() {
-		var supportedLanguages = ['C#', 'C++', 'Haskell', 'Java', 'JavaScript'
-			, 'Objective-C' , 'Perl', 'Pascal', 'Python', 'JavaScript'];
+		var supportedLanguages = ['C', 'C#', 'C++', 'C++11', 'Go'
+			, 'Java' , 'Node.js', 'Python', 'Python 3', 'Ruby'];
 
 		for (var i = 0; i < supportedLanguages.length; i++) {
 			var setLang = editorModule.setEditorLang(supportedLanguages[i]);
@@ -78,7 +87,7 @@ describe("editor", function() {
 	it('is able to switch between different existing sessions', function() {
 		var session1 			= editorModule.createNewSession(),
 			session1Contents 	= 'Test Str',
-			session1Lang		= 'JavaScript';
+			session1Lang		= 'Node.js';
 		editorModule.setEditorText(session1Contents);
 		editorModule.setEditorLang(session1Lang);
 

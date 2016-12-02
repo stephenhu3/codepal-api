@@ -6,23 +6,32 @@ describe("ui", function() {
 		ace.config.set('basePath', 'ace');
 		this.result = fixture.load('fixture.html');
 
-		var codeEditor = new CodeEditor({
-	        eleId       : 'editor',
-	        lang        : 'Node.js',
-	        execute     : {
-	            $outConsole     : $('#outConsole'),
-	        },
-	        editor      : {
-	            $filename       : $('#filename'),
-	            $extension      : $('#extension'),
-	            theme           : 'monokai'
-	        },
-	        ui          : {
-	            $tabContainer   : $('#tabContainer'),
-	            $langContainer  : $('#lang'),
-	            $themeContainer	: $('#theme')
-	        }
-	    });
+		var defaultLang = 'Node.js',
+			defaultTheme = 'monokai';
+
+		codeEditor = new CodeEditor({
+			eleId		: 'editor',
+			lang 		: defaultLang,
+			theme		: defaultTheme,
+			omitCallout : true,
+			execute		: {
+				$outConsole		: $('#codeeditor #outConsole'),
+			},
+			util		: {
+				$filename 		: $('#codeeditor #filename'),
+				$extension		: $('#codeeditor #extension'),
+			},
+			ui   		: {
+				$tabContainer		: $('#codeeditor #tabContainer'),
+				$langContainer		: $('#codeeditor #lang'),
+				$themeContainer		: $('#codeeditor #theme'),
+				$snippetContainer 	: $('#saved-snippets'),
+                $saveModal          : $('#fileModal')
+			},
+			api			: {
+				userID			: window.userID
+			}
+		});
 	    uiModule = codeEditor.ui;
 	});
 

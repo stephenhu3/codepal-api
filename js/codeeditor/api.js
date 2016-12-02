@@ -11,8 +11,8 @@ CodeEditor.prototype._api = function(options) {
 
 	var self 	= this,
 		domain	= 'http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080',
-		userId = "10154533296490027"; // for testing
-		// userId 	= options.userId; // window.userId after login
+		userId 	= options.userId; // window.userId after login
+		// userId = "10154533296490027"; // for testing
 
 	function getAllSavedSnippets(callbacks) {
 		performCallout(

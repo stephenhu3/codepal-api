@@ -70,7 +70,6 @@ Running Tests
 3. To run tests, go to root and run `karma start karma.conf.js` or `karma start youtubeKarma.conf.js` (for Youtube Component testing only)
 To view coverage, after running tests, navigate to codepal/coverage and open up index.html
 
-
 # CodePal REST API
 
 See the [api branch](https://github.com/stephenhu3/codepal/tree/api) for complete documentation.

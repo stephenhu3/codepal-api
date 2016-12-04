@@ -27,6 +27,7 @@ describe("snippet", function(){
         "content": "cHVibGljIGNsYXNzIEhlbGxvV29ybGQNCnsNCglwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmdbXSBhcmdzKSB7DQoJCVN5c3RlbS5vdXQucHJpbnRsbigiSGVsbG8gV29ybGQhIik7DQoJfQ0KfQ==",
         "isPublic": true
     };
+
   //TODO needs formatting
   //var badResponse = "{"code":500,"message":"There was an error processing your request. It has been logged (ID 5e4731a6978284c9)."}";
 
@@ -69,8 +70,9 @@ describe("snippet", function(){
   afterEach(function(){
     $(document).off();
   });
-//TODO - 'fail' tests are currently always going to pass as long as
-//       there is a function to call, needs refining
+
+  //TODO - 'fail' tests are currently always going to pass as long as
+  //       there is a function to call, needs refining
   it('fails to create a snippet', function(){
     snipSpy = spyOn(window, 'alert');
     snippetModule.create('a');
@@ -79,16 +81,14 @@ describe("snippet", function(){
   });
 
   it('creates a snippet', function(){
-
     calloutSpy = spyOn(apiModule, 'performCallout').and.callFake(function(callbacks){
-    //alert('calloutSpy called'); //debug
       callbacks.done(goodData);
     });
 
     snipSpy = spyOn(apiModule, 'createSnippet').and.callFake(function (sessionObj, newName, callbacks) {
       apiModule.performCallout(callbacks);
-    //alert('api called sucess with ' +callbacks); //debug
     });
+
     saveSpy = spyOn(uiModule, 'closeSaveModal');
     snippetModule.create('testName');
 
@@ -103,13 +103,12 @@ describe("snippet", function(){
 
   it('gets a single snippet', function(){
     calloutSpy = spyOn(apiModule, 'performCallout').and.callFake(function(callbacks){
-    //alert('calloutSpy called'); //debug
       callbacks.done(goodData);
     });
 
     snipSpy = spyOn(apiModule, 'getSnippet').and.callFake(function (uuid, callbacks) {
       apiModule.performCallout( callbacks);
-    //alert('api called sucess with ' +callbacks); //debug
+   
     });
     convertSpy = spyOn(apiModule, 'convertResponseToSessionObj');
 
@@ -162,7 +161,6 @@ describe("snippet", function(){
     expect(alertSpy).toHaveBeenCalled;
   });
 
-  //TODO I don't know why this fails, maybe not implemented? @Alec
   it('deletes a snippet', function(){
     calloutSpy = spyOn(apiModule, 'performCallout').and.callFake(function(callbacks){
       callbacks.done(goodData);
@@ -183,4 +181,5 @@ describe("snippet", function(){
     //false since there are no saved snippets
     expect(isSaved).toBe(false);
   });
+  
 });

@@ -1,14 +1,8 @@
 package com.codepal.api;
 
-// import com.codepal.api.auth.ExampleAuthenticator;
-// import com.codepal.api.auth.ExampleAuthorizer;
-
 import com.codepal.api.cli.RenderCommand;
-import com.codepal.api.core.Person;
 import com.codepal.api.core.Template;
-import com.codepal.api.db.PersonDAO;
 import com.codepal.api.filter.CrossOriginResponseFilter;
-import com.codepal.api.filter.DateRequiredFeature;
 import com.codepal.api.health.TemplateHealthCheck;
 import com.codepal.api.resources.SnippetResource;
 import com.codepal.api.resources.UserResource;
@@ -16,15 +10,12 @@ import com.codepal.api.tasks.EchoTask;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 
-import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
-
 import java.util.Map;
 
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -55,17 +46,9 @@ public class MainApplication extends Application<MainConfiguration> {
         new MainApplication().run(args);
     }
 
-    private final HibernateBundle<MainConfiguration> hibernateBundle =
-            new HibernateBundle<MainConfiguration>(Person.class) {
-                @Override
-                public DataSourceFactory getDataSourceFactory(MainConfiguration configuration) {
-                    return configuration.getDataSourceFactory();
-                }
-            };
-
     @Override
     public String getName() {
-        return "hello-world";
+        return "hello-world-codepal";
     }
 
     @Override
@@ -79,14 +62,12 @@ public class MainApplication extends Application<MainConfiguration> {
         );
 
         bootstrap.addCommand(new RenderCommand());
-//        bootstrap.addBundle(new AssetsBundle());
         bootstrap.addBundle(new MigrationsBundle<MainConfiguration>() {
             @Override
             public DataSourceFactory getDataSourceFactory(MainConfiguration configuration) {
                 return configuration.getDataSourceFactory();
             }
         });
-        bootstrap.addBundle(hibernateBundle);
         bootstrap.addBundle(new ViewBundle<MainConfiguration>() {
             @Override
             public Map<String, Map<String, String>> getViewConfiguration(MainConfiguration configuration) {
@@ -97,20 +78,11 @@ public class MainApplication extends Application<MainConfiguration> {
 
     @Override
     public void run(MainConfiguration configuration, Environment environment) {
-        final PersonDAO dao = new PersonDAO(hibernateBundle.getSessionFactory());
         final Template template = configuration.buildTemplate();
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
         environment.jersey().register(CrossOriginResponseFilter.class);
-        environment.jersey().register(DateRequiredFeature.class);
-        // environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
-        //         .setAuthenticator(new ExampleAuthenticator())
-        //         .setAuthorizer(new ExampleAuthorizer())
-        //         .setRealm("SUPER SECRET STUFF")
-        //         .buildAuthFilter()));
-        // environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
-        environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new UserResource());
         environment.jersey().register(new SnippetResource());
 

@@ -6,7 +6,8 @@ module.exports = function (config) {
             'spec/support/iframe_api.js',
             'spec/support/client.js',
             'js/youtubeComponent.js',
-            'spec/youtubeSpec.js'
+            'spec/youtubeSpec.js',
+            'html/youtube.html'
         ],
         preprocessors: {
             '**/*.html': ['html2js'],

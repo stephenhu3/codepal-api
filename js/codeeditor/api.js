@@ -113,22 +113,6 @@ CodeEditor.prototype._api = function(options) {
 		};
 	}
 
-	// PRIVATE
-	// -------------------------------
-
-	// @SUMMARY	: Converts an editor session object to a snippet object
-	// @PARAM	: [hash] corresponding to the sessionObject
-	// @PARAM	: [sessionObject] editor session object to be converted
-	// @RETURN	: the newly converted snippet obj
-	function generateSnippetObj(session) {
-		return {
-			uuid		: session.hash,	
-			lang		: session.sessionObj.lang,
-			contents 	: btoa(session.sessionObj.aceSession.getValue()), // base64
-			name		: session.sessionObj.name
-		};
-	}
-
 	// @SUMMARY	: Generic template for jQuery ajax()
 	// @PARAM	: (ajaxOptions) {url, contentType, type, dataType, data}
 	// @PARAM	: (callbacks) {function done, function fail, function always}
@@ -155,6 +139,22 @@ CodeEditor.prototype._api = function(options) {
 		});
 	}
 
+	// PRIVATE
+	// -------------------------------
+
+	// @SUMMARY	: Converts an editor session object to a snippet object
+	// @PARAM	: [hash] corresponding to the sessionObject
+	// @PARAM	: [sessionObject] editor session object to be converted
+	// @RETURN	: the newly converted snippet obj
+	function generateSnippetObj(session) {
+		return {
+			uuid		: session.hash,	
+			lang		: session.sessionObj.lang,
+			contents 	: btoa(session.sessionObj.aceSession.getValue()), // base64
+			name		: session.sessionObj.name
+		};
+	}
+
 	return {
 		getAllSavedSnippets	: getAllSavedSnippets,
 		createSnippet		: createSnippet,
@@ -162,7 +162,8 @@ CodeEditor.prototype._api = function(options) {
 		deleteSnippet		: deleteSnippet,
 		generateSnippetObj	: generateSnippetObj,
 		getSnippet			: getSnippet,
-		convertResponseToSessionObj	: convertResponseToSessionObj
+		convertResponseToSessionObj	: convertResponseToSessionObj,
+		performCallout		: performCallout
 	};
 
 };

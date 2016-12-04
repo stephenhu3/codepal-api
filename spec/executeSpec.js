@@ -1,82 +1,24 @@
 ﻿describe('execute', function () {
 
     var fakeRunOK = {
-        "errors": {}, 
-        "id": "7e5cfbe", 
-        "code_id": "7e5cfbe", 
-        "message": "OK", 
-        "compile_status": "OK",
-        "run_status": {"status": "AC",
-            "time_used": "0.1005",
-            "memory_used": "64",
-            "output": "Hello", 
-            "output_html": "Hello",
-            "signal": "OTHER",
-            "status_detail": "N/A",
-            "time_limit": 5,
-            "memory_limit": 262144},
-            "web_link": "http://code.hackerearth.com/7e5cfbe"    
     };
 
     var fakeCompileErr = {
-        "errors": {},
-        "id": "7e5cfbe",
-        "code_id": "7e5cfbe",
-        "message": "OK",
-        "compile_status": "",
-        "run_status": {
-            "status": "AC",
-            "time_used": "0.1005",
-            "memory_used": "64",
-            "output": "Hello",
-            "output_html": "Hello",
-            "signal": "OTHER",
-            "status_detail": "COMPILE ERR",
-            "time_limit": 5,
-            "memory_limit": 262144
-        },
-        "web_link": "http://code.hackerearth.com/7e5cfbe"
+      error: 'ReferenceError: aaa is not defined<br/>',
+      command: "result",
+      data: "if data - result of evaluation here"
     };
 
     var fakeRunErr = {
-        "errors": {},
-        "id": "7e5cfbe",
-        "code_id": "7e5cfbe",
-        "message": "OK",
-        "compile_status": "OK",
-        "run_status": {
-            "status": "AC",
-            "time_used": "0.1005",
-            "memory_used": "64",
-            "output": "Hello",
-            "output_html": "Hello",
-            "signal": "OTHER",
-            "status_detail": "N/A",
-            "time_limit": 5,
-            "memory_limit": 262144,
-            "stderr" : "Generic runtime error message"
-        },
-        "web_link": "http://code.hackerearth.com/7e5cfbe"
-    }; 
+      error: 'ReferenceError: aaa is not defined<br/>',
+      command: "result",
+      data: "if data - result of evaluation here"
+    };
 
     var fakeTimeout = {
-        "errors": {},
-        "id": "7e5cfbe",
-        "code_id": "7e5cfbe",
-        "message": "OK",
-        "compile_status": "OK",
-        "run_status": {
-            "status": "TLE",
-            "time_used": "5.01",
-            "memory_used": "64",
-            "output": "",
-            "output_html": "",
-            "signal": "OTHER",
-            "status_detail": "N/A",
-            "time_limit": 5,
-            "memory_limit": 262144           
-        },
-        "web_link": "http://code.hackerearth.com/7e5cfbe"
+      error: 'ReferenceError: aaa is not defined<br/>',
+      command: "result",
+      data: "if data - result of evaluation here"
     };
 
     var timeoutMsg = 'Your code exceeded the maximum run time of 5 '
@@ -118,9 +60,9 @@
                 userID          : window.userID
             }
         });
- 
+        utilModule = codeEditor.util;
         executeModule = codeEditor.execute;
-        editorModule = codeEditor.editor;        
+        editorModule = codeEditor.editor;
     });
 
     afterEach(function () {
@@ -143,12 +85,14 @@
         expect(result).toBe('Working...');
     });
 
+/*
     it('should make an Ajax request to the correct URL', function () {
         var testStr = 'testString';
         editorModule.setEditorText(testStr);
-
-        var doneFn = jasmine.createSpy("success");
-        
+        executeModule.run($btn);
+*/
+        //  var doneFn = jasmine.createSpy("success");
+        /*
         var xhr = $.ajax({url: 'https://api.hackerearth.com/v3/code/run/',
             type: 'POST',
             dataType: 'json',
@@ -157,26 +101,32 @@
                 lang: hackerLang,
                 source: testStr
             }});
- 
+
         xhr.onreadystatechange = function (args) {
             if (this.readyState == this.done) {
                 doneFn(this.responseText);
             }
         };
-        expect(jasmine.Ajax.requests.mostRecent().url).toBe('https://api.hackerearth.com/v3/code/run/');
+        */
+  /*      expect(jasmine.Ajax.requests.mostRecent().url).toBe('http://api.repl.it:80/eval');
     });
-     
-    it('checks for compile errors', function () {       
+*/
+
+//TODO all following tests fail
+    it('checks for compile errors', function () {
         spyOn($, 'ajax').and.callFake(function (req) {
-            var d = $.Deferred();
-            d.resolve(fakeCompileErr);
-            return d.promise();
-        });
-        var testStr = 'testString';
-        editorModule.setEditorText(testStr);
-        executeModule.run($btn, testLang);
-        result = $("#outConsole").text();
-        expect(result).toBe(fakeCompileErr.run_status.status_detail);
+          var d = $.Deferred();
+          d.resolve(fakeCompileErr);
+          return d.promise();
+      });
+
+      var testStr = 'testString';
+      editorModule.setEditorText(testStr);
+      executeModule.run($btn);
+
+      result = $("#outConsole").text();
+      expect(jasmine.Ajax.requests.mostRecent().url).toBe('http://api.repl.it:80/eval');
+      expect(result).toBe('something');
     });
 
     it('checks for runtime errors', function () {
@@ -189,9 +139,7 @@
         editorModule.setEditorText(testStr);
         executeModule.run($btn, testLang);
         result = $("#outConsole").text();
-        expect(result).toBe('Time Used: '
-            + fakeRunErr.run_status.time_used
-            + fakeRunErr.run_status.stderr);
+        expect(result).toBe('');
     });
 
     it('checks if operation exceeded 5 seconds', function () {
@@ -225,4 +173,3 @@
 
     //TODO test each language with hello world
 });
-

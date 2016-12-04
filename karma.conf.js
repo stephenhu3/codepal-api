@@ -21,6 +21,9 @@ module.exports = function(config) {
         'spec/support/repl_api.js',
         'js/ace/ace.js',
 
+        'spec/support/iframe_api.js',
+        'spec/support/client.js',
+
         // Files to test
         'js/codeeditor/main.js',
         'js/codeeditor/util.js',
@@ -30,10 +33,13 @@ module.exports = function(config) {
         'js/codeeditor/api.js',
         'js/codeeditor/snippet.js',
         'js/codeeditor/bindings.js',
-    
+
+        'js/youtubeComponent.js',
+
         // Fixtures
         'spec/fixtures/*',
-        
+        'html/youtube.html',
+
         // Helpers
         'spec/helpers/*.js',
 

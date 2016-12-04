@@ -81,7 +81,7 @@ describe("snippet", function(){
   it('creates a snippet', function(){
 
     calloutSpy = spyOn(apiModule, 'performCallout').and.callFake(function(callbacks){
-    //alert('calloutSpy called'); //debug
+    
       callbacks.done(goodData);
     });
 
@@ -109,7 +109,7 @@ describe("snippet", function(){
 
     snipSpy = spyOn(apiModule, 'getSnippet').and.callFake(function (uuid, callbacks) {
       apiModule.performCallout( callbacks);
-    //alert('api called sucess with ' +callbacks); //debug
+   
     });
     convertSpy = spyOn(apiModule, 'convertResponseToSessionObj');
 

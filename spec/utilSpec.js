@@ -78,8 +78,8 @@
         var dummycError = 'garbage.cline1\n.c\n.c++++++++error: \nend of message';
         var readableError = 'at line1<br/>at <br/>at ++++++++error: <br/>';
         expect(utilModule.translateErr(dummycError, 'c')).toBe(readableError);
-        var dummycError = 'garbage';
-        var readableError = 'garbage<br/>';
+        dummycError = 'garbage';
+        readableError = 'garbage<br/>';
         expect(utilModule.translateErr(dummycError, 'c')).toBe(readableError);
     });
 
@@ -87,9 +87,22 @@
         var dummyCsharpError = 'garbage.csline1\nend of message';
         var readableError = 'at line1<br/>end of message<br/>';
         expect(utilModule.translateErr(dummyCsharpError, 'csharp')).toBe(readableError);
+        //branch coverage
+        dummyCsharpError = 'garbage.cs+++error ';
+        readableError = 'at +++error <br/>';
+        expect(utilModule.translateErr(dummyCsharpError, 'csharp')).toBe(readableError);
     });
-
-    //TODO Error handling for each language
+    it('makes C++ error message readable', function () {
+        var dummycppError = 'garbage.cppline1\nend of message';
+        var readableError = 'at line1<br/>end of message<br/>';
+        expect(utilModule.translateErr(dummycppError, 'cpp')).toBe(readableError);
+        expect(utilModule.translateErr(dummycppError, 'cpp11')).toBe(readableError);
+        //branch coverage
+        dummycppError = 'garbage.cpp+++error: ';
+        readableError = 'at +++error: <br/>';
+        expect(utilModule.translateErr(dummycppError, 'cpp')).toBe(readableError);
+    });
+    //TODO JAVA, GO, PYTHON/PYTHON3, RUBY
     it('makes .. error message readable', function () {
 
     });

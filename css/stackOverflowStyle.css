@@ -1,4 +1,4 @@
-#questionFont{
+.questionFont{
     font-family: 'Ubuntu Mono', monospace;
     color: lightblue;
   }
@@ -14,7 +14,6 @@
 }
 
 button#soSearch{
-	right: 210px;
     background: transparent;
     border: transparent;
     color: lightgreen;

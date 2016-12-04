@@ -14,8 +14,8 @@ function statusChangeCallback(response) {
         window.location.assign(pageUrl);
     }
     else{
-        document.userId = response.authResponse.userID;
-        document.accessToken = response.authResponse.accessToken;
+        window.userId = response.authResponse.userID;
+        window.accessToken = response.authResponse.accessToken;
     }
 }
 // This function is called when someone finishes with the Login

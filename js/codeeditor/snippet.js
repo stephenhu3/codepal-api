@@ -120,7 +120,7 @@ CodeEditor.prototype._snippet = function() {
 		
 		function done() {
 			self.editor.deleteSession(uuid);
-			self.ui.deleteSnippet(deleteSnippet);
+			self.ui.deleteSnippet(uuid);
 			removeSnippetId(uuid);
 			alert('Your snippet was successfully deleted.');
 		}

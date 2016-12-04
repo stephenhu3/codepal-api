@@ -142,8 +142,9 @@ describe("integrateYouTube", function () {
     it(
         " should call init {testing: init()}",
         function () {
-          init();
-          expect(init).toHaveBeenCalled();
+            spyOn(controller,'init');
+            init();
+            expect(init).toHaveBeenCalled();
         });
     /*
     it(

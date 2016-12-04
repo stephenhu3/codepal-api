@@ -1,10 +1,10 @@
-describe("youtubeComponent", function () {
+describe("integrateYouTube", function () {
     var mvcTestArray, model, controller, view,
         testObject;
     beforeEach(function () {
         localStorage.clear();
         mvcTestArray = [];
-
+        this.result = fixture.load('youtubeFixture.html');
         mvcTestArray = mvc();
         model = mvcTestArray[0];
         controller = mvcTestArray[1];
@@ -140,11 +140,24 @@ describe("youtubeComponent", function () {
           expect($(".dropdown-toggle")).not.toBeUndefined();
         });
     it(
-        " {testing: init()}",
+        " should call init {testing: init()}",
         function () {
           init();
-          expect($(".dropdown-toggle")).not.toBeUndefined();
+          expect(init).toHaveBeenCalled();
         });
-  
+    it(
+        " should call videoClick {testing: videoClick()}",
+        function () {
+          videoClick();
+          expect(videoClick).toHaveBeenCalled();
+        });
+    it (
+        "should invoke the video-image click event.", function() {
+            spyEvent = spyOnEvent('.video-image', 'click');
+            console.log($('.video-image'));
+            $('.video-image').trigger( "click" );
+            expect('click').toHaveBeenTriggeredOn('.video-image');
+            expect(spyEvent).toHaveBeenTriggered();
+        });
 
 });

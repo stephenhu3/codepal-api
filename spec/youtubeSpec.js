@@ -139,6 +139,12 @@ describe("youtubeComponent", function () {
           view.init();
           expect($(".dropdown-toggle")).not.toBeUndefined();
         });
+    it(
+        " {testing: init()}",
+        function () {
+          init();
+          expect($(".dropdown-toggle")).not.toBeUndefined();
+        });
   
 
 });

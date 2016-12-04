@@ -1,5 +1,5 @@
 describe("editor", function() {
-	
+
 	var editorModule;
 
 	beforeEach(function() {
@@ -33,6 +33,7 @@ describe("editor", function() {
 			}
 		});
 	    editorModule = codeEditor.editor;
+		
 	});
 
 	it('updates an existing session', function() {
@@ -77,7 +78,7 @@ describe("editor", function() {
 		expect(editorModule.isSessionCached(savedSnippet.hash)).toBe(true);
 
 		editorModule.createNewSession(savedSnippet);
-		expect(editorModule.isSessionLoaded(savedSnippet.hash)).toBe(true);		
+		expect(editorModule.isSessionLoaded(savedSnippet.hash)).toBe(true);
 	});
 
 	it('returns the current session', function() {
@@ -120,7 +121,7 @@ describe("editor", function() {
 
 		for (var i = 0; i < supportedLanguages.length; i++) {
 			var setLang = editorModule.setEditorLang(supportedLanguages[i]);
-			
+
 			expect(setLang).toBe(supportedLanguages[i]);
 		}
 	});
@@ -139,7 +140,7 @@ describe("editor", function() {
 		expect(deletedSession).toBeNull();
 
 		var newSession 			= editorModule.createNewSession(),
-			newHash				= newSession.hash; 
+			newHash				= newSession.hash;
 			deletedSessionHash 	= editorModule.deleteSession(newHash);
 		expect(deletedSessionHash).toBe(newHash);
 	});

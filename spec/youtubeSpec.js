@@ -145,6 +145,7 @@ describe("integrateYouTube", function () {
           init();
           expect(init).toHaveBeenCalled();
         });
+    /*
     it(
         " should call videoClick {testing: videoClick()}",
         function () {
@@ -154,10 +155,10 @@ describe("integrateYouTube", function () {
     it (
         "should invoke the video-image click event.", function() {
             spyEvent = spyOnEvent('.video-image', 'click');
-            console.log($('.video-image'));
+            //console.log($('.video-image'));
             $('.video-image').trigger( "click" );
             expect('click').toHaveBeenTriggeredOn('.video-image');
             expect(spyEvent).toHaveBeenTriggered();
         });
-
+*/
 });

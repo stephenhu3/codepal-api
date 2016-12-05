@@ -13,10 +13,6 @@ function statusChangeCallback(response) {
         FB.logout();
         window.location.assign(pageUrl);
     }
-    else{
-        document.userId = response.authResponse.userID;
-        document.accessToken = response.authResponse.accessToken;
-    }
 }
 // This function is called when someone finishes with the Login
 // Button.  See the onlogin handler attached to it in the sample

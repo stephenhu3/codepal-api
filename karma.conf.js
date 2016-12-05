@@ -34,7 +34,9 @@ module.exports = function(config) {
         'js/codeeditor/snippet.js',
         'js/codeeditor/bindings.js',
 
-        'js/youtubeComponent.js',
+        'js/integrateYoutube.js',
+
+        'js/stackOverflowComponent.js',
 
         // Fixtures
         'spec/fixtures/*',

@@ -1,6 +1,6 @@
 function checkUserExists(){
-    var userId = document.userId;
-    var accessToken = document.accessToken;
+    var userId = localStorage.getItem("userId");
+    var accessToken = localStorage.getItem("accessToken");
     var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users/search";
 
     var data = {"userId": userId};
@@ -24,8 +24,8 @@ function checkUserExists(){
 }
 
 function updateAccessToken(){
-    var userId = document.userId;
-    var newAccessToken = document.accessToken;
+    var userId = localStorage.getItem("userId");
+    var newAccessToken = localStorage.getItem("accessToken");
     var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users/accesstokens";
 
     var data = {"userId": userId, "accessToken": newAccessToken};
@@ -45,8 +45,8 @@ function updateAccessToken(){
 
 function signUpNewUser(){
     var username = $("#usernameInput").val();
-    var userId = document.userId;
-    var accessToken = document.accessToken;
+    var userId = localStorage.getItem("userId");
+    var accessToken = localStorage.getItem("accessToken");
 
     var url = "http://ec2-52-38-68-51.us-west-2.compute.amazonaws.com:8080/users";
     var data = {"userId": userId, "username": username ,"accessToken": accessToken, "settings": "sampleSettings"};

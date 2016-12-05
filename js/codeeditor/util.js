@@ -281,7 +281,7 @@ CodeEditor.prototype._util = function(options) {
 	    //In case of unhandled error, print generic message
         //Not sure if this will ever run
 	    if (output.length === 0) {
-	        msg = messages.RUNTIME_ERR;
+	        output = messages.COMPILER_ERR;
 	    }
 
 	    return output;

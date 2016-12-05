@@ -1,5 +1,5 @@
 // This is called with the results from from FB.getLoginStatus().
-var pageUrl = 'http://localhost:8888/codepal/';
+var pageUrl = 'http://codepal.ca/';
 var userId;
 function statusChangeCallback(response) {
     console.log('statusChangeCallback');

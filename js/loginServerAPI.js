@@ -11,11 +11,11 @@ function checkUserExists(){
         url: url,
         data: JSON.stringify(data),
         success: function(data){
-            console.log(data);
             if(accessToken !== data.accessToken){
                 console.log("The user exists");
                 updateAccessToken();
             }
+            window.location.assign(pageUrl+'main.html');
         },
         error: function(){
             $("#myModal").modal();

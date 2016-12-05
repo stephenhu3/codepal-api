@@ -1,6 +1,6 @@
 describe("integrateYouTube", function () {
     var mvcTestArray, model, controller, view, testObject;
-        
+
     beforeEach(function (done) {
         setTimeout(function() {
         $.getScript( "https://apis.google.com/js/client.js", function( data, textStatus, jqxhr ) {
@@ -13,7 +13,7 @@ describe("integrateYouTube", function () {
       value = 0;
       fixture.load('youtubeFixture.html');
         document.body.insertAdjacentHTML(
-            'afterbegin', 
+            'afterbegin',
             fixture);
 
         localStorage.clear();
@@ -37,7 +37,7 @@ describe("integrateYouTube", function () {
         model.localStorageReset();
       done();
     }, 1);
-        
+
     }
   );
     it(
@@ -156,7 +156,13 @@ describe("integrateYouTube", function () {
           view.init();
           expect($(".dropdown-toggle")).not.toBeUndefined();done();
         });
-    
+    it(
+        "should have search-button attribute set to false {testing: view.init()}",
+        function (done) {
+          document.getElementById('query').value = "hello";
+          view.init();
+        });
+
     describe("long asynchronous specs", function() {
     var originalTimeout;
     beforeEach(function(done) {
@@ -166,11 +172,16 @@ describe("integrateYouTube", function () {
 
     it("takes a long time", function(done) {
       setTimeout(function() {
-          //spyOn(videoClick(),'onPlayerReady');
             init();
             videoClick();
-            //onPlayerReady();
-            //expect(videoClick().onPlayerReady).toHaveBeenCalled();
+        done();
+      }, 9000);
+    });
+    it("takes a long time", function(done) {
+      setTimeout(function() {
+          spyOn(view, 'init');
+          controller.setUpYoutubeAPI();
+          expect(view.init).toHaveBeenCalled();
         done();
       }, 9000);
     });
@@ -180,10 +191,6 @@ describe("integrateYouTube", function () {
     });
   });
 
-
-    
-
-    
     /*
     it("should submit the form when you press one of the update buttons", function(){
       var spyEvent = spyOnEvent('document', 'click');
@@ -200,7 +207,7 @@ describe("integrateYouTube", function () {
             expect(mvcTestArray).toBe([model, controller, view]);
         });
     it('{testing: init()}', function() {
-        
+
         integrateYoutube();
         expect(ajax.url).toBe("html/youtube.html");
     });

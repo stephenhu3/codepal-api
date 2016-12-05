@@ -34,7 +34,7 @@ module.exports = function(config) {
         'js/codeeditor/snippet.js',
         'js/codeeditor/bindings.js',
 
-        'js/integrateYoutube.js',
+        'js/youtubeComponent.js',
 
         'js/stackOverflowComponent.js',
 

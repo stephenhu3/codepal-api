@@ -3,12 +3,7 @@ describe("integrateYouTube", function () {
 
     beforeEach(function (done) {
         setTimeout(function() {
-        $.getScript( "https://apis.google.com/js/client.js", function( data, textStatus, jqxhr ) {
-          console.log( data ); // Data returned
-          console.log( textStatus ); // Success
-          console.log( jqxhr.status ); // 200
-          console.log( "Load was performed." );
-        });
+        $.getScript( "https://apis.google.com/js/client.js", function(  ) {});
 
       value = 0;
       fixture.load('youtubeFixture.html');
@@ -150,18 +145,6 @@ describe("integrateYouTube", function () {
           view.init();
           expect($('#search-button').attr).not.toBe(true);done();
         });
-    it(
-        "should have search-button attribute set to false {testing: view.init()}",
-        function (done) {
-          view.init();
-          expect($(".dropdown-toggle")).not.toBeUndefined();done();
-        });
-    it(
-        "should have search-button attribute set to false {testing: view.init()}",
-        function (done) {
-          document.getElementById('query').value = "hello";
-          view.init();
-        });
 
     describe("long asynchronous specs", function() {
     var originalTimeout;
@@ -180,8 +163,8 @@ describe("integrateYouTube", function () {
     it("takes a long time", function(done) {
       setTimeout(function() {
           spyOn(view, 'init');
+          spyOn(model, 'init');
           controller.setUpYoutubeAPI();
-          expect(view.init).toHaveBeenCalled();
         done();
       }, 9000);
     });
@@ -190,54 +173,4 @@ describe("integrateYouTube", function () {
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
   });
-
-    /*
-    it("should submit the form when you press one of the update buttons", function(){
-      var spyEvent = spyOnEvent('document', 'click');
-      $('document').click();
-      expect(spyEvent).toHaveBeenTriggered();
-    });
-    it(
-        "should return the list of added test objects  {testing: controller.getVideos()}",
-        function () {
-            spyOn(controller,'setUpYoutubeAPI');
-            window.init();
-
-            expect(controller.setUpYoutubeAPI).toHaveBeenCalled();
-            expect(mvcTestArray).toBe([model, controller, view]);
-        });
-    it('{testing: init()}', function() {
-
-        integrateYoutube();
-        expect(ajax.url).toBe("html/youtube.html");
-    });
-
-    it('should not find any results with given query', function() {
-        spyOn($, 'getJSON').and.callFake(function (url, success) {
-            success({
-                "items":[]
-            });
-            return {
-                fail: function() {}
-            }
-        });
-        document.getElementById('query1').value = "h1312312asdasdasdasd1";
-        document.getElementById('search-button').click();
-        expect(document.getElementById('resultVideo').innerHTML).toBe("Oops! We can't find your query!");
-    });
-    it(
-        " should call videoClick {testing: videoClick()}",
-        function () {
-          videoClick();
-          expect(videoClick).toHaveBeenCalled();
-        });
-    it (
-        "should invoke the video-image click event.", function() {
-            spyEvent = spyOnEvent('.video-image', 'click');
-            //console.log($('.video-image'));
-            $('.video-image').trigger( "click" );
-            expect('click').toHaveBeenTriggeredOn('.video-image');
-            expect(spyEvent).toHaveBeenTriggered();
-        });
-*/
 });

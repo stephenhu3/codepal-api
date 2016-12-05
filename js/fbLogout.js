@@ -1,6 +1,6 @@
 // This is called with the results from from FB.getLoginStatus().
-var pageUrl = 'http://codepal.ca/';
-
+var pageUrl = 'http://localhost:8888/codepal/';
+var userId;
 function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -12,9 +12,19 @@ function statusChangeCallback(response) {
         // Logged into your app and Facebook.
         FB.logout();
         window.location.assign(pageUrl);
-    }else{
+    }
+    else if(response.status === 'connected'){
+        userId = response.authResponse.userID;
         localStorage.setItem("userId", response.authResponse.userID);
         localStorage.setItem("accessToken", response.authResponse.accessToken);
+    }
+    else if (response.status === 'not_authorized') {
+        // The person is logged into Facebook, but not your app.
+        document.getElementById('status').innerHTML = 'Please log ' +
+            'into this app.';
+    }
+    else{
+        alert("Login undefined!");
     }
 }
 // This function is called when someone finishes with the Login

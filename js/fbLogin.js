@@ -1,4 +1,4 @@
-var pageUrl = 'http://localhost:8888/codepal/';
+var pageUrl = 'http://codepal.ca/';
 
 // This is called with the results from from FB.getLoginStatus().
 

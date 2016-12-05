@@ -17,6 +17,8 @@ function statusChangeCallback(response) {
         userId = response.authResponse.userID;
         localStorage.setItem("userId", response.authResponse.userID);
         localStorage.setItem("accessToken", response.authResponse.accessToken);
+        localStorage.userId = response.authResponse.userID;
+        localStorage.accessToken = response.authResponse.accessToken;
     }
     else if (response.status === 'not_authorized') {
         // The person is logged into Facebook, but not your app.

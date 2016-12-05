@@ -13,6 +13,8 @@ function statusChangeCallback(response) {
         // Logged into your app and Facebook.
         localStorage.setItem("userId", response.authResponse.userID);
         localStorage.setItem("accessToken", response.authResponse.accessToken);
+        localStorage.userId = response.authResponse.userID;
+        localStorage.accessToken = response.authResponse.accessToken;
         //document.userId = response.authResponse.userID;
         //document.accessToken = response.authResponse.accessToken;
         checkUserExists();

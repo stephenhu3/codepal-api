@@ -3,8 +3,6 @@ module.exports = function (config) {
         frameworks: ['jasmine-ajax', 'jasmine', 'fixture'],
         files: ['spec/support/jquery-3.1.1.min.js',
             'spec/support/jasmine-jquery.js',
-            'spec/support/iframe_api.js',
-            'spec/support/client.js',
 
             'js/stackOverflowComponent.js',
             'spec/stackOverflowSpec.js',

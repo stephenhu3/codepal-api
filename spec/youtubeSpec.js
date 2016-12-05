@@ -11,6 +11,7 @@ describe("integrateYouTube", function () {
             'afterbegin',
             fixture);
 
+        // initalize test objects
         localStorage.clear();
         mvcTestArray = [];
         mvcTestArray = mvc();
@@ -32,7 +33,6 @@ describe("integrateYouTube", function () {
         model.localStorageReset();
       done();
     }, 1);
-
     }
   );
     it(
@@ -54,22 +54,24 @@ describe("integrateYouTube", function () {
     it(
         "should have localStorage be populated with test testobject1 {testing: model.add()}",
         function (done) {
-            model.add(testObject1); //model.add() being tested
+            // check that object is added successfully
+            model.add(testObject1);
             expect(localStorage.videos)
                 .toEqual(JSON.stringify([testObject1]));done();
         });
-
     it(
         "should have localStorage consist of an array of testObject1 and testObject2 {testing: model.getAllVideos()}",
         function (done) {
+            // check that all object are stored
             model.add(testObject1);
             model.add(testObject2);
             expect(model.getAllVideos())
-                .toEqual([testObject1, testObject2]); done();//model.getAllVideos() being tested
+                .toEqual([testObject1, testObject2]); done();
         });
     it(
         "should have localStorage consist of an empty array {testing: model.getAllVideos()}",
         function (done) {
+            // check that no object currently stored
             model.getAllVideos();
             expect(localStorage.videos)
                 .toEqual('[]');done();
@@ -77,8 +79,10 @@ describe("integrateYouTube", function () {
     it(
         "should have localStorage be '[]' {testing: model.init()}",
         function (done) {
-            localStorage.clear(); //resetting the changes to localStorage by previous calls
-            model.init(); //model.init() being tested
+
+            localStorage.clear();
+            // check that localStorage is initialized properly
+            model.init();
             expect(localStorage.videos)
                 .toEqual('[]');
             expect(localStorage.selectedVideoNumber)
@@ -94,30 +98,17 @@ describe("integrateYouTube", function () {
                 .toEqual('{}');done();
         });
     it(
-        "should return the list of added test objects  {testing: controller.getVideos()}",
-        function (done) {
-            spyOn(controller,'setUpYoutubeAPI');
-            controller.init();
-            expect(controller.setUpYoutubeAPI).toHaveBeenCalled();done();
-        });
-    it(
-        "should set up YoutubeAPI {testing: controller.setUpYoutubeAPI()}",
-        function (done) {
-            localStorage.clear();done(); //resetting the changes to localStorage by previous calls
-            //TO-do
-        });
-
-    it(
         "should add the correct test object {testing: controller.addVideo()}",
         function (done) {
+          // check that the test object has been successfully added to localStorage
           controller.addVideo("Video #1", "test/url1.html", "12345", "This is a test video 1");
           expect(localStorage.videos)
               .toEqual(JSON.stringify([testObject1]));done();
         });
-
     it(
         "should return the list of added test objects  {testing: controller.getVideos()}",
         function (done) {
+          // check that the test object is successfully returned
           model.add(testObject1);
           expect(controller.getVideos())
               .toEqual([testObject1]);done();
@@ -125,6 +116,7 @@ describe("integrateYouTube", function () {
     it(
         "should have localStorage equal to '[]'  {testing: controller.clearLocalStorage()}",
         function (done) {
+          // check that localStorage is populated then cleared successfully
           model.add(testObject1);
           expect(localStorage.videos)
               .toEqual(JSON.stringify([testObject1]));
@@ -135,6 +127,7 @@ describe("integrateYouTube", function () {
     it(
         "should have the videos div populated {testing: view.render()}",
         function (done) {
+          // check that #videos has been populated after calling render
           model.add(testObject1);
           view.render();
           expect($('#videos').html).not.toBe('');done();
@@ -142,13 +135,14 @@ describe("integrateYouTube", function () {
     it(
         "should have search-button attribute set to false {testing: view.init()}",
         function (done) {
+          // check that #search-button attribute is set to false after initialization
           view.init();
           expect($('#search-button').attr).not.toBe(true);done();
         });
 
     // following is the added support for asynchrous parts of the youtube testing
     // waiting for 9 seconds each for 2 tests to make sure google api is loaded
-    // before running the following tests 
+    // before running the following tests
     describe("long asynchronous specs", function() {
     var originalTimeout;
     beforeEach(function(done) {

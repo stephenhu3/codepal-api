@@ -40,7 +40,7 @@ var integrateCodeEditor = function (container){
 				$saveModal			: $('#fileModal')
 			},
 			api			: {
-				userID			: document.userID
+				userId			: 123456789
 			}
 		});
 

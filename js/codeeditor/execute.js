@@ -1,7 +1,7 @@
 /* CodeEditor
  * Execute Module
  * Compiles and run code using Repl.it REST API
- */ 
+ */
 CodeEditor.prototype._execute = function(options) {
 
 	var self 			= this,
@@ -19,18 +19,18 @@ CodeEditor.prototype._execute = function(options) {
 			'Python 3'		: 'python3',
 			'Ruby'			: 'ruby'
 		},
-		token   = { 
+		token   = {
 			time_created: 1480401579000,
-			msg_mac: 'GINiXV8Vztcu3DsbdqFCjq0EXVgbj3rR/G6Cn8GuIxA=' 
+			msg_mac: 'GINiXV8Vztcu3DsbdqFCjq0EXVgbj3rR/G6Cn8GuIxA='
 		},
-		constants = { 
+		constants = {
 			'COMPILE_OK'	: 'OK',
 			'TIME_EXCEEDED' : 'TLE',
             'MAX_TIME'      : 5000
 		},
 		messages = {
-			'TIME_EXCEEDED'	: 'Your code exceeded the maximum run time of 5 ' 
-				+ ' seconds. As a result, some statements may not have been '  
+			'TIME_EXCEEDED'	: 'Your code exceeded the maximum run time of 5 '
+				+ ' seconds. As a result, some statements may not have been '
 				+ ' executed.',
 			'RUN_ERROR'		: 'Sorry, something went wrong! Please refresh '
 				+ 'and try again.',
@@ -57,7 +57,7 @@ CodeEditor.prototype._execute = function(options) {
 			$btn.prop('disabled', false);
 			return;
 		}
-		
+
 		$outConsole.html('Working...');
 		repl.evaluateOnce(
 			evalCode,
@@ -65,11 +65,11 @@ CodeEditor.prototype._execute = function(options) {
 				stdout: function(out) {
 				    output += 'Console output: ' + '<br/>' + out + '<br/><br/>';
 				},
-				timeout: 
+				timeout:
                     {
                         time: constants.MAX_TIME,
                         callback: function () {
-                            output += messages.TIME_EXCEEDED;                            
+                            output += messages.TIME_EXCEEDED;
                             return true;
 				    }
 				}
@@ -77,30 +77,30 @@ CodeEditor.prototype._execute = function(options) {
 		).then(
 			function success(result) {
 				/*
-					{ 
+					{
 						command: "result"
 						data: "if data - result of evaluation here"
 						error: "if error - error message here"
 					}
 				*/
-				
-				if (result.error.length!==0) {				   			    
+
+				if (result.error.length!==0) {
 				    output += 'ERROR:  '
                         + '<br/>'
-                        + self.util.translateErr(result.error, replMap[self.ui.getCurrLang()]) 
+                        + self.util.translateErr(result.error, replMap[self.ui.getCurrLang()])
                         + '<br/>';
 				}
-             
+
 				else {
 				    output += 'SUCCESS: <br/>'
-                        + result.data                        
+                        + result.data
 				}
-				
+
 				$outConsole.html(output);
 				$btn.prop('disabled', false);
 			},
 
-			function error(err) {				
+			function error(err) {
 			    $outConsole.html(output);
 				$btn.prop('disabled', false);
 			}

@@ -36,6 +36,8 @@ module.exports = function(config) {
 
         'js/integrateYoutube.js',
 
+        'js/stackOverflowComponent.js',
+
         // Fixtures
         'spec/fixtures/*',
         'html/youtube.html',

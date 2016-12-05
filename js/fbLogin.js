@@ -11,8 +11,10 @@ function statusChangeCallback(response) {
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
         // Logged into your app and Facebook.
-        document.userId = response.authResponse.userID;
-        document.accessToken = response.authResponse.accessToken;
+        localStorage.setItem("userId", response.authResponse.userID);
+        localStorage.setItem("accessToken", response.authResponse.accessToken);
+        //document.userId = response.authResponse.userID;
+        //document.accessToken = response.authResponse.accessToken;
         checkUserExists();
         //signUpUser(response.authResponse.userID);
         //window.location.assign("http://128.189.213.178:8080/main.html");

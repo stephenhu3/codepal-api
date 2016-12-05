@@ -11,6 +11,9 @@ function checkUserExists(){
         url: url,
         data: JSON.stringify(data),
         success: function(data){
+            console.log(data);
+            localStorage.setItem("userId",data.userId);
+            localStorage.setItem("accessToken",data.accessToken);
             if(accessToken !== data.accessToken){
                 console.log("The user exists");
                 updateAccessToken();

@@ -12,7 +12,7 @@ var model = {
         data.push(obj);
         localStorage.userId = JSON.stringify(data);
     },
-    getAllVideos: function () {
+    getuserId: function () {
         return JSON.parse(localStorage.userId);
     }
 }

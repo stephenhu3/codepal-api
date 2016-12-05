@@ -146,6 +146,9 @@ describe("integrateYouTube", function () {
           expect($('#search-button').attr).not.toBe(true);done();
         });
 
+    // following is the added support for asynchrous parts of the youtube testing
+    // waiting for 9 seconds each for 2 tests to make sure google api is loaded
+    // before running the following tests 
     describe("long asynchronous specs", function() {
     var originalTimeout;
     beforeEach(function(done) {

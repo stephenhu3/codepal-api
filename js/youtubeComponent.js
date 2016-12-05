@@ -78,8 +78,8 @@ function mvc() {
                     });
                     $(".dropdown-toggle").trigger("click"); // opens the
                                                             // dropdown
-                    // with the returned
-                    // search-results
+                                                    // with the returned
+                                                        // search-results
                 });
             },
             render: function () {
@@ -99,12 +99,17 @@ function mvc() {
     return mvcArray;
 }
 
+//initialize function for the whole youtube component
 function init() {
     var mvcTestArray = mvc();
     mvcTestArray[1].init();
 }
 var player;
 
+/*
+   setup a new youtube player object and play the video when laoded
+
+*/
 function videoClick(videoID) {
     player = new YT.Player('inside', {
         height: '100%',
@@ -119,6 +124,14 @@ function videoClick(videoID) {
         event.target.playVideo();
     }
 }
+
+/*
+ if a youtube video is clicked from dropdown add DOM element for the 
+ youtube video player and call videoClick function sending the
+ id of the clicked vidoe
+
+*/
+
 $(document).click(function (event) {
     var clickedClassName = $(event.target)[0].className
     if (clickedClassName == 'listedVideo' || clickedClassName ==

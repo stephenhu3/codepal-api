@@ -59,15 +59,13 @@ Project Structure
 
 karma.conf.js: config settings for karma test runner
 
-youtubeKarma.conf.js: config settings for karma youtube component test runner
-
 package.json: node json project file with all needed dependencies
 
 Running Tests
 -------------
 1. Run `npm install` to get all required node packages for testing.
 2. Get the karma cli package: `npm install -g karma-cli`
-3. To run tests, go to root and run `karma start karma.conf.js` or `karma start youtubeKarma.conf.js` (for Youtube Component testing only)
+3. To run tests, go to root and run `karma start karma.conf.js` 
 To view coverage, after running tests, navigate to codepal/coverage and open up index.html
 
 # CodePal REST API

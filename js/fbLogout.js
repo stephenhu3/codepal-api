@@ -12,6 +12,9 @@ function statusChangeCallback(response) {
         // Logged into your app and Facebook.
         FB.logout();
         window.location.assign(pageUrl);
+    }else{
+        localStorage.setItem("userId", response.authResponse.userID);
+        localStorage.setItem("accessToken", response.authResponse.accessToken);
     }
 }
 // This function is called when someone finishes with the Login

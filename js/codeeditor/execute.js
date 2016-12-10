@@ -1,3 +1,4 @@
+
 /* CodeEditor
  * Execute Module
  * Compiles and run code using Repl.it REST API
@@ -20,8 +21,8 @@ CodeEditor.prototype._execute = function(options) {
 			'Ruby'			: 'ruby'
 		},
 		token   = {
-			time_created: 1480401579000,
-			msg_mac: 'GINiXV8Vztcu3DsbdqFCjq0EXVgbj3rR/G6Cn8GuIxA='
+			time_created: 1481397485000,
+			msg_mac: 'Degk3hZ3r+N12f2oq6IqaHneHXyWEwywe+8aP9dAgCU='
 		},
 		constants = {
 			'COMPILE_OK'	: 'OK',

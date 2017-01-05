@@ -21,7 +21,8 @@ function checkUserExists(){
             window.location.assign(pageUrl+'main.html');
         },
         error: function(){
-            $("#myModal").modal();
+            window.location.assign(pageUrl+'main.html');
+            //$("#myModal").modal();
         }
     });
 }
@@ -69,12 +70,12 @@ function signUpNewUser(){
     }
     else{
         alert("Username is invalid");
-        FB.logout();
-        window.location.assign(pageUrl);
+        //FB.logout();
+        //window.location.assign(pageUrl);
     }
 }
 
 function unsubmitUsername(){
-    FB.logout();
-    window.location.assign(pageUrl);
+    //FB.logout();
+    //window.location.assign(pageUrl);
 }

@@ -21,4 +21,8 @@ function CodeEditor(options) {
 	if (!options.omitCallout) {
 		this.snippet.getAll();
 	}
+	if (options.disableAPI) {
+		alert('Snippet CRUD operations have been disabled following the end of CPEN 321. You will'
+			+ ' not be able to save, update, or restore code snippets. Sorry for the inconvenience!');
+	}
 }

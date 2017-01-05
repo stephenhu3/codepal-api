@@ -25,6 +25,8 @@ var integrateCodeEditor = function (container){
 			eleId		: 'editor',
 			lang 		: defaultLang,
 			theme		: defaultTheme,
+			omitCallout	: true,
+			disableAPI	: true,
 			execute		: {
 				$outConsole		: $('#codeeditor #outConsole'),
 			},

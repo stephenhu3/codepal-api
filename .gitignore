@@ -1,0 +1,9 @@
+.DS_Store
+.idea
+.metadata/*
+.sonarlint/*
+RemoteSystemsTempFiles/*
+/node_modules
+/coverage
+code/*
+.settings/*
